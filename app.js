@@ -439,15 +439,21 @@ document.getElementById('btn-next-q').addEventListener('click', () => {
 });
 
 document.getElementById('btn-mark-done').addEventListener('click', () => {
+  if (!currentTopic) return;
   const q = currentTopic.questions[currentQIdx];
   saveNotes(q.id, document.getElementById('q-notes').value);
   document.getElementById('score-form').classList.remove('hidden');
+  document.getElementById('score-got').value = '';
+  document.getElementById('score-max').value = q.marks;
+  document.getElementById('score-got').focus();
 });
 
 document.getElementById('btn-save-score').addEventListener('click', () => {
+  if (!currentTopic) return;
   const q = currentTopic.questions[currentQIdx];
   const got = parseInt(document.getElementById('score-got').value);
   const max = parseInt(document.getElementById('score-max').value) || q.marks;
+  if (isNaN(got)) { document.getElementById('score-got').focus(); return; }
   const pct = max > 0 ? Math.round((got / max) * 100) : undefined;
   const notes = document.getElementById('q-notes').value;
   saveNotes(q.id, notes);
@@ -516,17 +522,40 @@ function renderCurrentPPQuestion() {
   document.getElementById('pp-notes').value = getNotes(q.id);
   document.getElementById('pp-score-form').classList.add('hidden');
 
+  const flagBtn = document.getElementById('pp-btn-flag');
+  if (flagBtn) flagBtn.classList.toggle('flagged', getFlag(q.id));
+
+  const pdfUrl  = currentPaper.pdfUrl || null;
+  const solUrl  = currentPaper.solUrl || null;
+  const pageUrl = pdfUrl && q.page ? `${pdfUrl}#page=${q.page}` : pdfUrl;
+
   document.getElementById('pp-question-display').innerHTML = `
-    <h3>Question ${q.num}</h3>
-    <p style="color:var(--text-dim);font-size:0.85rem;margin-bottom:10px">Topic: ${q.topic}</p>
-    <p>${q.text}</p>
-    <span class="marks">[${q.marks} marks]</span>
-    <p style="margin-top:14px;font-size:0.8rem;color:var(--text-muted)">
-      ℹ️ For the actual question, download the paper using the link on the paper card, or visit 
-      <a href="https://www.physicsandmathstutor.com/maths-revision/a-level-edexcel/" target="_blank" style="color:var(--accent2)">PhysicsAndMathsTutor</a> / 
-      <a href="https://qualifications.pearson.com/en/qualifications/edexcel-a-levels/mathematics-2017.html" target="_blank" style="color:var(--accent2)">Edexcel</a>.
-    </p>
+    <div class="pp-q-header">
+      <div>
+        <h3>Question ${q.num} <span class="marks">[${q.marks} marks]</span></h3>
+        <span class="pp-topic-badge">${q.topic}</span>
+        ${q.page ? `<span style="font-size:0.7rem;color:var(--text-muted);margin-left:8px;font-family:'Space Mono',monospace">≈ p.${q.page}</span>` : ''}
+      </div>
+      <div class="pp-paper-links">
+        ${pageUrl  ? `<a href="${pageUrl}"  target="_blank" class="btn btn-secondary" style="font-size:0.8rem;text-decoration:none;padding:6px 12px">📄 Open Paper</a>` : ''}
+        ${solUrl   ? `<a href="${solUrl}"   target="_blank" class="btn btn-secondary" style="font-size:0.8rem;text-decoration:none;padding:6px 12px">✓ Mark Scheme</a>` : ''}
+        ${!pageUrl ? `<a href="${currentPaper.link}" target="_blank" class="btn btn-secondary" style="font-size:0.8rem;text-decoration:none;padding:6px 12px">↗ Get Paper</a>` : ''}
+      </div>
+    </div>
+    <div class="pp-q-body">
+      <p class="pp-q-desc">${q.text}</p>
+      <div class="pp-q-howto">
+        Work through <strong>Question ${q.num}</strong> on your tablet or paper, then log your time and score below.
+        ${q.page ? `The question starts on approximately <strong>page ${q.page}</strong> of the paper.` : ''}
+      </div>
+    </div>
+    ${pageUrl ? `
+    <details class="pp-pdf-embed-toggle" id="pp-pdf-details">
+      <summary>📄 View paper inline (page ${q.page || 1})</summary>
+      <iframe src="${pageUrl}" class="pp-pdf-iframe" title="${currentPaper.title}"></iframe>
+    </details>` : ''}
   `;
+
   renderQHistory(q.id, 'pp-q-history');
 }
 
@@ -578,15 +607,21 @@ document.getElementById('pp-btn-next').addEventListener('click', () => {
 });
 
 document.getElementById('pp-btn-mark').addEventListener('click', () => {
+  if (!currentPaper) return;
   const q = currentPaper.questions[currentPPIdx];
   saveNotes(q.id, document.getElementById('pp-notes').value);
   document.getElementById('pp-score-form').classList.remove('hidden');
+  document.getElementById('pp-score-got').value = '';
+  document.getElementById('pp-score-max').value = q.marks;
+  document.getElementById('pp-score-got').focus();
 });
 
 document.getElementById('pp-btn-save').addEventListener('click', () => {
+  if (!currentPaper) return;
   const q = currentPaper.questions[currentPPIdx];
   const got = parseInt(document.getElementById('pp-score-got').value);
   const max = parseInt(document.getElementById('pp-score-max').value) || q.marks;
+  if (isNaN(got)) { document.getElementById('pp-score-got').focus(); return; }
   const pct = max > 0 ? Math.round((got / max) * 100) : undefined;
   const notes = document.getElementById('pp-notes').value;
   saveNotes(q.id, notes);
@@ -861,6 +896,196 @@ document.getElementById('btn-clear-flags')?.addEventListener('click', () => {
   renderFlaggedView();
   renderTopicsGrid();
 });
+
+// ── DRAWING CANVAS ────────────────────────────────────────────
+// Shared canvas that appears in both topic and PP panels.
+// Supports pen, eraser, colours, thickness, undo, clear.
+// Tablet/stylus pressure is respected via pointerEvents.
+
+const CANVAS_STORE_KEY = 'canvas:current';
+let drawCanvas = null, drawCtx = null;
+let isDrawing = false, lastX = 0, lastY = 0;
+let drawTool = 'pen';   // 'pen' | 'eraser'
+let drawColor = '#e8e4d9';
+let drawSize = 3;
+let drawHistory = [];   // array of ImageData for undo
+const MAX_UNDO = 30;
+
+function initCanvas(canvasEl) {
+  drawCanvas = canvasEl;
+  drawCtx = canvasEl.getContext('2d');
+  resizeCanvas();
+
+  // Pointer events — works for mouse, touch and stylus/tablet
+  canvasEl.addEventListener('pointerdown', e => {
+    isDrawing = true;
+    const {x, y} = canvasPos(e);
+    lastX = x; lastY = y;
+    // save state for undo before stroke
+    drawHistory.push(drawCtx.getImageData(0, 0, drawCanvas.width, drawCanvas.height));
+    if (drawHistory.length > MAX_UNDO) drawHistory.shift();
+    drawCtx.beginPath();
+    drawCtx.arc(x, y, (drawTool === 'eraser' ? drawSize * 4 : drawSize) / 2, 0, Math.PI * 2);
+    drawCtx.fillStyle = drawTool === 'eraser' ? '#0f0f13' : drawColor;
+    drawCtx.fill();
+    e.preventDefault();
+  });
+
+  canvasEl.addEventListener('pointermove', e => {
+    if (!isDrawing) return;
+    const {x, y} = canvasPos(e);
+    const pressure = e.pressure > 0 ? e.pressure : 1;
+    const size = drawTool === 'eraser' ? drawSize * 4 : drawSize * pressure;
+    drawCtx.beginPath();
+    drawCtx.moveTo(lastX, lastY);
+    drawCtx.lineTo(x, y);
+    drawCtx.strokeStyle = drawTool === 'eraser' ? '#0f0f13' : drawColor;
+    drawCtx.lineWidth = size;
+    drawCtx.lineCap = 'round';
+    drawCtx.lineJoin = 'round';
+    drawCtx.stroke();
+    lastX = x; lastY = y;
+    e.preventDefault();
+  });
+
+  canvasEl.addEventListener('pointerup',    () => { isDrawing = false; });
+  canvasEl.addEventListener('pointerleave', () => { isDrawing = false; });
+  canvasEl.setPointerCapture && canvasEl.addEventListener('pointerdown', e => {
+    try { canvasEl.setPointerCapture(e.pointerId); } catch {}
+  });
+}
+
+function canvasPos(e) {
+  const rect = drawCanvas.getBoundingClientRect();
+  const scaleX = drawCanvas.width  / rect.width;
+  const scaleY = drawCanvas.height / rect.height;
+  return {
+    x: (e.clientX - rect.left) * scaleX,
+    y: (e.clientY - rect.top)  * scaleY,
+  };
+}
+
+function resizeCanvas() {
+  if (!drawCanvas) return;
+  const saved = drawCtx.getImageData(0, 0, drawCanvas.width, drawCanvas.height);
+  drawCanvas.width  = drawCanvas.offsetWidth  || 800;
+  drawCanvas.height = drawCanvas.offsetHeight || 400;
+  drawCtx.putImageData(saved, 0, 0);
+}
+
+function buildDrawingPanel(containerId) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+
+  container.innerHTML = `
+    <div class="draw-toolbar">
+      <div class="draw-tools">
+        <button class="draw-tool-btn active" id="draw-pen" title="Pen">✏️</button>
+        <button class="draw-tool-btn" id="draw-eraser" title="Eraser">⬜</button>
+      </div>
+      <div class="draw-colors">
+        ${['#e8e4d9','#c8a96e','#6e9ec8','#6ec8a0','#c86e9e','#e05555','#ffffff'].map(c =>
+          `<button class="draw-color-btn" style="background:${c}" data-color="${c}" title="${c}"></button>`
+        ).join('')}
+      </div>
+      <div class="draw-sizes">
+        <label style="font-size:0.72rem;color:var(--text-muted)">Size</label>
+        <input type="range" id="draw-size" min="1" max="20" value="3" style="width:80px;accent-color:var(--accent)" />
+        <span id="draw-size-val" style="font-size:0.72rem;color:var(--text-muted);font-family:'Space Mono',monospace;min-width:20px">3</span>
+      </div>
+      <div class="draw-actions">
+        <button class="btn btn-secondary draw-action-btn" id="draw-undo" title="Undo">↩ Undo</button>
+        <button class="btn btn-secondary draw-action-btn" id="draw-clear" title="Clear">✕ Clear</button>
+        <button class="btn btn-secondary draw-action-btn" id="draw-save" title="Save as image">⬇ Save</button>
+      </div>
+    </div>
+    <canvas id="draw-canvas" class="draw-canvas"></canvas>
+  `;
+
+  const canvas = container.querySelector('#draw-canvas');
+  initCanvas(canvas);
+
+  // Tool buttons
+  container.querySelector('#draw-pen').addEventListener('click', () => {
+    drawTool = 'pen';
+    container.querySelector('#draw-pen').classList.add('active');
+    container.querySelector('#draw-eraser').classList.remove('active');
+    drawCanvas.style.cursor = 'crosshair';
+  });
+  container.querySelector('#draw-eraser').addEventListener('click', () => {
+    drawTool = 'eraser';
+    container.querySelector('#draw-eraser').classList.add('active');
+    container.querySelector('#draw-pen').classList.remove('active');
+    drawCanvas.style.cursor = 'cell';
+  });
+
+  // Colour buttons
+  container.querySelectorAll('.draw-color-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      drawColor = btn.dataset.color;
+      drawTool = 'pen';
+      container.querySelector('#draw-pen').classList.add('active');
+      container.querySelector('#draw-eraser').classList.remove('active');
+      container.querySelectorAll('.draw-color-btn').forEach(b => b.classList.remove('active-color'));
+      btn.classList.add('active-color');
+    });
+  });
+  // Set first colour active
+  container.querySelector(`.draw-color-btn[data-color="${drawColor}"]`)?.classList.add('active-color');
+
+  // Size slider
+  const sizeSlider = container.querySelector('#draw-size');
+  const sizeVal    = container.querySelector('#draw-size-val');
+  sizeSlider.addEventListener('input', () => {
+    drawSize = parseInt(sizeSlider.value);
+    sizeVal.textContent = drawSize;
+  });
+
+  // Undo
+  container.querySelector('#draw-undo').addEventListener('click', () => {
+    if (drawHistory.length) {
+      drawCtx.putImageData(drawHistory.pop(), 0, 0);
+    }
+  });
+
+  // Clear
+  container.querySelector('#draw-clear').addEventListener('click', () => {
+    if (!confirm('Clear the canvas?')) return;
+    drawHistory.push(drawCtx.getImageData(0, 0, drawCanvas.width, drawCanvas.height));
+    drawCtx.clearRect(0, 0, drawCanvas.width, drawCanvas.height);
+  });
+
+  // Save as PNG
+  container.querySelector('#draw-save').addEventListener('click', () => {
+    const a = document.createElement('a');
+    a.href = drawCanvas.toDataURL('image/png');
+    a.download = 'maths-working.png';
+    a.click();
+  });
+
+  drawCanvas.style.cursor = 'crosshair';
+}
+
+// Wire up draw toggle buttons (added to both panels in HTML)
+function wireDrawToggle(toggleBtnId, containerId) {
+  const btn = document.getElementById(toggleBtnId);
+  const container = document.getElementById(containerId);
+  if (!btn || !container) return;
+  let built = false;
+  btn.addEventListener('click', () => {
+    const hidden = container.classList.toggle('hidden');
+    btn.classList.toggle('active-draw', !hidden);
+    if (!hidden && !built) {
+      built = true;
+      buildDrawingPanel(containerId);
+    }
+    // resize canvas when shown
+    if (!hidden) setTimeout(resizeCanvas, 50);
+  });
+}
+
+wireDrawToggle('btn-draw-q',  'draw-panel-q');
+wireDrawToggle('btn-draw-pp', 'draw-panel-pp');
 
 // ── INIT ──────────────────────────────────────────────────────
 switchView('home');
