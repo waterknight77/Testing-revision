@@ -43,7 +43,44 @@ function getAllFlags() {
   return flags;
 }
 
-// ── VIEW ROUTING ─────────────────────────────────────────────
+// ── SETTINGS ─────────────────────────────────────────────────
+const SETTINGS_KEY = 'app:settings';
+const defaultSettings = {
+  requireTimer: true,   // must start timer before marking
+  timerBuffer:  20,     // extra seconds buffer on suggested time
+};
+function getSettings() { return { ...defaultSettings, ...(store.get(SETTINGS_KEY) || {}) }; }
+function saveSettings(s) { store.set(SETTINGS_KEY, s); }
+
+// ── CLEAN BAD DATA ────────────────────────────────────────────
+// Runs once on load — removes corrupted history entries
+function cleanBadData() {
+  for (let i = localStorage.length - 1; i >= 0; i--) {
+    const k = localStorage.key(i);
+    if (!k.startsWith('hist:')) continue;
+    const h = store.get(k);
+    if (!Array.isArray(h)) { localStorage.removeItem(k); continue; }
+    const clean = h.filter(e =>
+      e && typeof e.ts === 'number' &&
+      (e.pct === undefined || (Number.isFinite(e.pct) && e.pct >= 0 && e.pct <= 100))
+    );
+    if (clean.length !== h.length) store.set(k, clean);
+  }
+}
+cleanBadData();
+
+// ── SUGGESTED TIME ────────────────────────────────────────────
+// Edexcel papers are 2 hours (120 min) for ~100 marks.
+// So roughly 1.2 min per mark, + buffer.
+function suggestedSecs(marks) {
+  const s = getSettings();
+  return Math.round(marks * 1.2 * 60) + s.timerBuffer;
+}
+function fmtSecs(s) {
+  return `${Math.floor(s/60)}m ${s%60}s`;
+}
+
+
 const views = {};
 document.querySelectorAll('.view').forEach(v => { views[v.id.replace('view-', '')] = v; });
 const navLinks = document.querySelectorAll('.nav-link');
@@ -60,6 +97,7 @@ function switchView(name) {
   if (name === 'madasmaths') renderMadAsMaths();
   if (name === 'stats') renderProgress();
   if (name === 'flagged') renderFlaggedView();
+  if (name === 'settings') renderSettingsView();
 }
 
 navLinks.forEach(l => l.addEventListener('click', e => { e.preventDefault(); switchView(l.dataset.view); }));
@@ -359,8 +397,11 @@ function renderCurrentQuestion() {
   document.getElementById('question-display').innerHTML = `
     <h3>Question ${currentQIdx + 1}</h3>
     <p>${q.text}</p>
-    <span class="marks">[${q.marks} marks]</span>
-    ${q.source ? `<p style="margin-top:10px;font-size:0.75rem;color:var(--text-muted)">Source: ${q.source}</p>` : ''}
+    <div style="display:flex;align-items:center;gap:12px;margin-top:12px;flex-wrap:wrap">
+      <span class="marks">[${q.marks} marks]</span>
+      <span class="suggested-time">⏱ Suggested: ~${fmtSecs(suggestedSecs(q.marks))}</span>
+      ${q.source ? `<span style="font-size:0.75rem;color:var(--text-muted)">Source: ${q.source}</span>` : ''}
+    </div>
   `;
 
   // Show/hide hint button
@@ -441,39 +482,55 @@ document.getElementById('btn-next-q').addEventListener('click', () => {
 
 document.getElementById('btn-mark-done').addEventListener('click', () => {
   if (!currentTopic) return;
+  const s = getSettings();
+  // Enforce timer requirement
+  if (s.requireTimer && !qTimer.isRunning() && qTimer.value() === 0) {
+    showTimerWarning('q-timer-warning');
+    return;
+  }
+  qTimer.pause();
   const q = currentTopic.questions[currentQIdx];
   saveNotes(q.id, document.getElementById('q-notes').value);
   document.getElementById('score-form').classList.remove('hidden');
   document.getElementById('score-got').value = '';
-  document.getElementById('score-max').value = q.marks;
+  // Lock max marks to question's mark value
+  const maxEl = document.getElementById('score-max');
+  maxEl.value = q.marks;
+  maxEl.readOnly = true;
+  maxEl.style.opacity = '0.6';
   document.getElementById('score-got').focus();
-  // Show answer if available
+  // Show answer
   const answerBox = document.getElementById('q-answer-box');
   if (answerBox) {
     if (q.answer) {
       answerBox.classList.remove('hidden');
       document.getElementById('q-answer-text').innerHTML = q.answer;
       if (window.MathJax) MathJax.typesetPromise([answerBox]).catch(() => {});
-    } else {
-      answerBox.classList.add('hidden');
-    }
+    } else answerBox.classList.add('hidden');
   }
 });
 
 document.getElementById('btn-save-score').addEventListener('click', () => {
   if (!currentTopic) return;
   const q = currentTopic.questions[currentQIdx];
-  const got = parseInt(document.getElementById('score-got').value);
-  const max = parseInt(document.getElementById('score-max').value) || q.marks;
-  if (isNaN(got)) { document.getElementById('score-got').focus(); return; }
-  const pct = max > 0 ? Math.round((got / max) * 100) : undefined;
+  const gotEl = document.getElementById('score-got');
+  const got = parseInt(gotEl.value);
+  const max = q.marks; // always use question's own marks
+  if (isNaN(got) || got < 0 || got > max) {
+    gotEl.style.borderColor = 'var(--accent3)';
+    gotEl.focus();
+    gotEl.title = `Enter a number between 0 and ${max}`;
+    setTimeout(() => { gotEl.style.borderColor = ''; }, 2000);
+    return;
+  }
+  const pct = Math.round((got / max) * 100);
   const notes = document.getElementById('q-notes').value;
   saveNotes(q.id, notes);
   saveHistory(q.id, { ts: Date.now(), secs: qTimer.value(), pct, got, max, notes });
   qTimer.reset();
   document.getElementById('score-form').classList.add('hidden');
-  // Hide answer box too
   document.getElementById('q-answer-box')?.classList.add('hidden');
+  document.getElementById('q-timer-warning')?.classList.add('hidden');
   renderCurrentQuestion();
   renderTopicsGrid();
 });
@@ -546,7 +603,9 @@ function renderCurrentPPQuestion() {
   document.getElementById('pp-question-display').innerHTML = `
     <div class="pp-q-header">
       <div>
-        <h3>Question ${q.num} <span class="marks">[${q.marks} marks]</span></h3>
+        <h3>Question ${q.num} <span class="marks">[${q.marks} marks]</span>
+          <span class="suggested-time" style="margin-left:8px">⏱ ~${fmtSecs(suggestedSecs(q.marks))}</span>
+        </h3>
         <span class="pp-topic-badge">${q.topic}</span>
         ${q.page ? `<span style="font-size:0.7rem;color:var(--text-muted);margin-left:8px;font-family:'Space Mono',monospace">≈ p.${q.page}</span>` : ''}
       </div>
@@ -622,26 +681,42 @@ document.getElementById('pp-btn-next').addEventListener('click', () => {
 
 document.getElementById('pp-btn-mark').addEventListener('click', () => {
   if (!currentPaper) return;
+  const s = getSettings();
+  if (s.requireTimer && !ppTimer.isRunning() && ppTimer.value() === 0) {
+    showTimerWarning('pp-timer-warning');
+    return;
+  }
+  ppTimer.pause();
   const q = currentPaper.questions[currentPPIdx];
   saveNotes(q.id, document.getElementById('pp-notes').value);
   document.getElementById('pp-score-form').classList.remove('hidden');
   document.getElementById('pp-score-got').value = '';
-  document.getElementById('pp-score-max').value = q.marks;
+  const maxEl = document.getElementById('pp-score-max');
+  maxEl.value = q.marks;
+  maxEl.readOnly = true;
+  maxEl.style.opacity = '0.6';
   document.getElementById('pp-score-got').focus();
 });
 
 document.getElementById('pp-btn-save').addEventListener('click', () => {
   if (!currentPaper) return;
   const q = currentPaper.questions[currentPPIdx];
-  const got = parseInt(document.getElementById('pp-score-got').value);
-  const max = parseInt(document.getElementById('pp-score-max').value) || q.marks;
-  if (isNaN(got)) { document.getElementById('pp-score-got').focus(); return; }
-  const pct = max > 0 ? Math.round((got / max) * 100) : undefined;
+  const gotEl = document.getElementById('pp-score-got');
+  const got = parseInt(gotEl.value);
+  const max = q.marks;
+  if (isNaN(got) || got < 0 || got > max) {
+    gotEl.style.borderColor = 'var(--accent3)';
+    gotEl.focus();
+    setTimeout(() => { gotEl.style.borderColor = ''; }, 2000);
+    return;
+  }
+  const pct = Math.round((got / max) * 100);
   const notes = document.getElementById('pp-notes').value;
   saveNotes(q.id, notes);
   saveHistory(q.id, { ts: Date.now(), secs: ppTimer.value(), pct, got, max, notes });
   ppTimer.reset();
   document.getElementById('pp-score-form').classList.add('hidden');
+  document.getElementById('pp-timer-warning')?.classList.add('hidden');
   renderCurrentPPQuestion();
   renderPastPapers();
 });
@@ -1109,6 +1184,102 @@ function wireDrawToggle(toggleBtnId, containerId) {
 
 wireDrawToggle('btn-draw-q',  'draw-panel-q');
 wireDrawToggle('btn-draw-pp', 'draw-panel-pp');
+
+// ── TIMER WARNING ─────────────────────────────────────────────
+function showTimerWarning(elId) {
+  const el = document.getElementById(elId);
+  if (!el) return;
+  el.classList.remove('hidden');
+  el.textContent = '⚑ Start the timer before marking!';
+  setTimeout(() => el.classList.add('hidden'), 3000);
+}
+
+// ── SETTINGS VIEW ─────────────────────────────────────────────
+function renderSettingsView() {
+  const s = getSettings();
+  const content = document.getElementById('settings-content');
+  if (!content) return;
+
+  content.innerHTML = `
+    <div class="settings-group">
+      <div class="settings-group-title">Timer</div>
+
+      <div class="setting-row">
+        <div class="setting-info">
+          <div class="setting-label">Require timer before marking</div>
+          <div class="setting-desc">You must start the timer before you can click Mark &amp; Score. Keeps you honest!</div>
+        </div>
+        <label class="toggle-switch">
+          <input type="checkbox" id="setting-require-timer" ${s.requireTimer ? 'checked' : ''}>
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+
+      <div class="setting-row">
+        <div class="setting-info">
+          <div class="setting-label">Time buffer (seconds)</div>
+          <div class="setting-desc">Extra seconds added to the suggested time per question. Currently <strong>${s.timerBuffer}s</strong>.</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <input type="range" id="setting-buffer" min="0" max="120" step="10" value="${s.timerBuffer}"
+            style="width:100px;accent-color:var(--accent)" />
+          <span id="setting-buffer-val" style="font-family:'Space Mono',monospace;font-size:0.8rem;color:var(--accent);min-width:32px">${s.timerBuffer}s</span>
+        </div>
+      </div>
+
+      <div class="setting-row" style="padding-top:4px">
+        <div class="setting-info">
+          <div class="setting-label">Suggested time formula</div>
+          <div class="setting-desc">~1.2 min per mark + buffer. E.g. a 5-mark question → ~${fmtSecs(suggestedSecs(5))} suggested.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="settings-group">
+      <div class="settings-group-title">Data</div>
+      <div class="setting-row">
+        <div class="setting-info">
+          <div class="setting-label">Clear all progress data</div>
+          <div class="setting-desc">Deletes all scores, history, notes and flags. Cannot be undone.</div>
+        </div>
+        <button class="btn btn-secondary" id="btn-clear-all-data" style="border-color:var(--accent3);color:var(--accent3)">🗑 Reset All Data</button>
+      </div>
+    </div>
+  `;
+
+  // Require timer toggle
+  document.getElementById('setting-require-timer').addEventListener('change', e => {
+    const s = getSettings(); s.requireTimer = e.target.checked; saveSettings(s);
+  });
+
+  // Buffer slider
+  const bufSlider = document.getElementById('setting-buffer');
+  const bufVal    = document.getElementById('setting-buffer-val');
+  bufSlider.addEventListener('input', () => {
+    const s = getSettings();
+    s.timerBuffer = parseInt(bufSlider.value);
+    saveSettings(s);
+    bufVal.textContent = s.timerBuffer + 's';
+    // refresh desc
+    content.querySelector('.setting-desc:last-of-type') &&
+      renderSettingsView(); // re-render to update example time
+  });
+
+  // Reset all data
+  document.getElementById('btn-clear-all-data').addEventListener('click', () => {
+    if (!confirm('Are you sure? This will delete ALL your scores, history, notes and flags permanently.')) return;
+    const keysToRemove = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      const k = localStorage.key(i);
+      if (k.startsWith('hist:') || k.startsWith('notes:') || k.startsWith('flag:')) {
+        keysToRemove.push(k);
+      }
+    }
+    keysToRemove.forEach(k => localStorage.removeItem(k));
+    alert('All data cleared!');
+    updateDashboard();
+  });
+}
 
 // ── INIT ──────────────────────────────────────────────────────
 switchView('home');

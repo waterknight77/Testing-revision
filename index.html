@@ -27,6 +27,7 @@
       <li><a href="#" class="nav-link" data-view="madasmaths"><span class="nav-icon">🔬</span> MadAsMaths</a></li>
       <li><a href="#" class="nav-link" data-view="stats"><span class="nav-icon">◎</span> Progress</a></li>
       <li><a href="#" class="nav-link" data-view="flagged"><span class="nav-icon">⚑</span> Flagged</a></li>
+      <li><a href="#" class="nav-link" data-view="settings"><span class="nav-icon">⚙</span> Settings</a></li>
     </ul>
     <div class="nav-section-label" style="margin-top:auto;">BOOKS</div>
     <div class="book-chips">
@@ -134,6 +135,7 @@
             <button class="btn btn-draw" id="btn-draw-q" title="Open drawing canvas">🖊 Draw</button>
             <button class="btn btn-primary" id="btn-mark-done">Mark &amp; Score</button>
           </div>
+          <div id="q-timer-warning" class="timer-warning hidden"></div>
           <div id="draw-panel-q" class="draw-panel hidden"></div>
           <div class="notes-area">
             <label class="notes-label">📝 Notes</label>
@@ -209,6 +211,7 @@
             <button class="btn btn-draw" id="btn-draw-pp" title="Open drawing canvas">🖊 Draw</button>
             <button class="btn btn-primary" id="pp-btn-mark">Mark &amp; Score</button>
           </div>
+          <div id="pp-timer-warning" class="timer-warning hidden"></div>
           <div id="draw-panel-pp" class="draw-panel hidden"></div>
           <div class="notes-area">
             <label class="notes-label">📝 Notes</label>
@@ -274,6 +277,14 @@
       </div>
       <p class="madas-intro">Questions you've flagged while practising. Click any question to jump straight to it.</p>
       <div id="flagged-list"></div>
+    </div>
+
+    <!-- SETTINGS VIEW -->
+    <div id="view-settings" class="view">
+      <div class="page-header">
+        <h1 class="page-title">⚙ Settings</h1>
+      </div>
+      <div id="settings-content"></div>
     </div>
 
   </main>
