@@ -414,7 +414,11 @@ function renderCurrentQuestion() {
   }
 
   renderQHistory(q.id, 'q-history');
-  if (window.MathJax) MathJax.typesetPromise([document.getElementById('question-display')]).catch(() => {});
+  if (window.MathJax) {
+    const el = document.getElementById('question-display');
+    MathJax.typesetClear([el]);
+    MathJax.typesetPromise([el]).catch(() => {});
+  }
 }
 
 function renderQHistory(qId, containerId) {
@@ -503,9 +507,14 @@ document.getElementById('btn-mark-done').addEventListener('click', () => {
   const answerBox = document.getElementById('q-answer-box');
   if (answerBox) {
     if (q.answer) {
+      const answerText = document.getElementById('q-answer-text');
+      answerText.innerHTML = q.answer;
       answerBox.classList.remove('hidden');
-      document.getElementById('q-answer-text').innerHTML = q.answer;
-      if (window.MathJax) MathJax.typesetPromise([answerBox]).catch(() => {});
+      // Clear MathJax's cache for this element then re-render
+      if (window.MathJax) {
+        MathJax.typesetClear([answerText]);
+        MathJax.typesetPromise([answerText]).catch(() => {});
+      }
     } else answerBox.classList.add('hidden');
   }
 });
@@ -1103,19 +1112,24 @@ function buildDrawingPanel(containerId) {
 
   // ── Resize handle (drag to change height) ──
   const handle = container.querySelector(`#draw-resize-${containerId}`);
-  let resizing = false, startY = 0, startH = 0;
+  let resizing = false, startY = 0, startH = 0, currentH = 420;
   handle.addEventListener('pointerdown', e => {
     resizing = true;
     startY = e.clientY;
-    startH = canvas.offsetHeight;
+    startH = currentH;
     handle.setPointerCapture(e.pointerId);
     e.preventDefault();
   });
   handle.addEventListener('pointermove', e => {
     if (!resizing) return;
     const newH = Math.max(200, startH + (e.clientY - startY));
+    currentH = newH;
     canvas.style.height = newH + 'px';
-    resizeCanvas();
+    // Resize canvas internal resolution preserving content
+    const saved = drawCtx ? drawCtx.getImageData(0, 0, canvas.width, canvas.height) : null;
+    canvas.width  = canvas.offsetWidth || 800;
+    canvas.height = newH;
+    if (saved && drawCtx) drawCtx.putImageData(saved, 0, 0);
   });
   handle.addEventListener('pointerup', () => { resizing = false; });
 

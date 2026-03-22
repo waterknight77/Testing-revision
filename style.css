@@ -945,18 +945,18 @@ select option { background: var(--bg2); }
 /* ── CANVAS RESIZE HANDLE ── */
 .draw-resize-handle {
   text-align: center;
-  padding: 4px;
+  padding: 6px;
   cursor: ns-resize;
   color: var(--text-muted);
   font-size: 1rem;
   background: var(--bg2);
   border-top: 1px solid var(--border);
   user-select: none;
-  letter-spacing: 3px;
-  transition: color 0.12s;
+  letter-spacing: 4px;
+  transition: all 0.12s;
+  touch-action: none;
 }
-
-.draw-resize-handle:hover { color: var(--accent); }
+.draw-resize-handle:hover { color: var(--accent); background: var(--bg3); }
 
 /* ── DRAWING CANVAS ── */
 .btn-draw {
@@ -1046,10 +1046,11 @@ select option { background: var(--bg2); }
 .draw-canvas {
   display: block;
   width: 100%;
-  height: 420px;
+  height: 420px; /* default — overridden by inline style when resized */
   cursor: crosshair;
-  touch-action: none; /* prevent scroll on tablet */
+  touch-action: none;
   background: #0f0f13;
+  box-sizing: content-box;
 }
 
 /* ── PAST PAPER QUESTION DISPLAY ── */
