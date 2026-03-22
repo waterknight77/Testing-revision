@@ -1,0 +1,83 @@
+# A Level Maths Revision
+
+A personal revision website for Edexcel A Level Mathematics, built for use on GitHub Pages.
+
+## Features
+
+- 📋 **Past Paper Questions** — Real Edexcel AS/A2 questions with full solutions and mark schemes
+- ⚡ **MadAsMaths Questions** — Synthetic practice questions (Bronze/Silver/Gold difficulty)
+- 📚 **Topic Browser** — All chapters from Year 1 & 2 Pure, Statistics and Mechanics
+- ⏱️ **Timer** — Time yourself on individual questions
+- 📊 **Progress Tracking** — Log scores, write notes, see when you last did a question
+- 💾 **Local Storage** — All your data saves automatically in your browser
+
+## How to Deploy to GitHub Pages
+
+1. Create a new GitHub repository (e.g. `maths-revision`)
+2. Upload all files maintaining the folder structure:
+   ```
+   index.html
+   css/style.css
+   js/app.js
+   data/topics.js
+   README.md
+   ```
+3. Go to **Settings → Pages**
+4. Under **Source**, select `main` branch and `/ (root)` folder
+5. Click **Save** — your site will be live at `https://yourusername.github.io/maths-revision`
+
+## Adding More Questions
+
+To add more past paper questions, edit `data/topics.js` and add entries to the `PAST_PAPERS` array:
+
+```js
+{
+  id: "pp_unique_id",
+  paper: "Edexcel AS 2024 P1 Q3",
+  year: 2024,
+  level: "AS",  // "AS" or "A2"
+  paperNum: 1,
+  qNum: 3,
+  topic: "Quadratics",
+  subtopic: "Completing the square",
+  marks: 4,
+  question: "Your question in LaTeX...",
+  answer: "Your answer in LaTeX...",
+  solution: "Step by step solution..."
+}
+```
+
+For MadAsMaths questions, add to the `MADASMATHS` array:
+
+```js
+{
+  id: "mm_unique_id",
+  set: "MAM-A003",
+  difficulty: "Silver",  // "Bronze", "Silver", or "Gold"
+  topic: "Algebraic Expressions",
+  subtopic: "Surds",
+  question: "...",
+  answer: "...",
+  solution: "..."
+}
+```
+
+## LaTeX in Questions
+
+Questions support LaTeX via MathJax. Use:
+- Inline: `$x^2 + 1$` or `\\(x^2 + 1\\)`
+- Display: `$$\\frac{d}{dx}$$` or `\\[\\frac{d}{dx}\\]`
+
+## Data Storage
+
+All your scores, notes and attempt history are stored in your browser's **localStorage**. This means:
+- Data persists between visits on the same browser/device
+- Clearing browser data will reset your progress
+- Data is NOT synced across devices
+
+## Textbooks Covered
+
+- **Year 1 Pure** — Edexcel AS and A Level Mathematics Pure Mathematics Year 1/AS
+- **Year 1 Stats & Mechanics** — Edexcel AS and A Level Mathematics Statistics & Mechanics Year 1/AS
+- **Year 2 Pure** — Edexcel A Level Mathematics Pure Mathematics Year 2
+- **Year 2 Stats & Mechanics** — Edexcel A Level Mathematics Statistics & Mechanics Year 2
