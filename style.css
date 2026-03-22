@@ -733,6 +733,47 @@ select option { background: var(--bg2); }
 }
 .mm-pdf-link:hover { background: rgba(110,158,200,0.1); border-color: var(--accent2); }
 
+/* ── ANSWER BOX ── */
+.answer-box {
+  background: rgba(110,200,160,0.07);
+  border: 1px solid rgba(110,200,160,0.3);
+  border-radius: var(--radius);
+  padding: 14px 18px;
+}
+
+.answer-box.hidden { display: none; }
+
+.answer-label {
+  font-size: 0.72rem;
+  color: var(--accent4);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.answer-text {
+  font-size: 0.9rem;
+  color: var(--text);
+  line-height: 1.8;
+}
+
+/* ── CANVAS RESIZE HANDLE ── */
+.draw-resize-handle {
+  text-align: center;
+  padding: 4px;
+  cursor: ns-resize;
+  color: var(--text-muted);
+  font-size: 1rem;
+  background: var(--bg2);
+  border-top: 1px solid var(--border);
+  user-select: none;
+  letter-spacing: 3px;
+  transition: color 0.12s;
+}
+
+.draw-resize-handle:hover { color: var(--accent); }
+
 /* ── DRAWING CANVAS ── */
 .btn-draw {
   background: var(--bg3);

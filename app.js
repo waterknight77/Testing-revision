@@ -350,6 +350,7 @@ function renderCurrentQuestion() {
   document.getElementById('score-got').value = '';
   document.getElementById('score-max').value = '';
   document.getElementById('q-hint-area').classList.add('hidden');
+  document.getElementById('q-answer-box')?.classList.add('hidden');
 
   // Flag button state
   const flagBtn = document.getElementById('btn-flag-q');
@@ -446,6 +447,17 @@ document.getElementById('btn-mark-done').addEventListener('click', () => {
   document.getElementById('score-got').value = '';
   document.getElementById('score-max').value = q.marks;
   document.getElementById('score-got').focus();
+  // Show answer if available
+  const answerBox = document.getElementById('q-answer-box');
+  if (answerBox) {
+    if (q.answer) {
+      answerBox.classList.remove('hidden');
+      document.getElementById('q-answer-text').innerHTML = q.answer;
+      if (window.MathJax) MathJax.typesetPromise([answerBox]).catch(() => {});
+    } else {
+      answerBox.classList.add('hidden');
+    }
+  }
 });
 
 document.getElementById('btn-save-score').addEventListener('click', () => {
@@ -460,6 +472,8 @@ document.getElementById('btn-save-score').addEventListener('click', () => {
   saveHistory(q.id, { ts: Date.now(), secs: qTimer.value(), pct, got, max, notes });
   qTimer.reset();
   document.getElementById('score-form').classList.add('hidden');
+  // Hide answer box too
+  document.getElementById('q-answer-box')?.classList.add('hidden');
   renderCurrentQuestion();
   renderTopicsGrid();
 });
@@ -898,30 +912,40 @@ document.getElementById('btn-clear-flags')?.addEventListener('click', () => {
 });
 
 // ── DRAWING CANVAS ────────────────────────────────────────────
-// Shared canvas that appears in both topic and PP panels.
-// Supports pen, eraser, colours, thickness, undo, clear.
-// Tablet/stylus pressure is respected via pointerEvents.
-
-const CANVAS_STORE_KEY = 'canvas:current';
 let drawCanvas = null, drawCtx = null;
 let isDrawing = false, lastX = 0, lastY = 0;
-let drawTool = 'pen';   // 'pen' | 'eraser'
+let drawTool = 'pen';
 let drawColor = '#e8e4d9';
 let drawSize = 3;
-let drawHistory = [];   // array of ImageData for undo
-const MAX_UNDO = 30;
+let drawHistory = [];
+const MAX_UNDO = 40;
+
+function doUndo() {
+  if (drawHistory.length && drawCtx) {
+    drawCtx.putImageData(drawHistory.pop(), 0, 0);
+  }
+}
+
+// Global Ctrl+Z handler
+document.addEventListener('keydown', e => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 'z' && drawCanvas) {
+    // Only undo canvas if focus is NOT in a text input/textarea
+    if (document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
+      e.preventDefault();
+      doUndo();
+    }
+  }
+});
 
 function initCanvas(canvasEl) {
   drawCanvas = canvasEl;
   drawCtx = canvasEl.getContext('2d');
   resizeCanvas();
 
-  // Pointer events — works for mouse, touch and stylus/tablet
   canvasEl.addEventListener('pointerdown', e => {
     isDrawing = true;
     const {x, y} = canvasPos(e);
     lastX = x; lastY = y;
-    // save state for undo before stroke
     drawHistory.push(drawCtx.getImageData(0, 0, drawCanvas.width, drawCanvas.height));
     if (drawHistory.length > MAX_UNDO) drawHistory.shift();
     drawCtx.beginPath();
@@ -950,18 +974,14 @@ function initCanvas(canvasEl) {
 
   canvasEl.addEventListener('pointerup',    () => { isDrawing = false; });
   canvasEl.addEventListener('pointerleave', () => { isDrawing = false; });
-  canvasEl.setPointerCapture && canvasEl.addEventListener('pointerdown', e => {
-    try { canvasEl.setPointerCapture(e.pointerId); } catch {}
-  });
+  canvasEl.addEventListener('pointerdown',  e => { try { canvasEl.setPointerCapture(e.pointerId); } catch {} });
 }
 
 function canvasPos(e) {
   const rect = drawCanvas.getBoundingClientRect();
-  const scaleX = drawCanvas.width  / rect.width;
-  const scaleY = drawCanvas.height / rect.height;
   return {
-    x: (e.clientX - rect.left) * scaleX,
-    y: (e.clientY - rect.top)  * scaleY,
+    x: (e.clientX - rect.left) * (drawCanvas.width  / rect.width),
+    y: (e.clientY - rect.top)  * (drawCanvas.height / rect.height),
   };
 }
 
@@ -980,93 +1000,100 @@ function buildDrawingPanel(containerId) {
   container.innerHTML = `
     <div class="draw-toolbar">
       <div class="draw-tools">
-        <button class="draw-tool-btn active" id="draw-pen" title="Pen">✏️</button>
-        <button class="draw-tool-btn" id="draw-eraser" title="Eraser">⬜</button>
+        <button class="draw-tool-btn active" id="draw-pen-${containerId}" title="Pen">✏️</button>
+        <button class="draw-tool-btn" id="draw-eraser-${containerId}" title="Eraser">⬜</button>
       </div>
       <div class="draw-colors">
         ${['#e8e4d9','#c8a96e','#6e9ec8','#6ec8a0','#c86e9e','#e05555','#ffffff'].map(c =>
-          `<button class="draw-color-btn" style="background:${c}" data-color="${c}" title="${c}"></button>`
+          `<button class="draw-color-btn" style="background:${c}" data-color="${c}"></button>`
         ).join('')}
       </div>
       <div class="draw-sizes">
         <label style="font-size:0.72rem;color:var(--text-muted)">Size</label>
-        <input type="range" id="draw-size" min="1" max="20" value="3" style="width:80px;accent-color:var(--accent)" />
-        <span id="draw-size-val" style="font-size:0.72rem;color:var(--text-muted);font-family:'Space Mono',monospace;min-width:20px">3</span>
+        <input type="range" id="draw-size-${containerId}" min="1" max="24" value="${drawSize}" style="width:80px;accent-color:var(--accent)" />
+        <span id="draw-size-val-${containerId}" style="font-size:0.72rem;color:var(--text-muted);font-family:'Space Mono',monospace;min-width:24px">${drawSize}</span>
       </div>
       <div class="draw-actions">
-        <button class="btn btn-secondary draw-action-btn" id="draw-undo" title="Undo">↩ Undo</button>
-        <button class="btn btn-secondary draw-action-btn" id="draw-clear" title="Clear">✕ Clear</button>
-        <button class="btn btn-secondary draw-action-btn" id="draw-save" title="Save as image">⬇ Save</button>
+        <button class="btn btn-secondary draw-action-btn" id="draw-undo-${containerId}" title="Undo (Ctrl+Z)">↩ Undo</button>
+        <button class="btn btn-secondary draw-action-btn" id="draw-clear-${containerId}" title="Clear">✕ Clear</button>
+        <button class="btn btn-secondary draw-action-btn" id="draw-save-${containerId}" title="Save PNG">⬇ Save</button>
       </div>
     </div>
-    <canvas id="draw-canvas" class="draw-canvas"></canvas>
+    <canvas id="draw-canvas-${containerId}" class="draw-canvas"></canvas>
+    <div class="draw-resize-handle" id="draw-resize-${containerId}" title="Drag to resize">⠿</div>
   `;
 
-  const canvas = container.querySelector('#draw-canvas');
+  const canvas = container.querySelector(`#draw-canvas-${containerId}`);
   initCanvas(canvas);
 
-  // Tool buttons
-  container.querySelector('#draw-pen').addEventListener('click', () => {
-    drawTool = 'pen';
-    container.querySelector('#draw-pen').classList.add('active');
-    container.querySelector('#draw-eraser').classList.remove('active');
-    drawCanvas.style.cursor = 'crosshair';
+  // ── Resize handle (drag to change height) ──
+  const handle = container.querySelector(`#draw-resize-${containerId}`);
+  let resizing = false, startY = 0, startH = 0;
+  handle.addEventListener('pointerdown', e => {
+    resizing = true;
+    startY = e.clientY;
+    startH = canvas.offsetHeight;
+    handle.setPointerCapture(e.pointerId);
+    e.preventDefault();
   });
-  container.querySelector('#draw-eraser').addEventListener('click', () => {
-    drawTool = 'eraser';
-    container.querySelector('#draw-eraser').classList.add('active');
-    container.querySelector('#draw-pen').classList.remove('active');
-    drawCanvas.style.cursor = 'cell';
+  handle.addEventListener('pointermove', e => {
+    if (!resizing) return;
+    const newH = Math.max(200, startH + (e.clientY - startY));
+    canvas.style.height = newH + 'px';
+    resizeCanvas();
+  });
+  handle.addEventListener('pointerup', () => { resizing = false; });
+
+  // ── Tool buttons ──
+  const penBtn    = container.querySelector(`#draw-pen-${containerId}`);
+  const eraserBtn = container.querySelector(`#draw-eraser-${containerId}`);
+  penBtn.addEventListener('click', () => {
+    drawTool = 'pen'; penBtn.classList.add('active'); eraserBtn.classList.remove('active');
+    canvas.style.cursor = 'crosshair';
+  });
+  eraserBtn.addEventListener('click', () => {
+    drawTool = 'eraser'; eraserBtn.classList.add('active'); penBtn.classList.remove('active');
+    canvas.style.cursor = 'cell';
   });
 
-  // Colour buttons
+  // ── Colours ──
   container.querySelectorAll('.draw-color-btn').forEach(btn => {
     btn.addEventListener('click', () => {
-      drawColor = btn.dataset.color;
-      drawTool = 'pen';
-      container.querySelector('#draw-pen').classList.add('active');
-      container.querySelector('#draw-eraser').classList.remove('active');
+      drawColor = btn.dataset.color; drawTool = 'pen';
+      penBtn.classList.add('active'); eraserBtn.classList.remove('active');
       container.querySelectorAll('.draw-color-btn').forEach(b => b.classList.remove('active-color'));
       btn.classList.add('active-color');
+      canvas.style.cursor = 'crosshair';
     });
   });
-  // Set first colour active
   container.querySelector(`.draw-color-btn[data-color="${drawColor}"]`)?.classList.add('active-color');
 
-  // Size slider
-  const sizeSlider = container.querySelector('#draw-size');
-  const sizeVal    = container.querySelector('#draw-size-val');
-  sizeSlider.addEventListener('input', () => {
-    drawSize = parseInt(sizeSlider.value);
-    sizeVal.textContent = drawSize;
-  });
+  // ── Size slider ──
+  const slider = container.querySelector(`#draw-size-${containerId}`);
+  const sizeLabel = container.querySelector(`#draw-size-val-${containerId}`);
+  slider.addEventListener('input', () => { drawSize = parseInt(slider.value); sizeLabel.textContent = drawSize; });
 
-  // Undo
-  container.querySelector('#draw-undo').addEventListener('click', () => {
-    if (drawHistory.length) {
-      drawCtx.putImageData(drawHistory.pop(), 0, 0);
-    }
-  });
+  // ── Undo ──
+  container.querySelector(`#draw-undo-${containerId}`).addEventListener('click', doUndo);
 
-  // Clear
-  container.querySelector('#draw-clear').addEventListener('click', () => {
+  // ── Clear ──
+  container.querySelector(`#draw-clear-${containerId}`).addEventListener('click', () => {
     if (!confirm('Clear the canvas?')) return;
     drawHistory.push(drawCtx.getImageData(0, 0, drawCanvas.width, drawCanvas.height));
     drawCtx.clearRect(0, 0, drawCanvas.width, drawCanvas.height);
   });
 
-  // Save as PNG
-  container.querySelector('#draw-save').addEventListener('click', () => {
+  // ── Save PNG ──
+  container.querySelector(`#draw-save-${containerId}`).addEventListener('click', () => {
     const a = document.createElement('a');
     a.href = drawCanvas.toDataURL('image/png');
     a.download = 'maths-working.png';
     a.click();
   });
 
-  drawCanvas.style.cursor = 'crosshair';
+  canvas.style.cursor = 'crosshair';
 }
 
-// Wire up draw toggle buttons (added to both panels in HTML)
 function wireDrawToggle(toggleBtnId, containerId) {
   const btn = document.getElementById(toggleBtnId);
   const container = document.getElementById(containerId);
@@ -1075,11 +1102,7 @@ function wireDrawToggle(toggleBtnId, containerId) {
   btn.addEventListener('click', () => {
     const hidden = container.classList.toggle('hidden');
     btn.classList.toggle('active-draw', !hidden);
-    if (!hidden && !built) {
-      built = true;
-      buildDrawingPanel(containerId);
-    }
-    // resize canvas when shown
+    if (!hidden && !built) { built = true; buildDrawingPanel(containerId); }
     if (!hidden) setTimeout(resizeCanvas, 50);
   });
 }
