@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A-Level Maths Revision</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+  <!-- SIDEBAR -->
+  <nav id="sidebar">
+    <div class="sidebar-header">
+      <div class="logo-mark">∫</div>
+      <div>
+        <div class="logo-title">A-Level</div>
+        <div class="logo-sub">Maths Revision</div>
+      </div>
+    </div>
+    <div class="nav-section-label">NAVIGATE</div>
+    <ul class="nav-links">
+      <li><a href="#" class="nav-link active" data-view="home"><span class="nav-icon">⌂</span> Dashboard</a></li>
+      <li><a href="#" class="nav-link" data-view="practice"><span class="nav-icon">✎</span> Topic Practice</a></li>
+      <li><a href="#" class="nav-link" data-view="pastpapers"><span class="nav-icon">📄</span> Past Papers</a></li>
+      <li><a href="#" class="nav-link" data-view="madasmaths"><span class="nav-icon">🔬</span> MadAsMaths</a></li>
+      <li><a href="#" class="nav-link" data-view="stats"><span class="nav-icon">◎</span> Progress</a></li>
+      <li><a href="#" class="nav-link" data-view="flagged"><span class="nav-icon">⚑</span> Flagged</a></li>
+    </ul>
+    <div class="nav-section-label" style="margin-top:auto;">BOOKS</div>
+    <div class="book-chips">
+      <span class="chip chip-y1p active-chip" data-filter="y1p">Y1 Pure</span>
+      <span class="chip chip-y1s" data-filter="y1s">Y1 S&M</span>
+      <span class="chip chip-y2p" data-filter="y2p">Y2 Pure</span>
+      <span class="chip chip-y2s" data-filter="y2s">Y2 S&M</span>
+    </div>
+  </nav>
+
+  <!-- MAIN CONTENT -->
+  <main id="main">
+
+    <!-- HOME VIEW -->
+    <div id="view-home" class="view active-view">
+      <div class="page-header">
+        <h1 class="page-title">Dashboard</h1>
+        <div class="date-badge" id="today-date"></div>
+      </div>
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-num" id="stat-done">0</div>
+          <div class="stat-label">Questions Done</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num" id="stat-avg">—</div>
+          <div class="stat-label">Avg Score %</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num" id="stat-streak">0</div>
+          <div class="stat-label">Day Streak</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num" id="stat-time">0m</div>
+          <div class="stat-label">Time Practised</div>
+        </div>
+      </div>
+      <div class="two-col">
+        <div class="panel">
+          <h2 class="panel-title">Recent Activity</h2>
+          <div id="recent-activity" class="empty-state">No activity yet — start practising!</div>
+        </div>
+        <div class="panel">
+          <h2 class="panel-title">Weak Topics <span style="font-size:0.72rem;color:var(--text-muted);font-family:'DM Sans',sans-serif;font-weight:400">— click to open</span></h2>
+          <div id="weak-topics" class="empty-state">Complete questions to see weak areas</div>
+        </div>
+      </div>
+      <div class="two-col" style="margin-top:16px">
+        <div class="panel">
+          <h2 class="panel-title">⚑ Flagged for Review <span style="font-size:0.72rem;color:var(--text-muted);font-family:'DM Sans',sans-serif;font-weight:400">— click to open</span></h2>
+          <div id="flagged-panel" class="empty-state">No flagged questions</div>
+        </div>
+        <div class="panel">
+          <h2 class="panel-title">Study Tips</h2>
+          <div style="font-size:0.83rem;color:var(--text-dim);line-height:1.7">
+            <p>🎯 Aim for 70%+ before moving on</p>
+            <p style="margin-top:6px">⏱ Use countdown mode to simulate exam conditions</p>
+            <p style="margin-top:6px">⚑ Flag questions you want to revisit</p>
+            <p style="margin-top:6px">💡 Use the hint only after attempting a question</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TOPIC PRACTICE VIEW -->
+    <div id="view-practice" class="view">
+      <div class="page-header">
+        <h1 class="page-title">Topic Practice</h1>
+        <div class="search-bar">
+          <input type="text" id="topic-search" placeholder="Search topics…" />
+        </div>
+      </div>
+
+      <div class="topics-grid" id="topics-grid">
+        <!-- populated by JS -->
+      </div>
+
+      <!-- QUESTION PANEL -->
+      <div id="question-panel" class="question-panel hidden">
+        <div class="qpanel-header">
+          <button class="back-btn" id="back-to-topics">← Topics</button>
+          <span id="qpanel-topic-name" class="qpanel-topic"></span>
+          <div class="timer-row">
+            <div class="timer-mode-toggle">
+              <button class="tmode-btn tmode-active" id="q-mode-up" title="Stopwatch">▲</button>
+              <button class="tmode-btn" id="q-mode-down" title="Countdown">▼</button>
+            </div>
+            <input type="number" id="q-countdown-mins" min="1" max="60" value="8" class="countdown-input" title="Countdown minutes" />
+            <span class="countdown-label">min</span>
+            <div class="timer-display" id="q-timer">00:00</div>
+          </div>
+        </div>
+        <div class="qpanel-body">
+          <div class="question-card" id="question-display"></div>
+          <div class="hint-area hidden" id="q-hint-area">
+            <div class="hint-label">💡 Hint</div>
+            <div id="q-hint-text" class="hint-text"></div>
+          </div>
+          <div class="q-controls">
+            <button class="btn btn-secondary" id="btn-start-timer">▶ Start</button>
+            <button class="btn btn-secondary" id="btn-pause-timer">⏸ Pause</button>
+            <button class="btn btn-secondary" id="btn-reset-timer">↺ Reset</button>
+            <button class="btn btn-secondary btn-hint" id="btn-show-hint">💡 Hint</button>
+            <button class="btn btn-flag" id="btn-flag-q" title="Flag for review">⚑ Flag</button>
+            <button class="btn btn-primary" id="btn-mark-done">Mark &amp; Score</button>
+          </div>
+          <div class="notes-area">
+            <label class="notes-label">📝 Notes</label>
+            <textarea id="q-notes" placeholder="Write working, observations, methods…"></textarea>
+          </div>
+          <div id="score-form" class="score-form hidden">
+            <label class="notes-label">Score (out of max marks):</label>
+            <div class="score-inputs">
+              <input type="number" id="score-got" min="0" placeholder="Got" />
+              <span>/ </span>
+              <input type="number" id="score-max" min="1" placeholder="Max" />
+              <button class="btn btn-primary" id="btn-save-score">Save</button>
+            </div>
+          </div>
+          <div id="q-history" class="q-history"></div>
+        </div>
+        <div class="q-nav">
+          <button class="btn btn-secondary" id="btn-prev-q">← Prev</button>
+          <span id="q-position"></span>
+          <button class="btn btn-secondary" id="btn-next-q">Next →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAST PAPERS VIEW -->
+    <div id="view-pastpapers" class="view">
+      <div class="page-header">
+        <h1 class="page-title">Past Papers</h1>
+      </div>
+      <div class="filter-bar">
+        <select id="pp-year" class="filter-select">
+          <option value="">All Years</option>
+          <option>2024</option><option>2023</option><option>2022</option>
+          <option>2019</option><option>2018</option><option>2017</option>
+        </select>
+        <select id="pp-paper" class="filter-select">
+          <option value="">All Papers</option>
+          <option>Paper 1 (Pure)</option>
+          <option>Paper 2 (Pure)</option>
+          <option>Paper 3 (Stats & Mechanics)</option>
+        </select>
+      </div>
+      <div class="papers-grid" id="papers-grid">
+        <!-- populated by JS -->
+      </div>
+
+      <!-- PAST PAPER QUESTION PANEL -->
+      <div id="pp-question-panel" class="question-panel hidden">
+        <div class="qpanel-header">
+          <button class="back-btn" id="back-to-papers">← Papers</button>
+          <span id="pp-qpanel-name" class="qpanel-topic"></span>
+          <div class="timer-row">
+            <div class="timer-mode-toggle">
+              <button class="tmode-btn tmode-active" id="pp-mode-up">▲</button>
+              <button class="tmode-btn" id="pp-mode-down">▼</button>
+            </div>
+            <input type="number" id="pp-countdown-mins" min="1" max="60" value="8" class="countdown-input" />
+            <span class="countdown-label">min</span>
+            <div class="timer-display" id="pp-timer">00:00</div>
+          </div>
+        </div>
+        <div class="qpanel-body">
+          <div class="question-card" id="pp-question-display"></div>
+          <div class="q-controls">
+            <button class="btn btn-secondary" id="pp-btn-start">▶ Start</button>
+            <button class="btn btn-secondary" id="pp-btn-pause">⏸ Pause</button>
+            <button class="btn btn-secondary" id="pp-btn-reset">↺ Reset</button>
+            <button class="btn btn-flag" id="pp-btn-flag">⚑ Flag</button>
+            <button class="btn btn-primary" id="pp-btn-mark">Mark &amp; Score</button>
+          </div>
+          <div class="notes-area">
+            <label class="notes-label">📝 Notes</label>
+            <textarea id="pp-notes" placeholder="Write working, hints, observations…"></textarea>
+          </div>
+          <div id="pp-score-form" class="score-form hidden">
+            <label class="notes-label">Score:</label>
+            <div class="score-inputs">
+              <input type="number" id="pp-score-got" min="0" placeholder="Got" />
+              <span>/ </span>
+              <input type="number" id="pp-score-max" min="1" placeholder="Max" />
+              <button class="btn btn-primary" id="pp-btn-save">Save</button>
+            </div>
+          </div>
+          <div id="pp-q-history" class="q-history"></div>
+        </div>
+        <div class="q-nav">
+          <button class="btn btn-secondary" id="pp-btn-prev">← Prev Q</button>
+          <span id="pp-q-position"></span>
+          <button class="btn btn-secondary" id="pp-btn-next">Next Q →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MADASMATHS VIEW -->
+    <div id="view-madasmaths" class="view">
+      <div class="page-header">
+        <h1 class="page-title">MadAsMaths</h1>
+        <a href="https://madasmaths.com" target="_blank" class="external-link">Visit Site ↗</a>
+      </div>
+      <p class="madas-intro">
+        Every MadAsMaths booklet and practice paper series, organised by topic. Click a topic card to expand direct PDF links — one click opens the paper in a new tab.
+      </p>
+      <div class="filter-bar">
+        <select id="mm-cat-filter" class="filter-select">
+          <option value="">All Categories</option>
+          <option value="Pure">Pure</option>
+          <option value="Statistics">Statistics</option>
+          <option value="Mechanics">Mechanics</option>
+          <option value="Practice Papers">Practice Papers</option>
+        </select>
+        <input type="text" id="mm-search" placeholder="Search topics…" style="width:200px" />
+      </div>
+      <div id="mm-topic-grid" class="mm-topic-grid"></div>
+    </div>
+
+    <!-- PROGRESS VIEW -->
+    <div id="view-stats" class="view">
+      <div class="page-header">
+        <h1 class="page-title">Progress</h1>
+        <button class="btn btn-secondary" id="btn-export">Export Data</button>
+      </div>
+      <div id="progress-content">
+        <!-- populated by JS -->
+      </div>
+    </div>
+
+    <!-- FLAGGED VIEW -->
+    <div id="view-flagged" class="view">
+      <div class="page-header">
+        <h1 class="page-title">⚑ Flagged for Review</h1>
+        <button class="btn btn-secondary" id="btn-clear-flags" style="margin-left:auto">Clear All Flags</button>
+      </div>
+      <p class="madas-intro">Questions you've flagged while practising. Click any question to jump straight to it.</p>
+      <div id="flagged-list"></div>
+    </div>
+
+  </main>
+</div>
+
+<!-- MATHJAX for rendering maths -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js"></script>
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

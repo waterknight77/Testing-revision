@@ -1,0 +1,1548 @@
+// ============================================================
+// CURRICULUM DATA — Edexcel A-Level Mathematics
+// All four Pearson textbooks. Every question has a hint.
+// ============================================================
+
+const TOPICS = [
+
+  // ═══════════════════════════════════════════════════════════
+  // YEAR 1 PURE
+  // ═══════════════════════════════════════════════════════════
+
+  {
+    id:'y1p-01', book:'y1p', chapter:1, title:'Algebraic Expressions',
+    subtopics:['Index laws','Expanding brackets','Factorising','Negative & fractional indices','Surds','Rationalising denominators'],
+    questions:[
+      { id:'y1p-01-q1', marks:3, source:'Ex 1A',
+        text:'Simplify \\(\\dfrac{(x^3y^{-2})^4}{x^{-1}y^5}\\), giving your answer in the form \\(x^a y^b\\).',
+        hint:'Apply the power rule to the numerator first, then use the division rule for indices (subtract powers).' },
+      { id:'y1p-01-q2', marks:4, source:'Ex 1B',
+        text:'Expand and simplify \\((2x-3)(x+5)(x-1)\\).',
+        hint:'Expand any two brackets first, then multiply the result by the third bracket.' },
+      { id:'y1p-01-q3', marks:3, source:'Ex 1C',
+        text:'Factorise completely \\(6x^3 - 13x^2 - 5x\\).',
+        hint:'Take out the common factor of \\(x\\) first, then factorise the resulting quadratic.' },
+      { id:'y1p-01-q4', marks:4, source:'Ex 1F',
+        text:'Simplify \\(\\dfrac{3}{\\sqrt{5}-1} + \\dfrac{2}{\\sqrt{5}+1}\\), giving your answer in the form \\(a+b\\sqrt{5}\\).',
+        hint:'Rationalise each fraction separately by multiplying by the conjugate of its denominator.' },
+      { id:'y1p-01-q5', marks:3, source:'Mixed Ex 1',
+        text:'Write \\(\\dfrac{1}{2}x^{-\\frac{1}{3}}\\left(6x^{\\frac{4}{3}} - 2x^{\\frac{1}{3}} + 4\\right)\\) in the form \\(ax^b + cx^d + ex^f\\).',
+        hint:'Multiply each term inside the bracket by \\(\\frac{1}{2}x^{-\\frac{1}{3}}\\) and then add the indices.' },
+      { id:'y1p-01-q6', marks:3, source:'Ex 1D',
+        text:'Simplify \\(\\dfrac{9x^5 y^{-3}}{3x^{-2} y^4}\\).',
+        hint:'Divide the coefficients, then subtract the index of each variable in denominator from numerator.' },
+      { id:'y1p-01-q7', marks:4, source:'Ex 1E',
+        text:'Express \\(\\dfrac{5}{2\\sqrt{3}+1} - \\dfrac{3}{2\\sqrt{3}-1}\\) in the form \\(a\\sqrt{3}+b\\).',
+        hint:'Multiply each fraction by the conjugate of its denominator to rationalise, then combine.' },
+    ]
+  },
+
+  {
+    id:'y1p-02', book:'y1p', chapter:2, title:'Quadratics',
+    subtopics:['Solving quadratic equations','Completing the square','Functions','Quadratic graphs','The discriminant','Modelling with quadratics'],
+    questions:[
+      { id:'y1p-02-q1', marks:3, source:'Ex 2A',
+        text:'Solve \\(2x^2 - 7x - 15 = 0\\) by factorisation.',
+        hint:'Look for two numbers that multiply to \\(2 \\times (-15) = -30\\) and add to \\(-7\\).' },
+      { id:'y1p-02-q2', marks:3, source:'Ex 2B',
+        text:'Write \\(3x^2 - 12x + 7\\) in the form \\(a(x+b)^2+c\\).',
+        hint:'Factor out the 3 from the first two terms, then complete the square inside the bracket.' },
+      { id:'y1p-02-q3', marks:5, source:'Ex 2E',
+        text:'The equation \\(kx^2 + 4x + (k-3) = 0\\) has two distinct real roots. Find the range of values of \\(k\\).',
+        hint:'For two distinct real roots, the discriminant \\(b^2 - 4ac > 0\\). Solve the resulting inequality carefully — check the sign of \\(k\\).' },
+      { id:'y1p-02-q4', marks:4, source:'Ex 2D',
+        text:'Sketch the curve \\(y = x^2 - 6x + 8\\), clearly labelling the turning point and all axis intercepts.',
+        hint:'Complete the square to find the turning point, then factorise to find the \\(x\\)-intercepts.' },
+      { id:'y1p-02-q5', marks:5, source:'Mixed Ex 2',
+        text:'A ball is thrown upwards with height \\(h = 15t - 5t^2\\) metres after \\(t\\) seconds. Find (a) the maximum height, (b) the time when it hits the ground.',
+        hint:'(a) Complete the square or differentiate to find the maximum. (b) Set \\(h=0\\) and solve.' },
+      { id:'y1p-02-q6', marks:4, source:'Ex 2C',
+        text:'Use the quadratic formula to solve \\(3x^2 - 5x - 1 = 0\\), giving your answers in surd form.',
+        hint:'\\(x = \\dfrac{-b \\pm \\sqrt{b^2-4ac}}{2a}\\). Simplify the surd in your answer.' },
+      { id:'y1p-02-q7', marks:3, source:'Ex 2E',
+        text:'Find the values of \\(p\\) for which \\(px^2 + 6x + p = 0\\) has equal roots.',
+        hint:'Equal roots means \\(\\Delta = 0\\), i.e. \\(b^2 - 4ac = 0\\). Remember \\(p\\) must be non-zero for it to be quadratic.' },
+    ]
+  },
+
+  {
+    id:'y1p-03', book:'y1p', chapter:3, title:'Equations and Inequalities',
+    subtopics:['Linear simultaneous equations','Quadratic simultaneous equations','Simultaneous equations on graphs','Linear inequalities','Quadratic inequalities','Inequalities on graphs','Regions'],
+    questions:[
+      { id:'y1p-03-q1', marks:5, source:'Ex 3B',
+        text:'Solve the simultaneous equations \\(3x + 2y = 7\\) and \\(x^2 + y = 5\\).',
+        hint:'Rearrange the linear equation to get \\(y\\) in terms of \\(x\\), substitute into the quadratic, then solve.' },
+      { id:'y1p-03-q2', marks:3, source:'Ex 3E',
+        text:'Find the set of values of \\(x\\) for which \\(x^2 - 5x + 4 < 0\\).',
+        hint:'Factorise the quadratic, find the roots, then sketch to see which region satisfies the inequality.' },
+      { id:'y1p-03-q3', marks:5, source:'Mixed Ex 3',
+        text:'Find the set of values of \\(x\\) for which both \\(2x-1 > 3\\) and \\(x^2 < 9\\).',
+        hint:'Solve each inequality separately, then find the intersection of the two solution sets.' },
+      { id:'y1p-03-q4', marks:4, source:'Ex 3G',
+        text:'On a sketch, indicate the region satisfying \\(y > x^2 - 4\\) and \\(y < 2x + 1\\) simultaneously.',
+        hint:'Draw both curves, then shade the region above the parabola and below the line.' },
+      { id:'y1p-03-q5', marks:4, source:'Ex 3A',
+        text:'Solve the simultaneous equations \\(4x - 3y = 1\\) and \\(5x + 2y = 22\\).',
+        hint:'Eliminate one variable by multiplying equations so its coefficients match, then subtract.' },
+      { id:'y1p-03-q6', marks:4, source:'Ex 3D',
+        text:'Solve \\(\\dfrac{3}{x+2} - \\dfrac{1}{x-1} \\ge 0\\) for \\(x \\in \\mathbb{R}\\), \\(x \\ne -2\\), \\(x \\ne 1\\).',
+        hint:'Combine the fractions over a common denominator, then analyse the sign of the result using a sign diagram.' },
+    ]
+  },
+
+  {
+    id:'y1p-04', book:'y1p', chapter:4, title:'Graphs and Transformations',
+    subtopics:['Cubic graphs','Quartic graphs','Reciprocal graphs','Points of intersection','Translating graphs','Stretching graphs','Transforming functions'],
+    questions:[
+      { id:'y1p-04-q1', marks:4, source:'Ex 4A',
+        text:'Sketch the graph of \\(y = x^3 - 4x\\), labelling all intercepts with the axes.',
+        hint:'Factorise as \\(x(x^2-4) = x(x-2)(x+2)\\) to find the roots. Check the shape using a large positive \\(x\\).' },
+      { id:'y1p-04-q2', marks:3, source:'Ex 4G',
+        text:'Describe the single transformation that maps \\(y = f(x)\\) onto \\(y = f(2x-3)\\).',
+        hint:'Rewrite as \\(f(2(x - \\tfrac{3}{2}))\\): this is a stretch in \\(x\\) by factor \\(\\tfrac{1}{2}\\) followed by a translation of \\(\\tfrac{3}{2}\\) in the positive \\(x\\)-direction — but as a single transformation, think carefully about the order.' },
+      { id:'y1p-04-q3', marks:6, source:'Mixed Ex 4',
+        text:'Given \\(f(x) = x^2\\), sketch on separate axes: (a) \\(y = f(x+3)-2\\), (b) \\(y = -f(x)\\), (c) \\(y = 3f(x)\\).',
+        hint:'(a) translate left 3, down 2. (b) reflect in \\(x\\)-axis. (c) stretch parallel to \\(y\\)-axis by factor 3.' },
+      { id:'y1p-04-q4', marks:4, source:'Ex 4E',
+        text:'The graph of \\(y = \\sin x\\) is transformed to \\(y = \\sin(x + 60°) + 2\\). Describe the two transformations.',
+        hint:'An addition inside the function is a horizontal translation; adding outside is a vertical translation.' },
+      { id:'y1p-04-q5', marks:3, source:'Ex 4F',
+        text:'Sketch \\(y = \\dfrac{1}{x-2} + 3\\), stating the equations of the asymptotes.',
+        hint:'Start from \\(y = \\frac{1}{x}\\) and apply: translate right 2 (asymptote \\(x=2\\)), then up 3 (asymptote \\(y=3\\)).' },
+    ]
+  },
+
+  {
+    id:'y1p-05', book:'y1p', chapter:5, title:'Straight Line Graphs',
+    subtopics:['y = mx + c','Equations of straight lines','Parallel and perpendicular lines','Length and area','Modelling with straight lines'],
+    questions:[
+      { id:'y1p-05-q1', marks:4, source:'Ex 5C',
+        text:'Find the equation of the line perpendicular to \\(3x - 2y + 5 = 0\\) that passes through \\((6, -1)\\).',
+        hint:'Rearrange to find the gradient of the given line. The perpendicular gradient is the negative reciprocal.' },
+      { id:'y1p-05-q2', marks:4, source:'Ex 5B',
+        text:'The line through \\(A(2,3)\\) and \\(B(6,k)\\) has gradient \\(-\\dfrac{3}{4}\\). Find \\(k\\) and the length \\(AB\\).',
+        hint:'Use \\(m = \\dfrac{k-3}{6-2} = -\\frac{3}{4}\\) to find \\(k\\), then use Pythagoras for the length.' },
+      { id:'y1p-05-q3', marks:4, source:'Ex 5D',
+        text:'A triangle has vertices \\(A(0,0)\\), \\(B(6,0)\\) and \\(C(2,4)\\). Find its area.',
+        hint:'Use the formula \\(\\frac{1}{2} \\times \\text{base} \\times \\text{height}\\). The base \\(AB\\) lies on the \\(x\\)-axis.' },
+      { id:'y1p-05-q4', marks:4, source:'Ex 5A',
+        text:'Find the equation of the line passing through \\((-3, 5)\\) and \\((1, -3)\\).',
+        hint:'Calculate the gradient first, then use \\(y - y_1 = m(x - x_1)\\).' },
+      { id:'y1p-05-q5', marks:5, source:'Mixed Ex 5',
+        text:'The line \\(l_1\\) has equation \\(2x + y = 8\\). The line \\(l_2\\) passes through \\((0,1)\\) and is perpendicular to \\(l_1\\). Find the coordinates of the point of intersection of \\(l_1\\) and \\(l_2\\).',
+        hint:'Find the gradient of \\(l_1\\), then write \\(l_2\\) using the perpendicular gradient and given point. Solve simultaneously.' },
+      { id:'y1p-05-q6', marks:5, source:'Ex 5E',
+        text:'The points \\(A(1,4)\\), \\(B(7,2)\\) and \\(C(4,k)\\) form a right angle at \\(C\\). Find \\(k\\).',
+        hint:'For a right angle at \\(C\\), \\(\\overrightarrow{CA} \\cdot \\overrightarrow{CB} = 0\\) (dot product = 0), or \\(m_{CA} \\times m_{CB} = -1\\).' },
+    ]
+  },
+
+  {
+    id:'y1p-06', book:'y1p', chapter:6, title:'Circles',
+    subtopics:['Midpoints and perpendicular bisectors','Equation of a circle','Intersections of straight lines and circles','Tangent and chord properties','Circles and triangles'],
+    questions:[
+      { id:'y1p-06-q1', marks:3, source:'Ex 6B',
+        text:'A circle has equation \\(x^2 + y^2 - 6x + 4y - 12 = 0\\). Find the centre and radius.',
+        hint:'Complete the square in both \\(x\\) and \\(y\\) to write in the form \\((x-a)^2 + (y-b)^2 = r^2\\).' },
+      { id:'y1p-06-q2', marks:4, source:'Ex 6D',
+        text:'Find the equation of the tangent to the circle \\(x^2 + y^2 = 25\\) at the point \\((3,4)\\).',
+        hint:'The tangent is perpendicular to the radius at the point of contact. The radius goes from \\((0,0)\\) to \\((3,4)\\).' },
+      { id:'y1p-06-q3', marks:6, source:'Mixed Ex 6',
+        text:'Show that the line \\(y = 2x + 1\\) is a tangent to the circle \\(x^2 + y^2 - 4x - 2y - 5 = 0\\) and find the point of contact.',
+        hint:'Substitute \\(y = 2x+1\\) into the circle equation and show the discriminant equals zero.' },
+      { id:'y1p-06-q4', marks:5, source:'Ex 6E',
+        text:'A circle passes through \\(A(1,0)\\), \\(B(5,0)\\) and \\(C(1,6)\\). Find the equation of the circle.',
+        hint:'The centre lies on the perpendicular bisectors of \\(AB\\) and \\(AC\\). Find their intersection.' },
+      { id:'y1p-06-q5', marks:4, source:'Ex 6A',
+        text:'Find the equation of the perpendicular bisector of the line segment joining \\(P(2,-3)\\) and \\(Q(8,5)\\).',
+        hint:'Find the midpoint and the gradient of PQ. The perpendicular bisector passes through the midpoint with the negative-reciprocal gradient.' },
+      { id:'y1p-06-q6', marks:5, source:'Ex 6C',
+        text:'Find the coordinates of the points where the circle \\(x^2 + y^2 = 20\\) intersects the line \\(y = x + 2\\).',
+        hint:'Substitute \\(y = x+2\\) into the circle equation to get a quadratic in \\(x\\). Solve and find both points.' },
+    ]
+  },
+
+  {
+    id:'y1p-07', book:'y1p', chapter:7, title:'Algebraic Methods',
+    subtopics:['Algebraic fractions','Dividing polynomials','The factor theorem','Mathematical proof','Methods of proof'],
+    questions:[
+      { id:'y1p-07-q1', marks:5, source:'Ex 7C',
+        text:'Show that \\((x-2)\\) is a factor of \\(f(x) = 2x^3 - 5x^2 + x + 2\\) and hence fully factorise \\(f(x)\\).',
+        hint:'Evaluate \\(f(2)\\). If it equals 0, \\((x-2)\\) is a factor. Then use polynomial division or inspection.' },
+      { id:'y1p-07-q2', marks:4, source:'Ex 7D',
+        text:'Prove that the sum of any three consecutive even integers is divisible by 6.',
+        hint:'Let the integers be \\(2n\\), \\(2n+2\\), \\(2n+4\\). Sum them and factor the result.' },
+      { id:'y1p-07-q3', marks:4, source:'Ex 7B',
+        text:'Divide \\(2x^3 + 3x^2 - 11x - 6\\) by \\((x+3)\\).',
+        hint:'Use algebraic long division or the grid/tabular method. Check by multiplying back.' },
+      { id:'y1p-07-q4', marks:3, source:'Ex 7C',
+        text:'Given \\(f(x) = x^3 + ax^2 - 7x + 6\\), and that \\((x-1)\\) is a factor, find \\(a\\) and fully factorise \\(f(x)\\).',
+        hint:'\\(f(1) = 0\\) gives you \\(a\\). Then divide by \\((x-1)\\) and factorise the quotient.' },
+      { id:'y1p-07-q5', marks:5, source:'Mixed Ex 7',
+        text:'Prove by contradiction that there is no largest even integer.',
+        hint:'Assume there is a largest even integer \\(N\\). Show that \\(N+2\\) is also even and larger — contradiction.' },
+      { id:'y1p-07-q6', marks:4, source:'Ex 7E',
+        text:'Prove that \\(n^2 + n\\) is even for all integers \\(n\\).',
+        hint:'Write \\(n^2 + n = n(n+1)\\). One of any two consecutive integers must be even.' },
+    ]
+  },
+
+  {
+    id:'y1p-08', book:'y1p', chapter:8, title:'The Binomial Expansion',
+    subtopics:["Pascal's triangle",'Factorial notation','The binomial expansion','Solving binomial problems','Binomial estimation'],
+    questions:[
+      { id:'y1p-08-q1', marks:5, source:'Ex 8C',
+        text:'Find the expansion of \\((2+3x)^5\\) in ascending powers of \\(x\\) up to and including the \\(x^3\\) term.',
+        hint:'Use \\(\\binom{5}{r}(2)^{5-r}(3x)^r\\) for \\(r = 0, 1, 2, 3\\).' },
+      { id:'y1p-08-q2', marks:3, source:'Ex 8D',
+        text:'Find the coefficient of \\(x^4\\) in the expansion of \\((1-2x)^7\\).',
+        hint:'The general term is \\(\\binom{7}{r}(1)^{7-r}(-2x)^r\\). Set \\(r = 4\\).' },
+      { id:'y1p-08-q3', marks:4, source:'Ex 8E',
+        text:'Use the binomial expansion to estimate \\((1.02)^6\\) to 4 significant figures.',
+        hint:'Write \\(1.02 = 1 + 0.02\\), expand \\((1+0.02)^6\\) and take enough terms for the required accuracy.' },
+      { id:'y1p-08-q4', marks:5, source:'Mixed Ex 8',
+        text:'In the expansion of \\((a + bx)^4\\) the coefficient of \\(x^2\\) is 24 and the coefficient of \\(x^3\\) is \\(-32\\). Find \\(a\\) and \\(b\\).',
+        hint:'Write expressions for the \\(x^2\\) and \\(x^3\\) coefficients using \\(\\binom{4}{r}\\), then solve the system of equations.' },
+      { id:'y1p-08-q5', marks:4, source:'Ex 8B',
+        text:'Use Pascal\'s triangle to expand \\((x - 2)^4\\) fully.',
+        hint:'Row 4 of Pascal\'s triangle gives coefficients 1, 4, 6, 4, 1. Be careful with the signs from \\(-2\\).' },
+      { id:'y1p-08-q6', marks:4, source:'Ex 8D',
+        text:'Find the term independent of \\(x\\) in the expansion of \\(\\left(x^2 + \\dfrac{2}{x}\\right)^6\\).',
+        hint:'General term: \\(\\binom{6}{r}(x^2)^{6-r}\\left(\\frac{2}{x}\\right)^r\\). Set the power of \\(x\\) equal to zero and solve for \\(r\\).' },
+    ]
+  },
+
+  {
+    id:'y1p-09', book:'y1p', chapter:9, title:'Trigonometric Ratios',
+    subtopics:['The cosine rule','The sine rule','Areas of triangles','Solving triangle problems','Graphs of sine, cosine and tangent','Transforming trigonometric graphs'],
+    questions:[
+      { id:'y1p-09-q1', marks:3, source:'Ex 9A',
+        text:'In triangle ABC, \\(AB = 8\\text{ cm}\\), \\(BC = 11\\text{ cm}\\) and \\(\\angle ABC = 38°\\). Find AC to 3 s.f.',
+        hint:'You know two sides and the included angle — use the cosine rule: \\(b^2 = a^2 + c^2 - 2ac\\cos B\\).' },
+      { id:'y1p-09-q2', marks:3, source:'Ex 9A',
+        text:'Triangle PQR has \\(PQ = 5\\), \\(QR = 7\\), \\(PR = 9\\). Find \\(\\angle QPR\\) to 1 d.p.',
+        hint:'You know all three sides — rearrange the cosine rule to find \\(\\cos P = \\dfrac{q^2+r^2-p^2}{2qr}\\).' },
+      { id:'y1p-09-q3', marks:3, source:'Ex 9C',
+        text:'A triangle has two sides of length 6 cm and 8 cm with an included angle of 50°. Find its area.',
+        hint:'Area \\(= \\frac{1}{2}ab\\sin C\\).' },
+      { id:'y1p-09-q4', marks:5, source:'Mixed Ex 9',
+        text:'Solve \\(\\sin(2\\theta) = 0.6\\) for \\(0° \\le \\theta \\le 360°\\).',
+        hint:'Let \\(u = 2\\theta\\), so \\(0° \\le u \\le 720°\\). Find all values of \\(u\\) in this range, then halve them.' },
+      { id:'y1p-09-q5', marks:5, source:'Ex 9B',
+        text:'In triangle ABC, \\(\\angle A = 40°\\), \\(\\angle B = 75°\\) and \\(BC = 6\\) cm. Find AC.',
+        hint:'First find \\(\\angle C = 180° - 40° - 75°\\). Then use the sine rule: \\(\\dfrac{a}{\\sin A} = \\dfrac{b}{\\sin B}\\).' },
+      { id:'y1p-09-q6', marks:4, source:'Ex 9F',
+        text:'Sketch the graph of \\(y = 3\\sin(2x) + 1\\) for \\(0 \\le x \\le 360°\\), stating the amplitude and period.',
+        hint:'Amplitude = 3, period = \\(360°/2 = 180°\\), vertical shift = 1. Mark key points at \\(0°, 45°, 90°, 135°, 180°\\).' },
+    ]
+  },
+
+  {
+    id:'y1p-10', book:'y1p', chapter:10, title:'Trigonometric Identities and Equations',
+    subtopics:['Angles in all four quadrants','Exact values of trig ratios','Trigonometric identities','Simple trigonometric equations','Harder trigonometric equations','Equations and identities'],
+    questions:[
+      { id:'y1p-10-q1', marks:4, source:'Ex 10F',
+        text:'Prove that \\(\\dfrac{\\sin\\theta}{1-\\cos\\theta} - \\dfrac{1+\\cos\\theta}{\\sin\\theta} \\equiv 0\\).',
+        hint:'Combine the fractions over a common denominator, then use the identity \\(\\sin^2\\theta + \\cos^2\\theta = 1\\).' },
+      { id:'y1p-10-q2', marks:5, source:'Ex 10E',
+        text:'Solve \\(2\\cos^2\\theta - 5\\cos\\theta + 2 = 0\\) for \\(0° \\le \\theta \\le 360°\\).',
+        hint:'Treat as a quadratic in \\(\\cos\\theta\\). Factorise, solve for \\(\\cos\\theta\\), then find \\(\\theta\\).' },
+      { id:'y1p-10-q3', marks:4, source:'Mixed Ex 10',
+        text:'Solve \\(\\tan^2\\theta + \\tan\\theta = 0\\) for \\(0 \\le \\theta \\le 2\\pi\\), giving exact answers.',
+        hint:'Factorise: \\(\\tan\\theta(\\tan\\theta + 1) = 0\\). Solve each factor separately.' },
+      { id:'y1p-10-q4', marks:4, source:'Ex 10D',
+        text:'Solve \\(\\sin\\theta = -\\dfrac{\\sqrt{3}}{2}\\) for \\(-180° \\le \\theta \\le 180°\\).',
+        hint:'The reference angle is 60°. Since \\(\\sin\\theta < 0\\), solutions are in the 3rd and 4th quadrants.' },
+      { id:'y1p-10-q5', marks:5, source:'Ex 10F',
+        text:'Show that \\(\\dfrac{1}{1-\\sin\\theta} + \\dfrac{1}{1+\\sin\\theta} \\equiv \\dfrac{2}{\\cos^2\\theta}\\).',
+        hint:'Combine over the common denominator \\((1-\\sin\\theta)(1+\\sin\\theta) = 1 - \\sin^2\\theta\\), then use the Pythagorean identity.' },
+      { id:'y1p-10-q6', marks:5, source:'Ex 10E',
+        text:'Solve \\(3\\sin^2 x + \\sin x \\cos x = 0\\) for \\(0 \\le x \\le \\pi\\).',
+        hint:'Factorise out \\(\\sin x\\): \\(\\sin x(3\\sin x + \\cos x)=0\\). For the second factor, divide by \\(\\cos x\\) to get \\(\\tan x\\).' },
+    ]
+  },
+
+  {
+    id:'y1p-11', book:'y1p', chapter:11, title:'Vectors',
+    subtopics:['Vectors','Representing vectors','Magnitude and direction','Position vectors','Solving geometric problems','Modelling with vectors'],
+    questions:[
+      { id:'y1p-11-q1', marks:4, source:'Ex 11C',
+        text:'Given \\(\\mathbf{a} = 2\\mathbf{i} - 3\\mathbf{j}\\) and \\(\\mathbf{b} = -\\mathbf{i} + 5\\mathbf{j}\\), find \\(|3\\mathbf{a} - 2\\mathbf{b}|\\).',
+        hint:'Calculate \\(3\\mathbf{a} - 2\\mathbf{b}\\) component-by-component, then use \\(|\\mathbf{v}| = \\sqrt{v_x^2 + v_y^2}\\).' },
+      { id:'y1p-11-q2', marks:4, source:'Ex 11E',
+        text:'Points A, B, C have position vectors \\(2\\mathbf{i}+\\mathbf{j}\\), \\(5\\mathbf{i}-2\\mathbf{j}\\) and \\(8\\mathbf{i}+4\\mathbf{j}\\) respectively. Show that A, B, C are NOT collinear.',
+        hint:'Find \\(\\overrightarrow{AB}\\) and \\(\\overrightarrow{AC}\\). If they are not parallel (one is not a scalar multiple of the other), the points are not collinear.' },
+      { id:'y1p-11-q3', marks:4, source:'Ex 11D',
+        text:'The position vectors of A and B are \\(\\mathbf{a} = 3\\mathbf{i} - \\mathbf{j}\\) and \\(\\mathbf{b} = -\\mathbf{i} + 7\\mathbf{j}\\). Find the position vector of the midpoint M of AB.',
+        hint:'The midpoint has position vector \\(\\dfrac{\\mathbf{a}+\\mathbf{b}}{2}\\).' },
+      { id:'y1p-11-q4', marks:5, source:'Mixed Ex 11',
+        text:'ABCD is a parallelogram where \\(\\overrightarrow{AB} = 3\\mathbf{i} + 2\\mathbf{j}\\) and \\(\\overrightarrow{AD} = \\mathbf{i} - 4\\mathbf{j}\\). Find the position vector of C if A has position vector \\(2\\mathbf{i} + \\mathbf{j}\\).',
+        hint:'In a parallelogram, \\(\\overrightarrow{AC} = \\overrightarrow{AB} + \\overrightarrow{AD}\\). Then add to the position vector of A.' },
+      { id:'y1p-11-q5', marks:3, source:'Ex 11C',
+        text:'Find a unit vector in the direction of \\(\\mathbf{v} = 5\\mathbf{i} - 12\\mathbf{j}\\).',
+        hint:'Divide \\(\\mathbf{v}\\) by its magnitude: \\(\\hat{\\mathbf{v}} = \\dfrac{\\mathbf{v}}{|\\mathbf{v}|}\\).' },
+    ]
+  },
+
+  {
+    id:'y1p-12', book:'y1p', chapter:12, title:'Differentiation',
+    subtopics:['Gradients of curves','Finding the derivative','Differentiating xⁿ','Differentiating quadratics','Differentiating polynomials','Gradients, tangents and normals','Increasing and decreasing functions','Second order derivatives','Stationary points','Sketching gradient functions','Modelling with differentiation'],
+    questions:[
+      { id:'y1p-12-q1', marks:2, source:'Ex 12C',
+        text:'Differentiate \\(f(x) = 3x^4 - 5x^2 + 7x - 2\\).',
+        hint:'Differentiate term by term using \\(\\frac{d}{dx}(x^n) = nx^{n-1}\\).' },
+      { id:'y1p-12-q2', marks:5, source:'Ex 12F',
+        text:'Find the equation of the tangent to \\(y = x^3 - 3x + 2\\) at the point where \\(x = 2\\).',
+        hint:'Find \\(y\\) at \\(x=2\\), then \\(\\frac{dy}{dx}\\) at \\(x=2\\) for the gradient. Use \\(y-y_1=m(x-x_1)\\).' },
+      { id:'y1p-12-q3', marks:7, source:'Ex 12I',
+        text:'Find the coordinates of the stationary points of \\(y = 2x^3 - 9x^2 + 12x - 4\\) and determine their nature.',
+        hint:'Set \\(\\frac{dy}{dx} = 0\\) and solve. Use the second derivative \\(\\frac{d^2y}{dx^2}\\) to classify each point.' },
+      { id:'y1p-12-q4', marks:4, source:'Mixed Ex 12',
+        text:'A curve has equation \\(y = x + \\dfrac{4}{x}\\). Find the range of values of \\(x\\) for which \\(y\\) is decreasing.',
+        hint:'Rewrite as \\(x + 4x^{-1}\\), differentiate, then set \\(\\frac{dy}{dx} < 0\\).' },
+      { id:'y1p-12-q5', marks:5, source:'Ex 12F',
+        text:'Find the equation of the normal to the curve \\(y = 2x^2 - 5x + 3\\) at the point \\((3, 6)\\).',
+        hint:'Find the gradient of the tangent at \\(x=3\\), then the normal has gradient \\(-\\frac{1}{m}\\).' },
+      { id:'y1p-12-q6', marks:6, source:'Ex 12K',
+        text:'A rectangular plot of land has perimeter 100 m. Show that its area is \\(A = 50x - x^2\\) where \\(x\\) is its width, and find the maximum area.',
+        hint:'If width \\(= x\\) then length \\(= 50 - x\\). Set \\(\\frac{dA}{dx} = 0\\) to maximise.' },
+      { id:'y1p-12-q7', marks:4, source:'Ex 12H',
+        text:'Find the intervals on which \\(f(x) = x^3 - 6x^2 + 9x + 1\\) is increasing.',
+        hint:'Find \\(f\'(x)\\), factorise, then determine where \\(f\'(x) > 0\\).' },
+    ]
+  },
+
+  {
+    id:'y1p-13', book:'y1p', chapter:13, title:'Integration',
+    subtopics:['Integrating xⁿ','Indefinite integrals','Finding functions','Definite integrals','Areas under curves','Areas under the x-axis','Areas between curves and lines'],
+    questions:[
+      { id:'y1p-13-q1', marks:3, source:'Ex 13B',
+        text:'Find \\(\\displaystyle\\int \\left(3x^2 - 5x + 2\\right)\\, dx\\).',
+        hint:'Integrate term by term using \\(\\int x^n\\,dx = \\frac{x^{n+1}}{n+1} + c\\).' },
+      { id:'y1p-13-q2', marks:5, source:'Ex 13D',
+        text:'Evaluate \\(\\displaystyle\\int_1^4 \\left(\\sqrt{x} - \\dfrac{1}{x^2}\\right)dx\\).',
+        hint:'Rewrite as \\(x^{1/2} - x^{-2}\\), integrate, then substitute the limits.' },
+      { id:'y1p-13-q3', marks:6, source:'Ex 13G',
+        text:'Find the area enclosed between \\(y = x^2 - 4x + 3\\) and the line \\(y = x - 1\\).',
+        hint:'Set the expressions equal to find the limits, then integrate \\((\\text{top} - \\text{bottom})\\) between them.' },
+      { id:'y1p-13-q4', marks:4, source:'Ex 13C',
+        text:'Given \\(\\dfrac{dy}{dx} = 3x^2 - 6x + 1\\) and \\(y = 4\\) when \\(x = 2\\), find \\(y\\) in terms of \\(x\\).',
+        hint:'Integrate \\(\\frac{dy}{dx}\\) to get \\(y\\), then substitute the given values to find \\(c\\).' },
+      { id:'y1p-13-q5', marks:5, source:'Ex 13E',
+        text:'Find the area between \\(y = x^2\\) and the \\(x\\)-axis for \\(-2 \\le x \\le 3\\). Be careful about regions below the axis.',
+        hint:'Since \\(x^2 \\ge 0\\), the curve is always above the axis here. Simply evaluate \\(\\int_{-2}^{3} x^2\\,dx\\).' },
+      { id:'y1p-13-q6', marks:6, source:'Mixed Ex 13',
+        text:'The curve \\(y = x^3 - 2x^2 - x + 2\\) crosses the \\(x\\)-axis at \\(x = -1, 1, 2\\). Find the total area enclosed between the curve and the \\(x\\)-axis.',
+        hint:'The curve changes sign at each root. Integrate each sub-interval separately and take the absolute value of each.' },
+      { id:'y1p-13-q7', marks:4, source:'Ex 13F',
+        text:'Find the area enclosed between \\(y = 4 - x^2\\) and the \\(x\\)-axis.',
+        hint:'Find where the curve crosses the \\(x\\)-axis (set \\(y=0\\)), then integrate between those roots.' },
+    ]
+  },
+
+  {
+    id:'y1p-14', book:'y1p', chapter:14, title:'Exponentials and Logarithms',
+    subtopics:['Exponential functions','y = eˣ','Exponential modelling','Logarithms','Laws of logarithms','Solving equations using logarithms','Working with natural logarithms','Logarithms and non-linear data'],
+    questions:[
+      { id:'y1p-14-q1', marks:4, source:'Ex 14F',
+        text:'Solve \\(3^{2x+1} = 7^x\\), giving your answer to 3 significant figures.',
+        hint:'Take \\(\\ln\\) of both sides: \\((2x+1)\\ln 3 = x\\ln 7\\). Expand and collect \\(x\\) terms.' },
+      { id:'y1p-14-q2', marks:3, source:'Ex 14E',
+        text:'Express \\(\\log_3 8 + 2\\log_3 6 - \\log_3 4\\) as a single logarithm.',
+        hint:'Use \\(2\\log_3 6 = \\log_3 36\\), then combine using \\(\\log A + \\log B = \\log AB\\) and \\(\\log A - \\log B = \\log\\frac{A}{B}\\).' },
+      { id:'y1p-14-q3', marks:6, source:'Ex 14C',
+        text:'The number of bacteria is modelled by \\(N = 500e^{0.3t}\\). Find (a) the initial number, (b) the number after 10 hours, (c) the time when \\(N = 10000\\).',
+        hint:'(a) \\(t=0\\). (b) Substitute \\(t=10\\). (c) Solve \\(500e^{0.3t}=10000\\) by taking \\(\\ln\\).' },
+      { id:'y1p-14-q4', marks:4, source:'Mixed Ex 14',
+        text:'Given that \\(\\ln(3x-1) - \\ln(x+2) = \\ln 2\\), find the exact value of \\(x\\).',
+        hint:'Use the subtraction law: \\(\\ln\\frac{3x-1}{x+2} = \\ln 2\\). Exponentiate both sides, then solve.' },
+      { id:'y1p-14-q5', marks:4, source:'Ex 14H',
+        text:'The data below follows a model \\(y = ax^n\\). Taking logs, \\(\\ln y\\) is plotted against \\(\\ln x\\) giving a straight line of gradient 2.5 and intercept \\(\\ln 3\\). Find \\(a\\) and \\(n\\).',
+        hint:'Taking \\(\\ln\\): \\(\\ln y = n\\ln x + \\ln a\\). Match with \\(Y = mX + c\\) where \\(Y = \\ln y\\), \\(X = \\ln x\\).' },
+      { id:'y1p-14-q6', marks:3, source:'Ex 14D',
+        text:'Solve \\(\\log_2(x+3) + \\log_2(x-1) = 5\\).',
+        hint:'Combine: \\(\\log_2[(x+3)(x-1)] = 5\\), so \\((x+3)(x-1) = 2^5 = 32\\). Expand and solve the quadratic.' },
+      { id:'y1p-14-q7', marks:4, source:'Ex 14G',
+        text:'Sketch the graph of \\(y = 2e^{-x} + 3\\), stating the equation of the asymptote and the coordinates of the \\(y\\)-intercept.',
+        hint:'As \\(x \\to \\infty\\), \\(e^{-x} \\to 0\\) so \\(y \\to 3\\). The \\(y\\)-intercept is at \\(x=0\\).' },
+    ]
+  },
+
+  // ═══════════════════════════════════════════════════════════
+  // YEAR 1 STATISTICS & MECHANICS
+  // ═══════════════════════════════════════════════════════════
+
+  {
+    id:'y1s-01', book:'y1s', chapter:1, title:'Data Collection',
+    subtopics:['Populations and samples','Sampling','Non-random sampling','Types of data','The large data set'],
+    questions:[
+      { id:'y1s-01-q1', marks:2, source:'Ex 1A',
+        text:'State one advantage and one disadvantage of using a census rather than a sample survey.',
+        hint:'Census: complete accuracy but very expensive/time-consuming.' },
+      { id:'y1s-01-q2', marks:3, source:'Ex 1B',
+        text:'A researcher wishes to select a stratified sample of 60 students from a sixth form with 150 Year 12 and 100 Year 13 students. How many should be chosen from each year group?',
+        hint:'Total = 250. Proportion from Y12 = 150/250. Multiply each proportion by 60.' },
+      { id:'y1s-01-q3', marks:3, source:'Ex 1B',
+        text:'Describe how you would use a random number table to select a simple random sample of 10 students from a list of 80.',
+        hint:'Number the students 01–80. Generate two-digit random numbers, skip any over 80 or already chosen.' },
+      { id:'y1s-01-q4', marks:2, source:'Ex 1C',
+        text:'Explain why quota sampling is a form of non-random sampling and give one disadvantage.',
+        hint:'Selection within quotas is left to the interviewer\'s judgement — no random mechanism, so not all individuals have a chance of selection.' },
+      { id:'y1s-01-q5', marks:3, source:'Mixed Ex 1',
+        text:'State whether each of the following is quantitative or qualitative, and discrete or continuous: (a) shoe size, (b) time to run 100 m, (c) eye colour.',
+        hint:'Quantitative = numerical. Continuous = can take any value in a range; discrete = only specific values.' },
+    ]
+  },
+
+  {
+    id:'y1s-02', book:'y1s', chapter:2, title:'Measures of Location and Spread',
+    subtopics:['Measures of central tendency','Other measures of location','Measures of spread','Variance and standard deviation','Coding'],
+    questions:[
+      { id:'y1s-02-q1', marks:5, source:'Ex 2D',
+        text:'The times (minutes) taken by 8 students to complete a puzzle are: 12, 15, 9, 18, 11, 14, 20, 13. Calculate the mean and standard deviation.',
+        hint:'Mean \\(= \\frac{\\sum x}{n}\\). For standard deviation: \\(s = \\sqrt{\\frac{\\sum x^2}{n} - \\bar{x}^2}\\).' },
+      { id:'y1s-02-q2', marks:4, source:'Ex 2E',
+        text:'Data is coded as \\(y = \\dfrac{x-30}{5}\\), giving \\(\\bar{y} = 2.4\\) and \\(s_y = 1.8\\). Find \\(\\bar{x}\\) and \\(s_x\\).',
+        hint:'\\(\\bar{x} = 5\\bar{y} + 30\\). Since subtracting a constant doesn\'t change spread: \\(s_x = 5 s_y\\).' },
+      { id:'y1s-02-q3', marks:3, source:'Mixed Ex 2',
+        text:'A distribution has \\(Q_1 = 38\\) and \\(\\text{IQR} = 24\\). Find \\(Q_3\\) and the boundary above which values are outliers.',
+        hint:'\\(Q_3 = Q_1 + \\text{IQR}\\). Outlier boundary \\(= Q_3 + 1.5 \\times \\text{IQR}\\).' },
+      { id:'y1s-02-q4', marks:5, source:'Ex 2C',
+        text:'A frequency table shows masses (kg): 50–55 (\\(f=4\\)), 55–60 (\\(f=10\\)), 60–65 (\\(f=12\\)), 65–70 (\\(f=6\\)), 70–75 (\\(f=3\\)). Estimate the mean and standard deviation.',
+        hint:'Use midpoints: \\(\\bar{x} = \\frac{\\sum fx}{\\sum f}\\), \\(s = \\sqrt{\\frac{\\sum fx^2}{\\sum f} - \\bar{x}^2}\\).' },
+      { id:'y1s-02-q5', marks:3, source:'Ex 2B',
+        text:'Find the median and quartiles for the data set: 3, 7, 8, 12, 14, 17, 19, 21, 25.',
+        hint:'Median is the 5th value. \\(Q_1\\) is the median of the lower half (values 1–4), \\(Q_3\\) of the upper half (values 6–9).' },
+    ]
+  },
+
+  {
+    id:'y1s-03', book:'y1s', chapter:3, title:'Representations of Data',
+    subtopics:['Outliers','Box plots','Cumulative frequency','Histograms','Comparing data'],
+    questions:[
+      { id:'y1s-03-q1', marks:4, source:'Ex 3D',
+        text:'A histogram has class widths and frequency densities: (0–5: fd=2.0), (5–15: fd=4.5), (15–20: fd=6.0), (20–30: fd=3.5), (30–50: fd=1.0). Find the total frequency.',
+        hint:'Frequency = frequency density × class width. Sum all frequencies.' },
+      { id:'y1s-03-q2', marks:3, source:'Ex 3E',
+        text:'The mean of a distribution is less than the median, which is less than the mode. Describe the skewness and sketch the shape of the distribution.',
+        hint:'Mean < median < mode implies the distribution is negatively (left) skewed.' },
+      { id:'y1s-03-q3', marks:4, source:'Ex 3B',
+        text:'A box plot shows: min = 12, \\(Q_1 = 20\\), median = 27, \\(Q_3 = 35\\), max = 48. Identify any outliers using the rule \\(< Q_1 - 1.5 \\times \\text{IQR}\\) or \\(> Q_3 + 1.5 \\times \\text{IQR}\\).',
+        hint:'IQR = 35 − 20 = 15. Lower fence = 20 − 22.5 = −2.5. Upper fence = 35 + 22.5 = 57.5.' },
+      { id:'y1s-03-q4', marks:4, source:'Ex 3C',
+        text:'From a cumulative frequency graph, the median is 42, \\(Q_1 = 34\\) and \\(Q_3 = 51\\). A student claims the data is positively skewed. Justify or refute this claim.',
+        hint:'Check: is the median closer to \\(Q_1\\) or \\(Q_3\\)? Positive skew means the upper tail is longer, so median is closer to \\(Q_1\\).' },
+      { id:'y1s-03-q5', marks:5, source:'Mixed Ex 3',
+        text:'Draw a histogram for the data: Length (cm): 0<l≤10 (f=8), 10<l≤15 (f=15), 15<l≤20 (f=20), 20<l≤30 (f=12), 30<l≤50 (f=6). Label axes correctly.',
+        hint:'Calculate frequency density = f ÷ class width for each group. The y-axis is frequency density, not frequency.' },
+    ]
+  },
+
+  {
+    id:'y1s-04', book:'y1s', chapter:4, title:'Correlation',
+    subtopics:['Correlation','Linear regression'],
+    questions:[
+      { id:'y1s-04-q1', marks:2, source:'Ex 4B',
+        text:'The regression line of \\(y\\) on \\(x\\) is \\(y = 3.2x - 8.4\\) where \\(x\\) is temperature (°C) and \\(y\\) is ice cream sales (£100s). Interpret the gradient in context.',
+        hint:'The gradient tells you how much \\(y\\) increases for each 1-unit increase in \\(x\\).' },
+      { id:'y1s-04-q2', marks:2, source:'Mixed Ex 4',
+        text:'Explain why a regression equation for \\(y\\) on \\(x\\) should not be used to predict values of \\(x\\) given \\(y\\).',
+        hint:'The regression of \\(y\\) on \\(x\\) minimises vertical distances. For predicting \\(x\\), you need the regression of \\(x\\) on \\(y\\), which is a different line.' },
+      { id:'y1s-04-q3', marks:4, source:'Ex 4A',
+        text:'Describe the correlation shown by each \\(r\\) value and comment on the strength: (a) \\(r = 0.97\\), (b) \\(r = -0.35\\), (c) \\(r = 0.08\\).',
+        hint:'\\(r\\) close to ±1 means strong correlation; close to 0 means weak. Sign indicates direction.' },
+      { id:'y1s-04-q4', marks:4, source:'Ex 4B',
+        text:'Data on revision hours (\\(x\\)) and exam score (\\(y\\)) gives \\(\\bar{x} = 5\\), \\(\\bar{y} = 62\\), \\(S_{xx} = 40\\), \\(S_{xy} = 120\\). Find the regression line \\(y = a + bx\\).',
+        hint:'\\(b = \\frac{S_{xy}}{S_{xx}}\\). Then \\(a = \\bar{y} - b\\bar{x}\\).' },
+      { id:'y1s-04-q5', marks:3, source:'Ex 4B',
+        text:'The regression line for predicting weight (\\(y\\) kg) from height (\\(x\\) cm) is \\(y = -110 + 0.85x\\). Predict the weight of a person 175 cm tall, and explain why you should not use this line to predict height from weight.',
+        hint:'Substitute \\(x=175\\) into the equation. The line of \\(y\\) on \\(x\\) minimises residuals in \\(y\\) only — it cannot be rearranged to predict \\(x\\).' },
+    ]
+  },
+
+  {
+    id:'y1s-05', book:'y1s', chapter:5, title:'Probability',
+    subtopics:['Calculating probabilities','Venn diagrams','Mutually exclusive and independent events','Tree diagrams'],
+    questions:[
+      { id:'y1s-05-q1', marks:5, source:'Ex 5C',
+        text:'Events A and B: \\(P(A) = 0.4\\), \\(P(B) = 0.35\\), \\(P(A\\cup B) = 0.6\\). Find \\(P(A\\cap B)\\) and determine if A and B are independent.',
+        hint:'\\(P(A\\cap B) = P(A)+P(B)-P(A\\cup B)\\). Independence: check if \\(P(A\\cap B) = P(A)P(B)\\).' },
+      { id:'y1s-05-q2', marks:5, source:'Ex 5D',
+        text:'A bag has 5 red and 3 blue balls. Two are drawn without replacement. Find the probability of drawing exactly one red ball.',
+        hint:'Use a tree diagram. P(RB) + P(BR) = \\(\\frac{5}{8}\\times\\frac{3}{7} + \\frac{3}{8}\\times\\frac{5}{7}\\).' },
+      { id:'y1s-05-q3', marks:4, source:'Ex 5B',
+        text:'In a class, 60% play sport (S), 40% play an instrument (I), and 20% do both. Draw a Venn diagram and find the probability that a randomly chosen student does neither.',
+        hint:'Fill in the Venn diagram: both = 0.2, only S = 0.4, only I = 0.2. Sum all regions and subtract from 1.' },
+      { id:'y1s-05-q4', marks:4, source:'Mixed Ex 5',
+        text:'Two events A and B are mutually exclusive with \\(P(A) = 0.3\\) and \\(P(B) = 0.45\\). Find \\(P(A\\cup B)\\) and \\(P(A\'\\cap B\')\\).',
+        hint:'Mutually exclusive means \\(P(A\\cap B)=0\\). \\(P(A\'\\cap B\') = 1 - P(A\\cup B)\\) by De Morgan\'s law.' },
+      { id:'y1s-05-q5', marks:5, source:'Ex 5D',
+        text:'A factory produces items; 5% are defective. Items are tested one by one. Find the probability that the first defective item found is the 3rd one tested.',
+        hint:'P(pass)×P(pass)×P(fail) = \\(0.95 \\times 0.95 \\times 0.05\\).' },
+    ]
+  },
+
+  {
+    id:'y1s-06', book:'y1s', chapter:6, title:'Statistical Distributions',
+    subtopics:['Probability distributions','The binomial distribution','Cumulative probabilities'],
+    questions:[
+      { id:'y1s-06-q1', marks:6, source:'Ex 6B',
+        text:'\\(X \\sim B(12, 0.3)\\). Find (a) \\(P(X=4)\\), (b) \\(P(X \\le 3)\\), (c) \\(P(X > 5)\\).',
+        hint:'(a) Use \\(\\binom{12}{4}(0.3)^4(0.7)^8\\). (b) Sum \\(P(X=0)\\) to \\(P(X=3)\\). (c) \\(1-P(X\\le 5)\\).' },
+      { id:'y1s-06-q2', marks:5, source:'Mixed Ex 6',
+        text:'A fair coin is tossed 10 times. Find the probability of obtaining (a) exactly 6 heads, (b) at least 8 heads.',
+        hint:'\\(X\\sim B(10, 0.5)\\). (a) \\(P(X=6)\\). (b) \\(P(X\\ge 8) = P(X=8)+P(X=9)+P(X=10)\\).' },
+      { id:'y1s-06-q3', marks:4, source:'Ex 6A',
+        text:'A random variable \\(X\\) has the distribution \\(P(X=x) = k(x+1)\\) for \\(x = 0, 1, 2, 3\\). Find \\(k\\) and \\(P(X>1)\\).',
+        hint:'All probabilities must sum to 1: \\(k(1+2+3+4) = 1\\). Solve for \\(k\\).' },
+      { id:'y1s-06-q4', marks:5, source:'Ex 6C',
+        text:'\\(X\\sim B(20, p)\\) and \\(P(X=0) = 0.0115\\) to 4 s.f. Find \\(p\\).',
+        hint:'\\(P(X=0) = (1-p)^{20} = 0.0115\\). Take the 20th root (or use logs).' },
+      { id:'y1s-06-q5', marks:5, source:'Mixed Ex 6',
+        text:'On average, 1 in 5 people in a survey prefer brand A. In a random sample of 15 people, find the probability that fewer than 4 prefer brand A.',
+        hint:'\\(X\\sim B(15, 0.2)\\). Find \\(P(X<4)=P(X\\le 3)\\).' },
+    ]
+  },
+
+  {
+    id:'y1s-07', book:'y1s', chapter:7, title:'Hypothesis Testing',
+    subtopics:['Hypothesis testing','Finding critical values','One-tailed tests','Two-tailed tests'],
+    questions:[
+      { id:'y1s-07-q1', marks:6, source:'Ex 7C',
+        text:'A coin is suspected to be biased towards heads. In 20 flips, 15 heads are obtained. Test at the 5% significance level.',
+        hint:'\\(H_0: p=0.5\\), \\(H_1: p>0.5\\). Find \\(P(X\\ge 15)\\) where \\(X\\sim B(20,0.5)\\) and compare to 0.05.' },
+      { id:'y1s-07-q2', marks:7, source:'Ex 7D',
+        text:'\\(X\\sim B(25,p)\\). Test \\(H_0: p=0.4\\) vs \\(H_1: p\\ne 0.4\\) at 5% given \\(X=15\\). State the critical region clearly.',
+        hint:'Two-tailed test: find the critical region in both tails. Each tail has probability ≤ 2.5%. Check whether \\(X=15\\) falls in either tail.' },
+      { id:'y1s-07-q3', marks:5, source:'Mixed Ex 7',
+        text:'A manufacturer claims 30% of customers prefer their product. A survey of 20 customers finds only 3 prefer it. Test at 5% whether there is evidence the true proportion is less than 30%.',
+        hint:'\\(H_0:p=0.3\\), \\(H_1:p<0.3\\). Find \\(P(X\\le 3)\\) where \\(X\\sim B(20,0.3)\\).' },
+      { id:'y1s-07-q4', marks:5, source:'Ex 7B',
+        text:'Find the critical region for a one-tailed test with \\(X\\sim B(30, 0.2)\\), \\(H_1: p < 0.2\\), at the 5% significance level.',
+        hint:'Find the largest \\(c\\) such that \\(P(X\\le c) \\le 0.05\\). Use the binomial cumulative distribution.' },
+      { id:'y1s-07-q5', marks:6, source:'Ex 7D',
+        text:'A biologist believes a new treatment increases the probability of recovery from 0.4. In a trial, 14 out of 25 patients recover. Test at the 5% significance level whether this is evidence of an increase.',
+        hint:'\\(H_0:p=0.4\\), \\(H_1:p>0.4\\). Find \\(P(X\\ge 14)\\) where \\(X\\sim B(25,0.4)\\). Use \\(P(X\\ge 14)=1-P(X\\le 13)\\).' },
+      { id:'y1s-07-q6', marks:5, source:'Mixed Ex 7',
+        text:'A two-tailed test at the 10% significance level tests \\(H_0:p=0.45\\) using \\(X\\sim B(18,p)\\). State the critical region and the actual significance level of the test.',
+        hint:'Split 10% across both tails: find \\(c_1\\) where \\(P(X\\le c_1)<0.05\\) and \\(c_2\\) where \\(P(X\\ge c_2)<0.05\\). Add those two probabilities for the actual significance level.' },
+    ]
+  },
+
+  {
+    id:'y1m-08', book:'y1s', chapter:8, title:'Modelling in Mechanics',
+    subtopics:['Constructing a model','Modelling assumptions','Quantities and units','Working with vectors'],
+    questions:[
+      { id:'y1m-08-q1', marks:2, source:'Ex 8B',
+        text:'State two modelling assumptions made when treating a snooker ball as a particle.',
+        hint:'Think about size, shape, and whether it matters that it can rotate.' },
+      { id:'y1m-08-q2', marks:3, source:'Ex 8D',
+        text:'A force of magnitude 12 N acts at 40° to the horizontal. Find its horizontal and vertical components.',
+        hint:'Horizontal: \\(12\\cos 40°\\). Vertical: \\(12\\sin 40°\\).' },
+      { id:'y1m-08-q3', marks:3, source:'Ex 8D',
+        text:'Two forces act on a particle: \\(\\mathbf{F_1} = (3\\mathbf{i} - 5\\mathbf{j})\\) N and \\(\\mathbf{F_2} = (-1\\mathbf{i} + 2\\mathbf{j})\\) N. Find the resultant force and its magnitude.',
+        hint:'Add the vectors component-by-component, then find the magnitude using Pythagoras.' },
+      { id:'y1m-08-q4', marks:2, source:'Mixed Ex 8',
+        text:'State the SI unit for each of: (a) force, (b) momentum, (c) acceleration, (d) energy.',
+        hint:'Force = N, momentum = kg m/s, acceleration = m/s², energy = J (joules).' },
+      { id:'y1m-08-q5', marks:3, source:'Ex 8D',
+        text:'A particle is in equilibrium under three forces: \\(\\mathbf{F_1} = (5\\mathbf{i} + 2\\mathbf{j})\\) N, \\(\\mathbf{F_2} = (-3\\mathbf{i} + \\mathbf{j})\\) N, and \\(\\mathbf{F_3}\\). Find \\(\\mathbf{F_3}\\).',
+        hint:'For equilibrium the vector sum is zero: \\(\\mathbf{F_3} = -(\\mathbf{F_1}+\\mathbf{F_2})\\).' },
+    ]
+  },
+
+  {
+    id:'y1m-09', book:'y1s', chapter:9, title:'Constant Acceleration',
+    subtopics:['Displacement-time graphs','Velocity-time graphs','SUVAT formulae 1','SUVAT formulae 2','Vertical motion under gravity'],
+    questions:[
+      { id:'y1m-09-q1', marks:4, source:'Ex 9C',
+        text:'A particle starts from rest and accelerates uniformly at \\(3\\text{ m s}^{-2}\\) for 8 seconds. Find (a) the final velocity, (b) the distance travelled.',
+        hint:'Use \\(v = u + at\\) and \\(s = ut + \\frac{1}{2}at^2\\) with \\(u=0\\).' },
+      { id:'y1m-09-q2', marks:5, source:'Ex 9E',
+        text:'A ball is thrown vertically upwards at 15 m/s. Find (a) the maximum height, (b) the time to return to the starting point. Take \\(g = 9.8\\text{ m s}^{-2}\\).',
+        hint:'At maximum height, \\(v=0\\). Use \\(v^2 = u^2 + 2as\\) for (a). For (b), \\(s=0\\) on return: use \\(s = ut + \\frac{1}{2}at^2\\).' },
+      { id:'y1m-09-q3', marks:4, source:'Mixed Ex 9',
+        text:'A train decelerates uniformly from 60 m/s to rest in 40 seconds. Find (a) the deceleration, (b) the distance covered.',
+        hint:'\\(v=0\\), \\(u=60\\), \\(t=40\\). Use \\(a = \\frac{v-u}{t}\\) then \\(s = \\frac{u+v}{2}t\\).' },
+      { id:'y1m-09-q4', marks:5, source:'Ex 9B',
+        text:'A velocity-time graph shows a particle accelerating from 0 to 20 m/s in 5 s, then moving at 20 m/s for 10 s, then decelerating to rest in 4 s. Find the total distance travelled.',
+        hint:'Total distance = area under the velocity-time graph = area of each trapezium/triangle.' },
+      { id:'y1m-09-q5', marks:5, source:'Ex 9E',
+        text:'A stone is dropped from a cliff 45 m high. Taking \\(g = 10\\text{ m s}^{-2}\\), find (a) the time to reach the bottom, (b) the speed on impact.',
+        hint:'Take downward as positive: \\(u=0\\), \\(s=45\\), \\(a=10\\). Use \\(s = ut + \\frac{1}{2}at^2\\) for (a) and \\(v^2 = u^2+2as\\) for (b).' },
+    ]
+  },
+
+  {
+    id:'y1m-10', book:'y1s', chapter:10, title:'Forces and Motion',
+    subtopics:['Force diagrams','Forces as vectors','Forces and acceleration','Motion in 2 dimensions','Connected particles','Pulleys'],
+    questions:[
+      { id:'y1m-10-q1', marks:5, source:'Ex 10C',
+        text:'A particle of mass 5 kg is pulled along a rough horizontal surface by a horizontal force of 30 N. Given \\(\\mu = 0.3\\), find the acceleration.',
+        hint:'Normal reaction \\(R = mg\\). Friction \\(F = \\mu R\\). Apply Newton\'s 2nd law: \\(30 - F = ma\\).' },
+      { id:'y1m-10-q2', marks:6, source:'Ex 10F',
+        text:'Two particles of mass 3 kg and 5 kg are connected by a light inextensible string over a smooth pulley. Find (a) the acceleration of the system, (b) the tension in the string.',
+        hint:'Treat each particle separately: \\(5g - T = 5a\\) and \\(T - 3g = 3a\\). Add the equations to find \\(a\\).' },
+      { id:'y1m-10-q3', marks:5, source:'Ex 10D',
+        text:'A particle of mass 2 kg is acted on by forces \\((3\\mathbf{i} + 4\\mathbf{j})\\) N and \\((-1\\mathbf{i} + 2\\mathbf{j})\\) N. Find the acceleration vector and its magnitude.',
+        hint:'Resultant force \\(= \\mathbf{F_1}+\\mathbf{F_2}\\). Then \\(\\mathbf{a} = \\mathbf{F}/m\\).' },
+      { id:'y1m-10-q4', marks:6, source:'Ex 10E',
+        text:'Two particles A (mass 4 kg) and B (mass 6 kg) are connected by a taut string. A is on a smooth horizontal table, string passes over the edge and B hangs freely. Find the acceleration and tension.',
+        hint:'Table particle: \\(T = 4a\\). Hanging particle: \\(6g - T = 6a\\). Solve simultaneously.' },
+      { id:'y1m-10-q5', marks:5, source:'Mixed Ex 10',
+        text:'A car of mass 1200 kg accelerates from 10 m/s to 25 m/s in 6 seconds on a horizontal road. The resistance force is 800 N. Find the driving force.',
+        hint:'Find acceleration using \\(a = \\frac{v-u}{t}\\). Then \\(F_{drive} - 800 = 1200a\\).' },
+    ]
+  },
+
+  {
+    id:'y1m-11', book:'y1s', chapter:11, title:'Variable Acceleration',
+    subtopics:['Functions of time','Using differentiation','Maxima and minima problems','Using integration','Constant acceleration formulae'],
+    questions:[
+      { id:'y1m-11-q1', marks:7, source:'Ex 11B',
+        text:'A particle moves so that \\(v = 3t^2 - 12t + 9\\) m/s. Find (a) the acceleration when \\(t = 3\\), (b) when the particle is at rest, (c) the displacement from \\(t=0\\) to \\(t=4\\).',
+        hint:'(a) Differentiate \\(v\\). (b) Set \\(v=0\\) and solve. (c) Integrate \\(v\\) from 0 to 4.' },
+      { id:'y1m-11-q2', marks:5, source:'Ex 11D',
+        text:'A particle starts from the origin with \\(a = 6t - 4\\) m/s². Given \\(v = 2\\) m/s when \\(t = 0\\), find (a) \\(v\\) in terms of \\(t\\), (b) the displacement when \\(t = 3\\).',
+        hint:'Integrate \\(a\\) to get \\(v\\), use initial condition to find \\(c\\). Then integrate \\(v\\) for displacement.' },
+      { id:'y1m-11-q3', marks:4, source:'Ex 11C',
+        text:'A particle has displacement \\(s = t^3 - 6t^2 + 9t\\) from the origin. Find the times when the particle is instantaneously at rest, and its position at those times.',
+        hint:'Set \\(v = \\frac{ds}{dt} = 0\\) and solve the quadratic.' },
+      { id:'y1m-11-q4', marks:5, source:'Mixed Ex 11',
+        text:'A particle moves with velocity \\(v = 4 - t^2\\) m/s for \\(0 \\le t \\le 3\\). Find the total distance travelled (not displacement) in this interval.',
+        hint:'Find when \\(v=0\\): at \\(t=2\\). Integrate \\(|v|\\) separately over \\([0,2]\\) and \\([2,3]\\).' },
+      { id:'y1m-11-q5', marks:6, source:'Ex 11E',
+        text:'A particle moves along a straight line. Its displacement from the origin is \\(s = 2t^3 - 15t^2 + 24t\\) metres at time \\(t\\) seconds. Find (a) the velocity and acceleration at \\(t=1\\), (b) the values of \\(t\\) when the acceleration is zero, (c) whether the particle is speeding up or slowing down at \\(t=4\\).',
+        hint:'(a) Differentiate once for \\(v\\), twice for \\(a\\). (b) Set \\(a=0\\). (c) At \\(t=4\\): if \\(v\\) and \\(a\\) have the same sign the particle is speeding up.' },
+      { id:'y1m-11-q6', marks:5, source:'Ex 11D',
+        text:'A particle has acceleration \\(a = (2t-5)\\) m/s². It is at rest at \\(t=1\\) s and has displacement 3 m at \\(t=0\\). Find an expression for its displacement at time \\(t\\).',
+        hint:'Integrate \\(a\\) to find \\(v\\). Use \\(v=0\\) at \\(t=1\\) to find the constant. Integrate \\(v\\) to find \\(s\\). Use \\(s=3\\) at \\(t=0\\).' },
+    ]
+  },
+
+  // ═══════════════════════════════════════════════════════════
+  // YEAR 2 PURE
+  // ═══════════════════════════════════════════════════════════
+
+  {
+    id:'y2p-01', book:'y2p', chapter:1, title:'Algebraic Methods (Y2)',
+    subtopics:['Proof by contradiction','Algebraic fractions','Partial fractions','Repeated factors','Algebraic division'],
+    questions:[
+      { id:'y2p-01-q1', marks:4, source:'Ex 1A',
+        text:'Prove by contradiction that \\(\\sqrt{3}\\) is irrational.',
+        hint:'Assume \\(\\sqrt{3} = \\frac{p}{q}\\) in lowest terms. Square both sides, show 3|p, then 3|q — contradicting lowest terms.' },
+      { id:'y2p-01-q2', marks:4, source:'Ex 1C',
+        text:'Express \\(\\dfrac{5x+3}{(x+1)(x-2)}\\) in partial fractions.',
+        hint:'Write as \\(\\frac{A}{x+1}+\\frac{B}{x-2}\\). Multiply through and substitute \\(x=-1\\) then \\(x=2\\).' },
+      { id:'y2p-01-q3', marks:5, source:'Ex 1D',
+        text:'Express \\(\\dfrac{3x^2+8x-4}{(x+2)^2(x-1)}\\) in partial fractions.',
+        hint:'Form: \\(\\frac{A}{x+2}+\\frac{B}{(x+2)^2}+\\frac{C}{x-1}\\). Substitute values and compare coefficients.' },
+      { id:'y2p-01-q4', marks:4, source:'Ex 1E',
+        text:'Express \\(\\dfrac{2x^3+x^2-3x+1}{x^2-1}\\) as a polynomial plus proper fraction.',
+        hint:'The numerator degree > denominator degree, so first do polynomial long division, then partial fractions on the remainder.' },
+      { id:'y2p-01-q5', marks:3, source:'Mixed Ex 1',
+        text:'Prove that if \\(n^2\\) is odd then \\(n\\) is odd.',
+        hint:'Use proof by contradiction: assume \\(n\\) is even, so \\(n = 2k\\). Then \\(n^2 = 4k^2\\) is even — contradiction.' },
+      { id:'y2p-01-q6', marks:4, source:'Ex 1C',
+        text:'Express \\(\\dfrac{11-3x}{(1+2x)(2-x)}\\) in partial fractions.',
+        hint:'Write as \\(\\frac{A}{1+2x}+\\frac{B}{2-x}\\). Multiply through and compare coefficients or substitute roots.' },
+    ]
+  },
+
+  {
+    id:'y2p-02', book:'y2p', chapter:2, title:'Functions and Graphs',
+    subtopics:['The modulus function','Functions and mappings','Composite functions','Inverse functions','y=|f(x)| and y=f(|x|)','Combining transformations','Solving modulus problems'],
+    questions:[
+      { id:'y2p-02-q1', marks:5, source:'Ex 2G',
+        text:'Sketch \\(y = |2x - 4|\\) and solve \\(|2x-4| = x + 1\\).',
+        hint:'The equation splits into two cases: \\(2x-4 = x+1\\) and \\(-(2x-4)=x+1\\). Check each solution is valid.' },
+      { id:'y2p-02-q2', marks:4, source:'Ex 2D',
+        text:'Given \\(f(x) = \\dfrac{2}{x+1}\\) for \\(x > -1\\), find \\(f^{-1}(x)\\) and state its domain.',
+        hint:'Let \\(y = \\frac{2}{x+1}\\), rearrange for \\(x\\). The domain of \\(f^{-1}\\) is the range of \\(f\\).' },
+      { id:'y2p-02-q3', marks:4, source:'Ex 2C',
+        text:'Given \\(f(x) = x^2 - 3\\) and \\(g(x) = 2x+1\\), find \\(fg(x)\\) and \\(gf(x)\\) and show they are different.',
+        hint:'\\(fg(x) = f(g(x))\\): substitute \\(g(x)\\) into \\(f\\). \\(gf(x) = g(f(x))\\): substitute \\(f(x)\\) into \\(g\\).' },
+      { id:'y2p-02-q4', marks:4, source:'Ex 2E',
+        text:'Sketch \\(y = |f(x)|\\) and \\(y = f(|x|)\\) where \\(f(x) = x^2 - 4x + 3\\).',
+        hint:'For \\(|f(x)|\\): reflect any part below the \\(x\\)-axis upwards. For \\(f(|x|)\\): reflect the right side to the left.' },
+      { id:'y2p-02-q5', marks:4, source:'Ex 2F',
+        text:'Describe the sequence of transformations that maps \\(y = \\ln x\\) to \\(y = 2\\ln(3x+6)\\).',
+        hint:'Rewrite as \\(2\\ln(3(x+2))\\). Transformations act from inside out: translation, stretch in \\(x\\), stretch in \\(y\\).' },
+      { id:'y2p-02-q6', marks:5, source:'Mixed Ex 2',
+        text:'Solve \\(|3x+1| < |x-5|\\).',
+        hint:'Square both sides (both sides are non-negative): \\((3x+1)^2 < (x-5)^2\\). Expand and solve the resulting quadratic inequality.' },
+    ]
+  },
+
+  {
+    id:'y2p-03', book:'y2p', chapter:3, title:'Sequences and Series',
+    subtopics:['Arithmetic sequences','Arithmetic series','Geometric sequences','Geometric series','Sum to infinity','Sigma notation','Recurrence relations','Modelling with series'],
+    questions:[
+      { id:'y2p-03-q1', marks:3, source:'Ex 3B',
+        text:'An arithmetic series has first term 7 and common difference 3. Find the sum of the first 30 terms.',
+        hint:'\\(S_n = \\frac{n}{2}(2a + (n-1)d)\\) with \\(a=7\\), \\(d=3\\), \\(n=30\\).' },
+      { id:'y2p-03-q2', marks:3, source:'Ex 3E',
+        text:'A geometric series has first term 4 and common ratio \\(\\frac{1}{3}\\). Find the sum to infinity.',
+        hint:'\\(S_\\infty = \\frac{a}{1-r}\\) (valid when \\(|r|<1\\)).' },
+      { id:'y2p-03-q3', marks:4, source:'Ex 3G',
+        text:'A sequence is defined by \\(u_{n+1} = 3u_n - 5\\) with \\(u_1 = 4\\). Find \\(u_2\\), \\(u_3\\) and the fixed point of the sequence.',
+        hint:'Substitute repeatedly. Fixed point: set \\(u = 3u - 5\\) and solve.' },
+      { id:'y2p-03-q4', marks:4, source:'Ex 3F',
+        text:'Evaluate \\(\\displaystyle\\sum_{r=3}^{10}(4r-1)\\).',
+        hint:'Write out as an arithmetic series: first term when \\(r=3\\) is \\(4(3)-1=11\\), last when \\(r=10\\) is 39. Use \\(S = \\frac{n}{2}(a+l)\\).' },
+      { id:'y2p-03-q5', marks:5, source:'Ex 3D',
+        text:'A geometric sequence has third term 12 and sixth term \\(\\frac{3}{2}\\). Find the common ratio and the first term.',
+        hint:'\\(ar^2 = 12\\) and \\(ar^5 = \\frac{3}{2}\\). Divide the equations to find \\(r^3\\).' },
+      { id:'y2p-03-q6', marks:5, source:'Mixed Ex 3',
+        text:'An arithmetic series has first term \\(a\\), common difference \\(d\\) and \\(n\\) terms. If the sum is 200, \\(a=5\\) and the last term is 35, find \\(n\\) and \\(d\\).',
+        hint:'\\(l = a + (n-1)d = 35\\) and \\(S_n = \\frac{n}{2}(a+l) = 200\\). Solve for \\(n\\) first.' },
+      { id:'y2p-03-q7', marks:4, source:'Ex 3E',
+        text:'Find the range of values of \\(x\\) for which the geometric series \\(1 + 2x + 4x^2 + \\cdots\\) has a sum to infinity, and find \\(S_\\infty\\) in terms of \\(x\\).',
+        hint:'Series converges when \\(|r| = |2x| < 1\\), i.e. \\(-\\frac{1}{2} < x < \\frac{1}{2}\\). Then \\(S_\\infty = \\frac{1}{1-2x}\\).' },
+    ]
+  },
+
+  {
+    id:'y2p-04', book:'y2p', chapter:4, title:'Binomial Expansion (Y2)',
+    subtopics:['Expanding (1+x)ⁿ','Expanding (a+bx)ⁿ','Using partial fractions'],
+    questions:[
+      { id:'y2p-04-q1', marks:6, source:'Ex 4A',
+        text:'Expand \\((1+2x)^{-\\frac{1}{2}}\\) in ascending powers of \\(x\\) up to and including the \\(x^3\\) term, stating the range of values of \\(x\\) for which it is valid.',
+        hint:'Use \\((1+u)^n = 1 + nu + \\frac{n(n-1)}{2!}u^2 + \\cdots\\) with \\(n=-\\frac{1}{2}\\) and \\(u=2x\\). Valid for \\(|2x|<1\\).' },
+      { id:'y2p-04-q2', marks:7, source:'Ex 4C',
+        text:'Expand \\(\\dfrac{1}{(1-x)(1+2x)}\\) in ascending powers of \\(x\\) up to \\(x^2\\) using partial fractions.',
+        hint:'Decompose into partial fractions first, then expand each separately using \\((1+u)^{-1} \\approx 1-u+u^2-\\cdots\\).' },
+      { id:'y2p-04-q3', marks:5, source:'Ex 4B',
+        text:'Find the first three terms of the expansion of \\(\\dfrac{1}{(2+3x)^2}\\) in ascending powers of \\(x\\).',
+        hint:'Write as \\(\\frac{1}{4}(1+\\frac{3x}{2})^{-2}\\). Expand using the binomial series with \\(n=-2\\).' },
+      { id:'y2p-04-q4', marks:5, source:'Mixed Ex 4',
+        text:'Use a binomial expansion to find an approximation for \\(\\sqrt{1.04}\\) to 5 decimal places.',
+        hint:'Write as \\((1+0.04)^{1/2}\\) and expand to enough terms.' },
+      { id:'y2p-04-q5', marks:6, source:'Ex 4B',
+        text:'(a) Find the first four terms of the expansion of \\((1-2x)^{-3}\\). (b) State the range of values of \\(x\\) for which your expansion is valid.',
+        hint:'Use the general binomial with \\(n=-3\\): \\((1+u)^n = 1+nu+\\frac{n(n-1)}{2!}u^2+\\cdots\\). Valid when \\(|2x|<1\\).' },
+    ]
+  },
+
+  {
+    id:'y2p-05', book:'y2p', chapter:5, title:'Radians',
+    subtopics:['Radian measure','Arc length','Areas of sectors and segments','Solving trigonometric equations','Small angle approximations'],
+    questions:[
+      { id:'y2p-05-q1', marks:4, source:'Ex 5B',
+        text:'A sector has radius 6 cm and arc length 9 cm. Find (a) the angle in radians, (b) the area of the sector.',
+        hint:'Arc length \\(= r\\theta\\), so \\(\\theta = \\frac{9}{6}\\). Area \\(= \\frac{1}{2}r^2\\theta\\).' },
+      { id:'y2p-05-q2', marks:4, source:'Ex 5E',
+        text:'Using small angle approximations, show that \\(\\dfrac{\\sin 3\\theta - \\tan\\theta}{\\theta^2} \\approx 2\\) for small \\(\\theta\\).',
+        hint:'Use \\(\\sin\\theta \\approx \\theta\\), \\(\\tan\\theta \\approx \\theta\\) for small \\(\\theta\\). Substitute \\(\\sin 3\\theta \\approx 3\\theta\\).' },
+      { id:'y2p-05-q3', marks:5, source:'Ex 5D',
+        text:'Solve \\(2\\cos\\!\\left(\\theta + \\dfrac{\\pi}{6}\\right) = 1\\) for \\(0 \\le \\theta \\le 2\\pi\\), giving exact answers.',
+        hint:'\\(\\cos(\\theta+\\frac{\\pi}{6}) = \\frac{1}{2}\\). Let \\(u = \\theta+\\frac{\\pi}{6}\\); find all \\(u\\) in the extended range, then subtract \\(\\frac{\\pi}{6}\\).' },
+      { id:'y2p-05-q4', marks:5, source:'Ex 5C',
+        text:'A sector OAB has radius 8 cm and angle \\(\\frac{\\pi}{3}\\) radians. Find (a) the arc length, (b) the area of the sector, (c) the area of the segment.',
+        hint:'(a) \\(r\\theta\\). (b) \\(\\frac{1}{2}r^2\\theta\\). (c) Segment = sector area − triangle area (\\(=\\frac{1}{2}r^2\\sin\\theta\\)).' },
+      { id:'y2p-05-q5', marks:4, source:'Mixed Ex 5',
+        text:'A pendulum of length 50 cm swings through an angle of 0.3 radians. Find the arc length traced and the area of the sector swept.',
+        hint:'Arc \\(= r\\theta = 50 \\times 0.3\\). Area \\(= \\frac{1}{2}r^2\\theta\\). (Remember to work in consistent units.)' },
+    ]
+  },
+
+  {
+    id:'y2p-06', book:'y2p', chapter:6, title:'Trigonometric Functions',
+    subtopics:['Secant, cosecant and cotangent','Graphs of sec x, cosec x and cot x','Using sec x, cosec x and cot x','Trigonometric identities','Inverse trigonometric functions'],
+    questions:[
+      { id:'y2p-06-q1', marks:4, source:'Ex 6C',
+        text:'Prove that \\(\\csc^2\\theta + \\sec^2\\theta \\equiv \\csc^2\\theta \\sec^2\\theta\\).',
+        hint:'Start with the RHS: \\(\\frac{1}{\\sin^2\\theta\\cos^2\\theta}\\). Split and use \\(\\sin^2+\\cos^2=1\\).' },
+      { id:'y2p-06-q2', marks:6, source:'Mixed Ex 6',
+        text:'Solve \\(2\\cot^2\\theta - 5\\csc\\theta + 4 = 0\\) for \\(0 \\le \\theta \\le 2\\pi\\).',
+        hint:'Use \\(\\cot^2\\theta = \\csc^2\\theta - 1\\) to write entirely in terms of \\(\\csc\\theta\\). Factorise the quadratic.' },
+      { id:'y2p-06-q3', marks:4, source:'Ex 6D',
+        text:'Prove that \\((\\sec\\theta - \\tan\\theta)(\\sec\\theta + \\tan\\theta) \\equiv 1\\).',
+        hint:'Expand: \\(\\sec^2\\theta - \\tan^2\\theta\\). Use the identity \\(\\sec^2\\theta = 1 + \\tan^2\\theta\\).' },
+      { id:'y2p-06-q4', marks:5, source:'Ex 6E',
+        text:'Find the range of \\(f(x) = 2\\arcsin(x) + \\pi\\) and state the domain.',
+        hint:'Domain of \\(\\arcsin x\\) is \\([-1,1]\\), range is \\([-\\pi/2, \\pi/2]\\). Scale and shift accordingly.' },
+      { id:'y2p-06-q5', marks:4, source:'Ex 6B',
+        text:'Sketch \\(y = \\sec x\\) for \\(-\\pi \\le x \\le \\pi\\), marking any asymptotes.',
+        hint:'\\(\\sec x = \\frac{1}{\\cos x}\\): undefined where \\(\\cos x = 0\\), i.e. at \\(x = \\pm\\frac{\\pi}{2}\\). The graph has a minimum of 1 and maximum of −1 (i.e. a local maximum of −1).' },
+    ]
+  },
+
+  {
+    id:'y2p-07', book:'y2p', chapter:7, title:'Trigonometry and Modelling',
+    subtopics:['Addition formulae','Using the angle addition formulae','Double-angle formulae','Solving trigonometric equations','Simplifying acosx ± bsinx','Proving trigonometric identities','Modelling with trig functions'],
+    questions:[
+      { id:'y2p-07-q1', marks:5, source:'Ex 7E',
+        text:'Express \\(5\\sin\\theta + 12\\cos\\theta\\) in the form \\(R\\sin(\\theta + \\alpha)\\). Hence state the maximum value and find the smallest positive \\(\\theta\\) at which it occurs.',
+        hint:'\\(R = \\sqrt{5^2+12^2}\\), \\(\\tan\\alpha = \\frac{12}{5}\\). Maximum when \\(\\sin(\\theta+\\alpha)=1\\).' },
+      { id:'y2p-07-q2', marks:5, source:'Ex 7C',
+        text:'Show that \\(\\cos 3\\theta \\equiv 4\\cos^3\\theta - 3\\cos\\theta\\).',
+        hint:'Write \\(\\cos 3\\theta = \\cos(2\\theta+\\theta)\\). Use the addition formula, then the double-angle formula for \\(\\cos 2\\theta\\).' },
+      { id:'y2p-07-q3', marks:6, source:'Ex 7D',
+        text:'Solve \\(3\\cos 2\\theta - \\cos\\theta = 2\\) for \\(0 \\le \\theta \\le 2\\pi\\).',
+        hint:'Use \\(\\cos 2\\theta = 2\\cos^2\\theta - 1\\). Substitute to get a quadratic in \\(\\cos\\theta\\).' },
+      { id:'y2p-07-q4', marks:4, source:'Ex 7A',
+        text:'Given \\(\\sin A = \\frac{3}{5}\\) and \\(\\sin B = \\frac{5}{13}\\), where A and B are acute, find \\(\\sin(A+B)\\) and \\(\\cos(A+B)\\).',
+        hint:'Find \\(\\cos A\\) and \\(\\cos B\\) using Pythagoras. Then use \\(\\sin(A+B)=\\sin A\\cos B+\\cos A\\sin B\\).' },
+      { id:'y2p-07-q5', marks:5, source:'Ex 7B',
+        text:'Use the formula for \\(\\cos(A-B)\\) to show that \\(\\cos 15° = \\dfrac{\\sqrt{6}+\\sqrt{2}}{4}\\).',
+        hint:'Write \\(\\cos 15° = \\cos(45°-30°)\\) and expand using the subtraction formula.' },
+      { id:'y2p-07-q6', marks:5, source:'Mixed Ex 7',
+        text:'A spring-mass system oscillates with displacement \\(x = 3\\sin(2t) + 4\\cos(2t)\\) cm. Express \\(x\\) in the form \\(R\\sin(2t+\\alpha)\\) and find the amplitude and period.',
+        hint:'\\(R = \\sqrt{3^2+4^2} = 5\\). Period \\(= \\frac{2\\pi}{2} = \\pi\\).' },
+    ]
+  },
+
+  {
+    id:'y2p-08', book:'y2p', chapter:8, title:'Parametric Equations',
+    subtopics:['Parametric equations','Using trigonometric identities','Curve sketching','Points of intersection','Modelling with parametric equations'],
+    questions:[
+      { id:'y2p-08-q1', marks:3, source:'Ex 8A',
+        text:'A curve is defined by \\(x = 3t^2\\), \\(y = 6t\\). Find the Cartesian equation.',
+        hint:'From \\(y=6t\\), get \\(t=\\frac{y}{6}\\). Substitute into \\(x=3t^2\\).' },
+      { id:'y2p-08-q2', marks:4, source:'Ex 8B',
+        text:'Show that the curve \\(x = \\cos\\theta\\), \\(y = \\sin 2\\theta\\) has Cartesian equation \\(y^2 = 4x^2(1-x^2)\\).',
+        hint:'Use \\(\\sin 2\\theta = 2\\sin\\theta\\cos\\theta\\) and \\(\\sin^2\\theta = 1-\\cos^2\\theta = 1-x^2\\).' },
+      { id:'y2p-08-q3', marks:5, source:'Ex 8D',
+        text:'The parametric curve \\(x = t+1\\), \\(y = t^2-2t\\) meets the \\(x\\)-axis at two points. Find the coordinates of these points.',
+        hint:'At the \\(x\\)-axis, \\(y=0\\): solve \\(t^2-2t=0\\). Then substitute each \\(t\\) back to find \\(x\\).' },
+      { id:'y2p-08-q4', marks:5, source:'Mixed Ex 8',
+        text:'A curve has parametric equations \\(x = 4\\cos t\\), \\(y = 3\\sin t\\). Find the equation of the tangent at the point where \\(t = \\frac{\\pi}{4}\\).',
+        hint:'\\(\\frac{dy}{dx} = \\frac{dy/dt}{dx/dt}\\). Find the gradient and the point coordinates, then use \\(y-y_1=m(x-x_1)\\).' },
+      { id:'y2p-08-q5', marks:6, source:'Ex 8E',
+        text:'A curve is given by \\(x = 2t - \\sin 2t\\), \\(y = 1 - \\cos 2t\\). Show that \\(\\frac{dy}{dx} = \\tan t\\) and hence find the equation of the normal at \\(t = \\frac{\\pi}{3}\\).',
+        hint:'Differentiate \\(x\\) and \\(y\\) with respect to \\(t\\). Simplify the ratio using double angle identities. The normal has gradient \\(-\\cot t\\).' },
+    ]
+  },
+
+  {
+    id:'y2p-09', book:'y2p', chapter:9, title:'Differentiation (Y2)',
+    subtopics:['Differentiating sin x and cos x','Differentiating exponentials and logarithms','The chain rule','The product rule','The quotient rule','Differentiating trig functions','Parametric differentiation','Implicit differentiation','Using second derivatives','Rates of change'],
+    questions:[
+      { id:'y2p-09-q1', marks:3, source:'Ex 9D',
+        text:'Differentiate \\(y = x^3\\ln(2x)\\) using the product rule.',
+        hint:'\\(u = x^3\\), \\(v = \\ln(2x)\\). Product rule: \\(\\frac{dy}{dx} = u\'v + uv\'\\).' },
+      { id:'y2p-09-q2', marks:4, source:'Ex 9E',
+        text:'Find \\(\\dfrac{dy}{dx}\\) for \\(y = \\dfrac{e^{3x}}{\\cos 2x}\\).',
+        hint:'Use the quotient rule with \\(u=e^{3x}\\) and \\(v=\\cos 2x\\). Differentiate each using the chain rule.' },
+      { id:'y2p-09-q3', marks:4, source:'Ex 9H',
+        text:'A curve is given implicitly by \\(x^2 + 3xy - y^2 = 5\\). Find \\(\\dfrac{dy}{dx}\\) in terms of \\(x\\) and \\(y\\).',
+        hint:'Differentiate each term with respect to \\(x\\). For \\(3xy\\) use the product rule. Collect \\(\\frac{dy}{dx}\\) terms.' },
+      { id:'y2p-09-q4', marks:5, source:'Ex 9J',
+        text:'A spherical balloon is inflated so that its volume increases at 50 cm³/s. Find the rate of increase of radius when \\(r = 5\\) cm.',
+        hint:'\\(V = \\frac{4}{3}\\pi r^3\\). \\(\\frac{dV}{dt} = \\frac{dV}{dr}\\cdot\\frac{dr}{dt}\\). Solve for \\(\\frac{dr}{dt}\\).' },
+      { id:'y2p-09-q5', marks:4, source:'Ex 9C',
+        text:'Find the derivative of \\(y = \\sin^3(4x)\\).',
+        hint:'Write as \\([\\sin(4x)]^3\\). Apply the chain rule twice.' },
+      { id:'y2p-09-q6', marks:5, source:'Ex 9G',
+        text:'A curve has parametric equations \\(x = t^2 + 1\\), \\(y = t^3 - 3t\\). Find \\(\\frac{dy}{dx}\\) in terms of \\(t\\), and determine the coordinates of the stationary points.',
+        hint:'\\(\\frac{dy}{dx} = \\frac{dy/dt}{dx/dt}\\). Set numerator \\(= 0\\) for stationary points.' },
+      { id:'y2p-09-q7', marks:4, source:'Mixed Ex 9',
+        text:'Differentiate \\(y = \\arctan(3x)\\) from first principles, or using the known result \\(\\frac{d}{dx}(\\arctan x) = \\frac{1}{1+x^2}\\).',
+        hint:'Use the chain rule: \\(\\frac{dy}{dx} = \\frac{1}{1+(3x)^2} \\cdot 3\\).' },
+    ]
+  },
+
+  {
+    id:'y2p-10', book:'y2p', chapter:10, title:'Numerical Methods',
+    subtopics:['Locating roots','Iteration','The Newton-Raphson method','Applications to modelling'],
+    questions:[
+      { id:'y2p-10-q1', marks:6, source:'Ex 10B',
+        text:'Show that \\(x^3 - 5x + 1 = 0\\) has a root in \\([2, 3]\\). Use \\(x_{n+1} = \\sqrt[3]{5x_n-1}\\) starting from \\(x_0 = 2\\) to find the root to 4 d.p.',
+        hint:'Evaluate \\(f(2)\\) and \\(f(3)\\) — a sign change confirms a root. Iterate until successive values agree to 4 d.p.' },
+      { id:'y2p-10-q2', marks:4, source:'Ex 10C',
+        text:'Apply the Newton–Raphson method once, starting from \\(x_0 = 1\\), to approximate a root of \\(f(x) = e^x - 3x\\).',
+        hint:'\\(x_1 = x_0 - \\frac{f(x_0)}{f\'(x_0)}\\). Calculate \\(f(1)\\) and \\(f\'(1) = e-3\\).' },
+      { id:'y2p-10-q3', marks:4, source:'Ex 10A',
+        text:'Show that the equation \\(\\cos x = x^2 - 1\\) has a root between \\(x = 1\\) and \\(x = 2\\) (working in radians).',
+        hint:'Rearrange as \\(f(x) = \\cos x - x^2 + 1 = 0\\). Evaluate \\(f(1)\\) and \\(f(2)\\) and show they have opposite signs.' },
+      { id:'y2p-10-q4', marks:5, source:'Mixed Ex 10',
+        text:'The iteration \\(x_{n+1} = \\dfrac{2}{3}x_n + \\dfrac{5}{3x_n^2}\\) converges to a root of an equation. Find the equation and the root to 3 d.p. starting from \\(x_0 = 1.5\\).',
+        hint:'At the fixed point \\(x = \\frac{2}{3}x + \\frac{5}{3x^2}\\). Multiply through by \\(3x^2\\) to find the equation.' },
+      { id:'y2p-10-q5', marks:5, source:'Ex 10C',
+        text:'Use the Newton–Raphson method to find the positive root of \\(x^3 - x - 3 = 0\\) correct to 3 decimal places. Use \\(x_0 = 1.5\\) and show all iterations.',
+        hint:'\\(f(x)=x^3-x-3\\), \\(f\'(x)=3x^2-1\\). Apply \\(x_{n+1}=x_n-\\frac{f(x_n)}{f\'(x_n)}\\) repeatedly until the value stabilises.' },
+    ]
+  },
+
+  {
+    id:'y2p-11', book:'y2p', chapter:11, title:'Integration (Y2)',
+    subtopics:['Integrating standard functions','Integrating f(ax+b)','Using trig identities','Reverse chain rule','Integration by substitution','Integration by parts','Partial fractions','Finding areas','The trapezium rule','Solving differential equations','Modelling with differential equations'],
+    questions:[
+      { id:'y2p-11-q1', marks:5, source:'Ex 11F',
+        text:'Find \\(\\displaystyle\\int x^2 e^x\\, dx\\) using integration by parts.',
+        hint:'Apply IBP twice. First: \\(u=x^2\\), \\(dv=e^x dx\\). Second application integrates \\(xe^x\\).' },
+      { id:'y2p-11-q2', marks:5, source:'Ex 11E',
+        text:'Use the substitution \\(u = x^2 + 1\\) to find \\(\\displaystyle\\int \\dfrac{x}{\\sqrt{x^2+1}}\\, dx\\).',
+        hint:'\\(du = 2x\\,dx\\), so \\(x\\,dx = \\frac{du}{2}\\). The integral becomes \\(\\frac{1}{2}\\int u^{-1/2}\\,du\\).' },
+      { id:'y2p-11-q3', marks:5, source:'Ex 11J',
+        text:'Solve \\(\\dfrac{dy}{dx} = \\dfrac{3x^2}{y}\\), given \\(y = 2\\) when \\(x = 0\\).',
+        hint:'Separate variables: \\(y\\,dy = 3x^2\\,dx\\). Integrate both sides, then apply the initial condition.' },
+      { id:'y2p-11-q4', marks:5, source:'Ex 11I',
+        text:'Use the trapezium rule with 4 strips to estimate \\(\\displaystyle\\int_0^2 \\sqrt{1+x^3}\\, dx\\). Give your answer to 3 d.p.',
+        hint:'\\(h = 0.5\\). Evaluate \\(y\\) at \\(x = 0, 0.5, 1, 1.5, 2\\). Formula: \\(\\frac{h}{2}(y_0+2(y_1+y_2+y_3)+y_4)\\).' },
+      { id:'y2p-11-q5', marks:5, source:'Ex 11G',
+        text:'Find \\(\\displaystyle\\int \\dfrac{2x+5}{(x+2)(x-1)}\\, dx\\).',
+        hint:'Decompose into partial fractions first, then integrate each term.' },
+      { id:'y2p-11-q6', marks:5, source:'Ex 11C',
+        text:'Find \\(\\displaystyle\\int \\sin^2 x\\, dx\\).',
+        hint:'Use the identity \\(\\sin^2 x = \\frac{1-\\cos 2x}{2}\\), then integrate term by term.' },
+      { id:'y2p-11-q7', marks:6, source:'Mixed Ex 11',
+        text:'Find \\(\\displaystyle\\int \\ln x\\, dx\\).',
+        hint:'Use IBP with \\(u = \\ln x\\) and \\(dv = dx\\). So \\(du = \\frac{1}{x}dx\\) and \\(v = x\\).' },
+    ]
+  },
+
+  {
+    id:'y2p-12', book:'y2p', chapter:12, title:'Vectors (Y2)',
+    subtopics:['3D coordinates','Vectors in 3D','Solving geometric problems','Application to mechanics'],
+    questions:[
+      { id:'y2p-12-q1', marks:4, source:'Ex 12B',
+        text:'Points A and B have position vectors \\(2\\mathbf{i}-\\mathbf{j}+3\\mathbf{k}\\) and \\(4\\mathbf{i}+\\mathbf{j}-\\mathbf{k}\\). Find the unit vector in the direction \\(\\overrightarrow{AB}\\).',
+        hint:'\\(\\overrightarrow{AB} = \\mathbf{b}-\\mathbf{a}\\). Divide by its magnitude.' },
+      { id:'y2p-12-q2', marks:6, source:'Ex 12C',
+        text:'Find the point of intersection (if any) of lines \\(\\mathbf{r} = (\\mathbf{i}+2\\mathbf{j}) + t(2\\mathbf{i}-\\mathbf{j}+3\\mathbf{k})\\) and \\(\\mathbf{r} = (3\\mathbf{i}+\\mathbf{j}-3\\mathbf{k}) + s(\\mathbf{i}+\\mathbf{j}+\\mathbf{k})\\).',
+        hint:'Equate components to get three equations in \\(t\\) and \\(s\\). Solve two to find \\(t,s\\) and check the third is consistent.' },
+      { id:'y2p-12-q3', marks:4, source:'Ex 12B',
+        text:'Find the angle between vectors \\(\\mathbf{a} = 2\\mathbf{i}+\\mathbf{j}-2\\mathbf{k}\\) and \\(\\mathbf{b} = \\mathbf{i}-2\\mathbf{j}+2\\mathbf{k}\\).',
+        hint:'\\(\\cos\\theta = \\frac{\\mathbf{a}\\cdot\\mathbf{b}}{|\\mathbf{a}||\\mathbf{b}|}\\).' },
+      { id:'y2p-12-q4', marks:5, source:'Mixed Ex 12',
+        text:'Show that the points \\(A(1,2,3)\\), \\(B(3,5,7)\\) and \\(C(5,8,11)\\) are collinear.',
+        hint:'Show \\(\\overrightarrow{AB} = k\\overrightarrow{AC}\\) for some scalar \\(k\\).' },
+      { id:'y2p-12-q5', marks:6, source:'Ex 12C',
+        text:'The line \\(l\\) passes through \\(A(2,1,-1)\\) with direction \\(\\mathbf{d} = \\mathbf{i}+2\\mathbf{j}-\\mathbf{k}\\). The point \\(B\\) has position vector \\(5\\mathbf{i}+3\\mathbf{j}+2\\mathbf{k}\\). Find the shortest distance from \\(B\\) to \\(l\\).',
+        hint:'Find \\(\\overrightarrow{AB}\\). The distance is \\(|\\overrightarrow{AB} - (\\overrightarrow{AB}\\cdot\\hat{\\mathbf{d}})\\hat{\\mathbf{d}}|\\). Alternatively, use \\(d = \\frac{|\\overrightarrow{AB}\\times\\mathbf{d}|}{|\\mathbf{d}|}\\) if cross product is known.' },
+    ]
+  },
+
+  // ═══════════════════════════════════════════════════════════
+  // YEAR 2 STATISTICS & MECHANICS
+  // ═══════════════════════════════════════════════════════════
+
+  {
+    id:'y2s-01', book:'y2s', chapter:1, title:'Regression, Correlation and Hypothesis Testing (Y2)',
+    subtopics:['Exponential models','Measuring correlation','Hypothesis testing for zero correlation'],
+    questions:[
+      { id:'y2s-01-q1', marks:5, source:'Ex 1C',
+        text:'The PMCC for a sample of 10 data points is 0.72. Test at the 5% significance level whether there is positive linear correlation in the population.',
+        hint:'\\(H_0: \\rho=0\\), \\(H_1: \\rho>0\\). Look up the critical value for \\(n=10\\) at 5% one-tailed in the PMCC table.' },
+      { id:'y2s-01-q2', marks:3, source:'Ex 1A',
+        text:'Data can be modelled by \\(y = ab^x\\). Explain how to linearise this using logarithms.',
+        hint:'Take \\(\\log\\) of both sides: \\(\\log y = \\log a + x\\log b\\). This is a linear equation in \\(x\\) and \\(\\log y\\).' },
+      { id:'y2s-01-q3', marks:4, source:'Mixed Ex 1',
+        text:'For a sample of size 8, find the critical region for testing \\(H_0: \\rho=0\\) against \\(H_1: \\rho \\ne 0\\) at the 10% significance level.',
+        hint:'Two-tailed test at 10% means 5% in each tail. Look up the critical value for \\(n=8\\) at 5% in the PMCC table.' },
+      { id:'y2s-01-q4', marks:4, source:'Ex 1A',
+        text:'The relationship between two variables can be modelled by \\(P = at^n\\). A graph of \\(\\log P\\) against \\(\\log t\\) gives a straight line with gradient 2.5 and intercept 0.6. Find \\(a\\) and \\(n\\).',
+        hint:'\\(\\log P = \\log a + n\\log t\\). The gradient gives \\(n\\) directly. The intercept is \\(\\log a\\), so \\(a=10^{0.6}\\).' },
+      { id:'y2s-01-q5', marks:5, source:'Ex 1C',
+        text:'A researcher computes a PMCC of \\(-0.68\\) from a sample of 15 pairs of data. Test at the 5% level whether this suggests negative correlation in the population. State your hypotheses clearly.',
+        hint:'\\(H_0: \\rho=0\\), \\(H_1: \\rho<0\\). One-tailed test. Look up critical value for \\(n=15\\) at 5% in the PMCC table. Since PMCC is negative, compare \\(|-0.68|\\) against the critical value.' },
+      { id:'y2s-01-q6', marks:4, source:'Ex 1B',
+        text:'Explain why a large PMCC does not necessarily imply that changes in \\(x\\) cause changes in \\(y\\). Give one possible alternative explanation.',
+        hint:'Think about correlation vs causation. Could a third variable be causing both? Or could it be a coincidence with a small sample?' },
+    ]
+  },
+
+  {
+    id:'y2s-02', book:'y2s', chapter:2, title:'Conditional Probability',
+    subtopics:['Set notation','Conditional probability','Conditional probabilities in Venn diagrams','Probability formulae','Tree diagrams'],
+    questions:[
+      { id:'y2s-02-q1', marks:6, source:'Ex 2B',
+        text:'Given \\(P(A) = 0.5\\), \\(P(B) = 0.4\\) and \\(P(A\\cap B) = 0.2\\), find (a) \\(P(A|B)\\), (b) \\(P(B|A)\\), (c) \\(P(A|B\')\\).',
+        hint:'\\(P(A|B) = \\frac{P(A\\cap B)}{P(B)}\\). For (c), find \\(P(A\\cap B\') = P(A) - P(A\\cap B)\\) then divide by \\(P(B\')\\).' },
+      { id:'y2s-02-q2', marks:5, source:'Ex 2E',
+        text:'Three cards are drawn without replacement from a pack of 4 red, 3 blue and 2 green cards. Find \\(P(\\text{all same colour})\\).',
+        hint:'P(all red) + P(all blue) + P(all green). For all red: \\(\\frac{4}{9}\\cdot\\frac{3}{8}\\cdot\\frac{2}{7}\\). There are no 3 green cards, so that term is 0.' },
+      { id:'y2s-02-q3', marks:4, source:'Ex 2C',
+        text:'A Venn diagram shows: \\(P(A\\cap B) = 0.15\\), \\(P(A\\cap B\') = 0.25\\), \\(P(A\'\\cap B) = 0.30\\). Find \\(P(A|B)\\) and state whether A and B are independent.',
+        hint:'\\(P(B) = P(A\\cap B) + P(A\'\\cap B)\\). Then \\(P(A|B) = \\frac{0.15}{P(B)}\\). Compare to \\(P(A)\\) to check independence.' },
+      { id:'y2s-02-q4', marks:5, source:'Mixed Ex 2',
+        text:'A student either revises (R) or does not (R\'). \\(P(R) = 0.7\\). If she revises, \\(P(\\text{pass}) = 0.9\\); if not, \\(P(\\text{pass}) = 0.4\\). Given that she passes, find \\(P(R|\\text{pass})\\) using Bayes\' theorem.',
+        hint:'\\(P(\\text{pass}) = P(\\text{pass}|R)P(R) + P(\\text{pass}|R\')P(R\')\\). Then \\(P(R|\\text{pass}) = \\frac{P(\\text{pass}|R)P(R)}{P(\\text{pass})}\\).' },
+      { id:'y2s-02-q5', marks:5, source:'Ex 2D',
+        text:'Events A and B are such that \\(P(B|A) = 0.6\\), \\(P(B|A\') = 0.3\\) and \\(P(A) = 0.4\\). Draw a tree diagram and find (a) \\(P(A\\cap B)\\), (b) \\(P(B)\\), (c) \\(P(A\'|B)\\).',
+        hint:'\\(P(A\\cap B) = P(B|A)\\cdot P(A)\\). \\(P(B) = P(A\\cap B)+P(A\'\\cap B)\\). \\(P(A\'|B)=\\frac{P(A\'\\cap B)}{P(B)}\\).' },
+    ]
+  },
+
+  {
+    id:'y2s-03', book:'y2s', chapter:3, title:'The Normal Distribution',
+    subtopics:['The normal distribution','Finding probabilities','The inverse normal','The standard normal','Finding μ and σ','Approximating a binomial','Hypothesis testing with the normal'],
+    questions:[
+      { id:'y2s-03-q1', marks:7, source:'Ex 3B',
+        text:'\\(X\\sim N(50, 16)\\). Find (a) \\(P(X<54)\\), (b) \\(P(46<X<58)\\), (c) the value \\(a\\) such that \\(P(X>a)=0.15\\).',
+        hint:'Standardise: \\(Z = \\frac{X-50}{4}\\). (a) \\(P(Z<1)\\). (b) \\(P(-1<Z<2)\\). (c) \\(P(Z>z)=0.15\\), find \\(z\\) then convert back.' },
+      { id:'y2s-03-q2', marks:4, source:'Ex 3E',
+        text:'\\(X\\sim N(\\mu, 25)\\) and \\(P(X<30)=0.8\\). Find \\(\\mu\\).',
+        hint:'\\(P(Z<\\frac{30-\\mu}{5})=0.8\\). Look up the \\(z\\)-value for 0.8 (≈ 0.842), then solve for \\(\\mu\\).' },
+      { id:'y2s-03-q3', marks:6, source:'Ex 3F',
+        text:'\\(X\\sim B(100, 0.45)\\). Use a normal approximation with continuity correction to find \\(P(40\\le X\\le 55)\\).',
+        hint:'\\(\\mu=45\\), \\(\\sigma^2=24.75\\). With continuity correction: \\(P(39.5 \\le Y \\le 55.5)\\) where \\(Y\\sim N(45, 24.75)\\).' },
+      { id:'y2s-03-q4', marks:5, source:'Ex 3G',
+        text:'\\(X\\sim N(\\mu, \\sigma^2)\\). \\(P(X<20)=0.2\\) and \\(P(X>35)=0.1\\). Find \\(\\mu\\) and \\(\\sigma\\).',
+        hint:'Two equations: \\(\\frac{20-\\mu}{\\sigma}\\approx-0.842\\) and \\(\\frac{35-\\mu}{\\sigma}\\approx 1.282\\). Solve simultaneously.' },
+      { id:'y2s-03-q5', marks:5, source:'Mixed Ex 3',
+        text:'A machine fills bottles with volume \\(X\\sim N(500, 25)\\) ml. Find the probability that a randomly chosen bottle contains less than 495 ml. What proportion of bottles should be rejected if the minimum is 492 ml?',
+        hint:'Standardise each value and look up from the normal distribution tables.' },
+    ]
+  },
+
+  {
+    id:'y2m-04', book:'y2s', chapter:4, title:'Moments',
+    subtopics:['Moments','Resultant moments','Equilibrium','Centres of mass','Tilting'],
+    questions:[
+      { id:'y2m-04-q1', marks:5, source:'Ex 4C',
+        text:'A uniform rod AB of length 4 m and mass 12 kg rests horizontally on supports at A and at C, 1 m from B. Find the reactions at A and C.',
+        hint:'Take moments about one support to find the other reaction. The weight acts at the midpoint (2 m from A).' },
+      { id:'y2m-04-q2', marks:5, source:'Mixed Ex 4',
+        text:'A non-uniform plank of length 6 m, mass 20 kg, rests in equilibrium on a pivot 2 m from end A. A 5 kg mass placed at A keeps it balanced. Find the distance of the centre of mass from A.',
+        hint:'Take moments about the pivot. Weight of plank acts at the centre of mass distance \\(d\\) from A.' },
+      { id:'y2m-04-q3', marks:5, source:'Ex 4E',
+        text:'A uniform rod AB of length 3 m and weight 40 N rests with end A on rough ground and against a smooth peg at C, where AC = 2 m. The rod makes 30° with the ground. Find the reaction at C and the friction at A.',
+        hint:'Take moments about A to find the reaction at C. Then resolve horizontally and vertically to find friction and normal reaction at A.' },
+      { id:'y2m-04-q4', marks:4, source:'Ex 4D',
+        text:'Find the centre of mass of a uniform L-shaped lamina made of two rectangles: one 4 cm × 2 cm and the other 2 cm × 6 cm joined along one short side.',
+        hint:'Find the centroid of each rectangle separately. Treat as a system of two particles with masses proportional to areas.' },
+      { id:'y2m-04-q5', marks:6, source:'Ex 4E',
+        text:'A uniform plank AB of length 5 m and mass 18 kg is placed on supports at A and at point C where AC = 3.5 m. A person of mass 60 kg walks from A towards B. How far from A can they walk before the plank tips?',
+        hint:'The plank tips when the reaction at A becomes zero. Take moments about C: the plank tips when the moment of the person about C equals the restoring moment of the plank\'s weight.' },
+    ]
+  },
+
+  {
+    id:'y2m-05', book:'y2s', chapter:5, title:'Forces and Friction',
+    subtopics:['Resolving forces','Inclined planes','Friction'],
+    questions:[
+      { id:'y2m-05-q1', marks:6, source:'Ex 5B',
+        text:'A particle of mass 8 kg rests on a rough inclined plane at 30°. Given \\(\\mu = 0.4\\), determine whether the particle slides, and find the friction force.',
+        hint:'Resolve parallel to the plane: component of weight down = \\(8g\\sin 30°\\). Max friction \\(= \\mu \\times 8g\\cos 30°\\). Compare.' },
+      { id:'y2m-05-q2', marks:5, source:'Ex 5C',
+        text:'A particle of mass 5 kg is in equilibrium on a rough horizontal surface under a force of 20 N at 30° above the horizontal. Find \\(\\mu\\).',
+        hint:'Resolve vertically: \\(R + 20\\sin 30° = 5g\\). Resolve horizontally: \\(F = 20\\cos 30°\\). Then \\(\\mu = F/R\\).' },
+      { id:'y2m-05-q3', marks:6, source:'Mixed Ex 5',
+        text:'A particle of mass 3 kg is placed on a rough plane inclined at 40° to the horizontal. The particle is on the point of sliding down. Find \\(\\mu\\).',
+        hint:'On the point of sliding means friction is at its maximum up the slope. Resolve along and perpendicular to plane.' },
+      { id:'y2m-05-q4', marks:6, source:'Ex 5B',
+        text:'A block of mass 10 kg on a rough plane (\\(\\mu=0.3\\)) inclined at 25° is pushed by a force of P N acting up along the plane. Find the minimum P needed to move the block up the plane.',
+        hint:'Block moves up when \\(P \\ge mg\\sin 25° + \\mu mg\\cos 25°\\) (friction acts down when block moves up).' },
+      { id:'y2m-05-q5', marks:7, source:'Ex 5C',
+        text:'A particle of mass 6 kg is pulled up a rough inclined plane (angle 35°, \\(\\mu=0.25\\)) by a rope parallel to the plane. Find (a) the tension needed to move the particle at constant speed, (b) the acceleration if the tension is increased to 60 N.',
+        hint:'(a) Constant speed means \\(a=0\\): \\(T = mg\\sin 35° + \\mu mg\\cos 35°\\). (b) Apply Newton\'s 2nd law: \\(60 - mg\\sin 35° - \\mu mg\\cos 35° = 6a\\).' },
+      { id:'y2m-05-q6', marks:6, source:'Mixed Ex 5',
+        text:'A box of mass 12 kg is held in equilibrium on a rough slope (angle \\(\\theta\\)) by a horizontal force of 30 N. The normal reaction is 140 N. Find \\(\\theta\\) and \\(\\mu\\).',
+        hint:'Resolve perpendicular to slope: \\(R = 12g\\cos\\theta + 30\\sin\\theta = 140\\). Resolve along slope: \\(F + 30\\cos\\theta = 12g\\sin\\theta\\). Find \\(\\theta\\) first, then \\(\\mu = F/R\\).' },
+    ]
+  },
+
+  {
+    id:'y2m-06', book:'y2s', chapter:6, title:'Projectiles',
+    subtopics:['Horizontal projection','Horizontal and vertical components','Projection at any angle','Projectile motion formulae'],
+    questions:[
+      { id:'y2m-06-q1', marks:8, source:'Ex 6C',
+        text:'A ball is projected from ground level at 20 m/s at 45° to the horizontal. Find (a) the maximum height, (b) the horizontal range, (c) the speed when it lands.',
+        hint:'Resolve into \\(u_x = 20\\cos 45°\\) and \\(u_y = 20\\sin 45°\\). (a) When \\(v_y=0\\). (b) Time of flight × \\(u_x\\). (c) Speed \\(= \\sqrt{v_x^2+v_y^2}\\) at landing.' },
+      { id:'y2m-06-q2', marks:5, source:'Ex 6A',
+        text:'A particle is launched horizontally at 25 m/s from a cliff 80 m high. Find (a) the time to hit the sea, (b) the horizontal distance from the base, (c) the speed at impact.',
+        hint:'Vertical: \\(s=\\frac{1}{2}gt^2=80\\). Find \\(t\\). Horizontal distance \\(=25t\\). Speed \\(=\\sqrt{25^2+(gt)^2}\\).' },
+      { id:'y2m-06-q3', marks:6, source:'Ex 6D',
+        text:'A particle is projected at speed 30 m/s and hits a target 40 m away at the same height. Find the two possible angles of projection.',
+        hint:'Use \\(R = \\frac{u^2\\sin 2\\alpha}{g}\\). Solve for \\(\\sin 2\\alpha\\), giving two values of \\(\\alpha\\) (since \\(\\sin(180°-x)=\\sin x\\)).' },
+      { id:'y2m-06-q4', marks:5, source:'Mixed Ex 6',
+        text:'A football is kicked from ground level at 15 m/s at 60°. Find the height of the ball when it is 8 m horizontally from the kicker.',
+        hint:'Find time when horizontal displacement \\(= 8\\): \\(t = \\frac{8}{u\\cos 60°}\\). Substitute into \\(y = u\\sin 60° \\cdot t - \\frac{1}{2}gt^2\\).' },
+      { id:'y2m-06-q5', marks:7, source:'Ex 6D',
+        text:'A stone is thrown from the top of a cliff 45 m above sea level with speed 20 m/s at 30° above the horizontal. Find (a) the time before it hits the sea, (b) its horizontal distance from the base of the cliff, (c) its speed just before impact. Take \\(g = 10\\) m/s².',
+        hint:'Set up \\(y = u_y t - 5t^2\\) where \\(y = -45\\) at impact (taking launch as origin). Solve the quadratic for \\(t > 0\\). Then \\(x = u_x t\\) and speed \\(= \\sqrt{v_x^2 + v_y^2}\\).' },
+    ]
+  },
+
+  {
+    id:'y2m-07', book:'y2s', chapter:7, title:'Applications of Forces',
+    subtopics:['Static particles','Modelling with statics','Friction and static particles','Static rigid bodies','Dynamics and inclined planes','Connected particles'],
+    questions:[
+      { id:'y2m-07-q1', marks:8, source:'Ex 7F',
+        text:'Two particles of mass 4 kg and 6 kg lie on rough inclined planes of 30° and 45° respectively, connected by a string over a smooth pulley at the top. \\(\\mu = 0.2\\) for both. Find the acceleration of the system.',
+        hint:'Resolve along each plane. Friction opposes motion — need to determine which way the system moves first (heavier side on steeper slope). Write equations for each particle and solve.' },
+      { id:'y2m-07-q2', marks:7, source:'Ex 7D',
+        text:'A ladder of mass 15 kg and length 6 m leans against a smooth vertical wall at 70° to the ground. Find the minimum coefficient of friction at the rough ground for the ladder not to slip.',
+        hint:'Resolve horizontally and vertically, then take moments about the base. The friction \\(= R_{wall}\\) and normal reaction \\(R_{ground} = 15g\\).' },
+      { id:'y2m-07-q3', marks:5, source:'Ex 7A',
+        text:'A particle of weight 50 N is held in equilibrium by two strings making angles of 30° and 50° with the vertical. Find the tensions in the strings.',
+        hint:'Resolve horizontally: \\(T_1\\sin 30° = T_2\\sin 50°\\). Resolve vertically: \\(T_1\\cos 30° + T_2\\cos 50° = 50\\). Solve simultaneously.' },
+      { id:'y2m-07-q4', marks:6, source:'Mixed Ex 7',
+        text:'A car of mass 1500 kg tows a trailer of mass 500 kg along a horizontal road. The driving force is 4000 N and resistance forces are 200 N on the car and 100 N on the trailer. Find the acceleration and the tension in the tow bar.',
+        hint:'Treat the whole system to find acceleration. Then consider just the trailer to find the tension in the tow bar.' },
+      { id:'y2m-07-q5', marks:7, source:'Ex 7D',
+        text:'A uniform rod AB, mass 8 kg and length 5 m, rests with end A on rough horizontal ground and end B against a smooth vertical wall. The rod makes 60° with the ground. A person of mass 60 kg stands 2 m from A. Find the normal reaction at the wall and the friction at A.',
+        hint:'Take moments about A to find \\(R_B\\). Resolve horizontally (\\(F_A = R_B\\)) and vertically (\\(N_A = (8+60)g\\)) to complete the solution.' },
+      { id:'y2m-07-q6', marks:6, source:'Ex 7E',
+        text:'Two particles A (3 kg) and B (5 kg) are connected by a light string over a smooth fixed pulley. A rests on a rough horizontal table (\\(\\mu=0.2\\)) and B hangs freely. Find the acceleration of the system and the tension.',
+        hint:'For B: \\(5g - T = 5a\\). For A: \\(T - \\mu(3g) = 3a\\). Add the equations to eliminate \\(T\\).' },
+    ]
+  },
+
+  {
+    id:'y2m-08', book:'y2s', chapter:8, title:'Further Kinematics',
+    subtopics:['Vectors in kinematics','Vector methods with projectiles','Variable acceleration in one dimension','Differentiating vectors','Integrating vectors'],
+    questions:[
+      { id:'y2m-08-q1', marks:5, source:'Ex 8D',
+        text:'A particle has position vector \\(\\mathbf{r} = (t^3-3t)\\mathbf{i} + (4t^2-5)\\mathbf{j}\\). Find (a) the velocity when \\(t=2\\), (b) the acceleration when \\(t=1\\).',
+        hint:'(a) Differentiate \\(\\mathbf{r}\\) to get \\(\\mathbf{v}\\), substitute \\(t=2\\). (b) Differentiate again to get \\(\\mathbf{a}\\), substitute \\(t=1\\).' },
+      { id:'y2m-08-q2', marks:4, source:'Ex 8A',
+        text:'A particle starts at the origin with velocity \\((6\\mathbf{i}+3\\mathbf{j})\\) m/s and constant acceleration \\((2\\mathbf{i}-\\mathbf{j})\\) m/s². Find its position after 4 seconds.',
+        hint:'\\(\\mathbf{r} = \\mathbf{u}t + \\frac{1}{2}\\mathbf{a}t^2\\).' },
+      { id:'y2m-08-q3', marks:5, source:'Ex 8C',
+        text:'A particle has velocity \\(\\mathbf{v} = (6t^2-4)\\mathbf{i} + (3t)\\mathbf{j}\\) m/s and is at the point \\((1,2)\\) when \\(t=0\\). Find its position vector at time \\(t\\).',
+        hint:'Integrate \\(\\mathbf{v}\\) to get \\(\\mathbf{r}\\), then apply the initial condition to find the constant vector.' },
+      { id:'y2m-08-q4', marks:5, source:'Mixed Ex 8',
+        text:'A particle projected at 40 m/s at angle \\(\\alpha\\) to the horizontal has position vector \\(\\mathbf{r} = (40\\cos\\alpha)t\\,\\mathbf{i} + \\left(40t\\sin\\alpha - 5t^2\\right)\\mathbf{j}\\). It passes through \\((60, 15)\\). Find \\(\\alpha\\).',
+        hint:'Equate \\(x\\) and \\(y\\) components. From \\(x=60\\): find \\(t\\cos\\alpha\\). Substitute into \\(y=15\\) to get \\(\\tan\\alpha\\).' },
+      { id:'y2m-08-q5', marks:6, source:'Ex 8E',
+        text:'A particle moves so that its velocity at time \\(t\\) is \\(\\mathbf{v} = (3t^2-12)\\mathbf{i} + (2t-1)\\mathbf{j}\\) m/s. Find (a) the times when the particle is moving parallel to \\(\\mathbf{i}\\), (b) the position at those times given the particle is at the origin when \\(t=0\\).',
+        hint:'(a) Parallel to \\(\\mathbf{i}\\) means the \\(\\mathbf{j}\\) component is zero: \\(2t-1=0\\). (b) Integrate \\(\\mathbf{v}\\) to get \\(\\mathbf{r}\\) with initial condition, then substitute \\(t\\).' },
+    ]
+  },
+
+];
+
+// ============================================================
+// PAST PAPERS — Edexcel A-Level Maths (2017–2024)
+// ============================================================
+
+const PAST_PAPERS = [
+  {
+    id:'pp-2024-p1', year:2024, paper:'Paper 1 (Pure)', title:'Edexcel 2024 Paper 1',
+    link:'https://www.physicsandmathstutor.com/maths-revision/a-level-edexcel/',
+    questions:[
+      { id:'pp-2024-p1-q1', num:1, marks:4, topic:'Proof', text:'Q1 — Proof / algebraic manipulation (4 marks). Download paper from link above.' },
+      { id:'pp-2024-p1-q2', num:2, marks:5, topic:'Algebra', text:'Q2 — Algebraic expressions and indices (5 marks).' },
+      { id:'pp-2024-p1-q3', num:3, marks:6, topic:'Binomial Expansion', text:'Q3 — Binomial series expansion (6 marks).' },
+      { id:'pp-2024-p1-q4', num:4, marks:7, topic:'Trigonometry', text:'Q4 — Trigonometric identities and equations (7 marks).' },
+      { id:'pp-2024-p1-q5', num:5, marks:8, topic:'Differentiation', text:'Q5 — Differentiation (chain/product rule) (8 marks).' },
+      { id:'pp-2024-p1-q6', num:6, marks:6, topic:'Sequences', text:'Q6 — Sequences and series (6 marks).' },
+      { id:'pp-2024-p1-q7', num:7, marks:9, topic:'Integration', text:'Q7 — Integration by parts or substitution (9 marks).' },
+      { id:'pp-2024-p1-q8', num:8, marks:8, topic:'Vectors', text:'Q8 — 3D vectors (8 marks).' },
+      { id:'pp-2024-p1-q9', num:9, marks:10, topic:'Numerical Methods / Modelling', text:'Q9 — Numerical methods / modelling (10 marks).' },
+    ]
+  },
+  {
+    id:'pp-2024-p2', year:2024, paper:'Paper 2 (Pure)', title:'Edexcel 2024 Paper 2',
+    link:'https://www.physicsandmathstutor.com/maths-revision/a-level-edexcel/',
+    questions:[
+      { id:'pp-2024-p2-q1', num:1, marks:5, topic:'Functions', text:'Q1 — Functions and mappings (5 marks).' },
+      { id:'pp-2024-p2-q2', num:2, marks:6, topic:'Radians', text:'Q2 — Radian measure and sectors (6 marks).' },
+      { id:'pp-2024-p2-q3', num:3, marks:7, topic:'Parametric Equations', text:'Q3 — Parametric equations (7 marks).' },
+      { id:'pp-2024-p2-q4', num:4, marks:8, topic:'Differentiation', text:'Q4 — Implicit / parametric differentiation (8 marks).' },
+      { id:'pp-2024-p2-q5', num:5, marks:9, topic:'Integration', text:'Q5 — Integration including differential equations (9 marks).' },
+      { id:'pp-2024-p2-q6', num:6, marks:6, topic:'Numerical Methods', text:'Q6 — Newton-Raphson / iteration (6 marks).' },
+      { id:'pp-2024-p2-q7', num:7, marks:8, topic:'Trigonometry', text:'Q7 — R sin(x+α) form and applications (8 marks).' },
+    ]
+  },
+  {
+    id:'pp-2024-p3', year:2024, paper:'Paper 3 (Stats & Mechanics)', title:'Edexcel 2024 Paper 3',
+    link:'https://www.physicsandmathstutor.com/maths-revision/a-level-edexcel/',
+    questions:[
+      { id:'pp-2024-p3-q1', num:1, marks:5, topic:'Regression & Correlation', text:'Q1 — Regression and correlation (5 marks).' },
+      { id:'pp-2024-p3-q2', num:2, marks:6, topic:'Normal Distribution', text:'Q2 — Normal distribution (6 marks).' },
+      { id:'pp-2024-p3-q3', num:3, marks:7, topic:'Hypothesis Testing', text:'Q3 — Hypothesis testing with normal distribution (7 marks).' },
+      { id:'pp-2024-p3-q4', num:4, marks:6, topic:'Conditional Probability', text:'Q4 — Conditional probability (6 marks).' },
+      { id:'pp-2024-p3-q5', num:5, marks:7, topic:'Projectiles', text:'Q5 — Projectile motion (7 marks).' },
+      { id:'pp-2024-p3-q6', num:6, marks:8, topic:'Forces & Friction', text:'Q6 — Forces on inclined plane with friction (8 marks).' },
+      { id:'pp-2024-p3-q7', num:7, marks:6, topic:'Moments', text:'Q7 — Moments and equilibrium (6 marks).' },
+    ]
+  },
+  {
+    id:'pp-2023-p1', year:2023, paper:'Paper 1 (Pure)', title:'Edexcel 2023 Paper 1',
+    link:'https://www.physicsandmathstutor.com/maths-revision/a-level-edexcel/',
+    questions:[
+      { id:'pp-2023-p1-q1', num:1, marks:4, topic:'Indices & Surds', text:'Q1 — Surds and rationalising (4 marks).' },
+      { id:'pp-2023-p1-q2', num:2, marks:5, topic:'Functions', text:'Q2 — Composite and inverse functions (5 marks).' },
+      { id:'pp-2023-p1-q3', num:3, marks:6, topic:'Sequences', text:'Q3 — Arithmetic or geometric series (6 marks).' },
+      { id:'pp-2023-p1-q4', num:4, marks:8, topic:'Differentiation', text:'Q4 — Differentiation including chain rule (8 marks).' },
+      { id:'pp-2023-p1-q5', num:5, marks:7, topic:'Integration', text:'Q5 — Integration involving partial fractions (7 marks).' },
+      { id:'pp-2023-p1-q6', num:6, marks:6, topic:'Proof', text:'Q6 — Proof by contradiction (6 marks).' },
+      { id:'pp-2023-p1-q7', num:7, marks:9, topic:'Trigonometry', text:'Q7 — R sin(x+α) form and equations (9 marks).' },
+      { id:'pp-2023-p1-q8', num:8, marks:8, topic:'Vectors', text:'Q8 — 3D vectors and geometric problem (8 marks).' },
+    ]
+  },
+  {
+    id:'pp-2023-p2', year:2023, paper:'Paper 2 (Pure)', title:'Edexcel 2023 Paper 2',
+    link:'https://www.physicsandmathstutor.com/maths-revision/a-level-edexcel/',
+    questions:[
+      { id:'pp-2023-p2-q1', num:1, marks:4, topic:'Binomial Expansion', text:'Q1 — Binomial series (4 marks).' },
+      { id:'pp-2023-p2-q2', num:2, marks:5, topic:'Logarithms', text:'Q2 — Exponentials and logarithms (5 marks).' },
+      { id:'pp-2023-p2-q3', num:3, marks:6, topic:'Radians', text:'Q3 — Sectors and segments (6 marks).' },
+      { id:'pp-2023-p2-q4', num:4, marks:7, topic:'Parametric Equations', text:'Q4 — Parametric equations (7 marks).' },
+      { id:'pp-2023-p2-q5', num:5, marks:9, topic:'Integration', text:'Q5 — Integration by substitution / parts (9 marks).' },
+      { id:'pp-2023-p2-q6', num:6, marks:6, topic:'Numerical Methods', text:'Q6 — Iteration / Newton-Raphson (6 marks).' },
+      { id:'pp-2023-p2-q7', num:7, marks:7, topic:'Differential Equations', text:'Q7 — Differential equations (7 marks).' },
+    ]
+  },
+  {
+    id:'pp-2023-p3', year:2023, paper:'Paper 3 (Stats & Mechanics)', title:'Edexcel 2023 Paper 3',
+    link:'https://www.physicsandmathstutor.com/maths-revision/a-level-edexcel/',
+    questions:[
+      { id:'pp-2023-p3-q1', num:1, marks:5, topic:'Statistics', text:'Q1 — Statistical diagrams / large data set (5 marks).' },
+      { id:'pp-2023-p3-q2', num:2, marks:6, topic:'Normal Distribution', text:'Q2 — Normal distribution probabilities (6 marks).' },
+      { id:'pp-2023-p3-q3', num:3, marks:7, topic:'Hypothesis Testing', text:'Q3 — Hypothesis test using normal (7 marks).' },
+      { id:'pp-2023-p3-q4', num:4, marks:6, topic:'Mechanics', text:'Q4 — Newton\'s laws and connected particles (6 marks).' },
+      { id:'pp-2023-p3-q5', num:5, marks:7, topic:'Projectiles', text:'Q5 — Projectile motion (7 marks).' },
+      { id:'pp-2023-p3-q6', num:6, marks:8, topic:'Applications of Forces', text:'Q6 — Forces, friction, inclined plane (8 marks).' },
+    ]
+  },
+  {
+    id:'pp-2022-p1', year:2022, paper:'Paper 1 (Pure)', title:'Edexcel 2022 Paper 1',
+    link:'https://www.physicsandmathstutor.com/maths-revision/a-level-edexcel/',
+    questions:[
+      { id:'pp-2022-p1-q1', num:1, marks:3, topic:'Logarithms', text:'Q1 — Laws of logarithms (3 marks).' },
+      { id:'pp-2022-p1-q2', num:2, marks:5, topic:'Algebra', text:'Q2 — Partial fractions (5 marks).' },
+      { id:'pp-2022-p1-q3', num:3, marks:6, topic:'Sequences', text:'Q3 — Arithmetic sequence problem (6 marks).' },
+      { id:'pp-2022-p1-q4', num:4, marks:7, topic:'Calculus', text:'Q4 — Differentiation and stationary points (7 marks).' },
+      { id:'pp-2022-p1-q5', num:5, marks:9, topic:'Integration', text:'Q5 — Areas and integration by substitution (9 marks).' },
+      { id:'pp-2022-p1-q6', num:6, marks:6, topic:'Trigonometry', text:'Q6 — Trigonometric equations (6 marks).' },
+      { id:'pp-2022-p1-q7', num:7, marks:8, topic:'Vectors', text:'Q7 — 3D vectors (8 marks).' },
+      { id:'pp-2022-p1-q8', num:8, marks:10, topic:'Proof & Modelling', text:'Q8 — Proof / modelling question (10 marks).' },
+    ]
+  },
+  {
+    id:'pp-2022-p2', year:2022, paper:'Paper 2 (Pure)', title:'Edexcel 2022 Paper 2',
+    link:'https://www.physicsandmathstutor.com/maths-revision/a-level-edexcel/',
+    questions:[
+      { id:'pp-2022-p2-q1', num:1, marks:4, topic:'Functions', text:'Q1 — Functions, domain and range (4 marks).' },
+      { id:'pp-2022-p2-q2', num:2, marks:5, topic:'Radians', text:'Q2 — Arc length and sector area (5 marks).' },
+      { id:'pp-2022-p2-q3', num:3, marks:6, topic:'Binomial Expansion', text:'Q3 — Binomial expansion with partial fractions (6 marks).' },
+      { id:'pp-2022-p2-q4', num:4, marks:7, topic:'Parametric Equations', text:'Q4 — Parametric equations and Cartesian form (7 marks).' },
+      { id:'pp-2022-p2-q5', num:5, marks:8, topic:'Differentiation', text:'Q5 — Implicit differentiation and rates of change (8 marks).' },
+      { id:'pp-2022-p2-q6', num:6, marks:9, topic:'Integration', text:'Q6 — Integration by parts and differential equations (9 marks).' },
+      { id:'pp-2022-p2-q7', num:7, marks:6, topic:'Numerical Methods', text:'Q7 — Newton-Raphson or iteration (6 marks).' },
+      { id:'pp-2022-p2-q8', num:8, marks:8, topic:'Trigonometry', text:'Q8 — Addition formulae and proof (8 marks).' },
+    ]
+  },
+  {
+    id:'pp-2022-p3', year:2022, paper:'Paper 3 (Stats & Mechanics)', title:'Edexcel 2022 Paper 3',
+    link:'https://www.physicsandmathstutor.com/maths-revision/a-level-edexcel/',
+    questions:[
+      { id:'pp-2022-p3-q1', num:1, marks:4, topic:'Regression & Correlation', text:'Q1 — Regression line and interpretation (4 marks).' },
+      { id:'pp-2022-p3-q2', num:2, marks:5, topic:'Probability', text:'Q2 — Conditional probability (5 marks).' },
+      { id:'pp-2022-p3-q3', num:3, marks:7, topic:'Normal Distribution', text:'Q3 — Normal distribution probabilities and inverse (7 marks).' },
+      { id:'pp-2022-p3-q4', num:4, marks:6, topic:'Hypothesis Testing', text:'Q4 — Hypothesis test for normal mean (6 marks).' },
+      { id:'pp-2022-p3-q5', num:5, marks:5, topic:'Kinematics', text:'Q5 — Constant acceleration / SUVAT (5 marks).' },
+      { id:'pp-2022-p3-q6', num:6, marks:7, topic:'Forces', text:'Q6 — Newton\'s laws, connected particles (7 marks).' },
+      { id:'pp-2022-p3-q7', num:7, marks:8, topic:'Projectiles', text:'Q7 — Projectile motion (8 marks).' },
+      { id:'pp-2022-p3-q8', num:8, marks:7, topic:'Moments', text:'Q8 — Moments and equilibrium (7 marks).' },
+    ]
+  },
+  {
+    id:'pp-2019-p1', year:2019, paper:'Paper 1 (Pure)', title:'Edexcel 2019 Paper 1',
+    link:'https://www.physicsandmathstutor.com/maths-revision/a-level-edexcel/',
+    questions:[
+      { id:'pp-2019-p1-q1', num:1, marks:3, topic:'Algebra', text:'Q1 — Binomial expansion and approximation (3 marks).' },
+      { id:'pp-2019-p1-q2', num:2, marks:5, topic:'Trigonometry', text:'Q2 — Trigonometric identities (5 marks).' },
+      { id:'pp-2019-p1-q3', num:3, marks:6, topic:'Differentiation', text:'Q3 — Product rule and stationary points (6 marks).' },
+      { id:'pp-2019-p1-q4', num:4, marks:8, topic:'Integration', text:'Q4 — Integration by parts (8 marks).' },
+      { id:'pp-2019-p1-q5', num:5, marks:7, topic:'Vectors', text:'Q5 — 3D vectors geometric problem (7 marks).' },
+      { id:'pp-2019-p1-q6', num:6, marks:6, topic:'Sequences', text:'Q6 — Geometric series and sum to infinity (6 marks).' },
+      { id:'pp-2019-p1-q7', num:7, marks:8, topic:'Proof', text:'Q7 — Proof by contradiction or direct (8 marks).' },
+      { id:'pp-2019-p1-q8', num:8, marks:10, topic:'Functions & Graphs', text:'Q8 — Functions, modulus and transformations (10 marks).' },
+    ]
+  },
+  {
+    id:'pp-2019-p2', year:2019, paper:'Paper 2 (Pure)', title:'Edexcel 2019 Paper 2',
+    link:'https://www.physicsandmathstutor.com/maths-revision/a-level-edexcel/',
+    questions:[
+      { id:'pp-2019-p2-q1', num:1, marks:4, topic:'Radians', text:'Q1 — Radian measure: arc, sector, segment (4 marks).' },
+      { id:'pp-2019-p2-q2', num:2, marks:5, topic:'Sequences', text:'Q2 — Arithmetic/geometric series problem (5 marks).' },
+      { id:'pp-2019-p2-q3', num:3, marks:6, topic:'Trigonometry', text:'Q3 — Double angle formulae and equations (6 marks).' },
+      { id:'pp-2019-p2-q4', num:4, marks:7, topic:'Differentiation', text:'Q4 — Implicit differentiation (7 marks).' },
+      { id:'pp-2019-p2-q5', num:5, marks:9, topic:'Integration', text:'Q5 — Integration involving trig and differential equations (9 marks).' },
+      { id:'pp-2019-p2-q6', num:6, marks:6, topic:'Numerical Methods', text:'Q6 — Root finding by iteration (6 marks).' },
+      { id:'pp-2019-p2-q7', num:7, marks:7, topic:'Parametric Equations', text:'Q7 — Parametric differentiation and tangent (7 marks).' },
+      { id:'pp-2019-p2-q8', num:8, marks:9, topic:'Modelling', text:'Q8 — Exponential/log modelling (9 marks).' },
+    ]
+  },
+  {
+    id:'pp-2019-p3', year:2019, paper:'Paper 3 (Stats & Mechanics)', title:'Edexcel 2019 Paper 3',
+    link:'https://www.physicsandmathstutor.com/maths-revision/a-level-edexcel/',
+    questions:[
+      { id:'pp-2019-p3-q1', num:1, marks:4, topic:'Statistics', text:'Q1 — Interpreting statistical diagrams (4 marks).' },
+      { id:'pp-2019-p3-q2', num:2, marks:7, topic:'Normal Distribution', text:'Q2 — Normal distribution and hypothesis test (7 marks).' },
+      { id:'pp-2019-p3-q3', num:3, marks:6, topic:'Mechanics', text:'Q3 — Forces and Newton\'s laws (6 marks).' },
+      { id:'pp-2019-p3-q4', num:4, marks:8, topic:'Projectiles', text:'Q4 — Projectile motion (8 marks).' },
+      { id:'pp-2019-p3-q5', num:5, marks:6, topic:'Conditional Probability', text:'Q5 — Conditional probability (6 marks).' },
+      { id:'pp-2019-p3-q6', num:6, marks:8, topic:'Kinematics', text:'Q6 — Variable acceleration (8 marks).' },
+      { id:'pp-2019-p3-q7', num:7, marks:7, topic:'Regression', text:'Q7 — Regression and correlation (7 marks).' },
+    ]
+  },
+  {
+    id:'pp-2018-p1', year:2018, paper:'Paper 1 (Pure)', title:'Edexcel 2018 Paper 1',
+    link:'https://www.physicsandmathstutor.com/maths-revision/a-level-edexcel/',
+    questions:[
+      { id:'pp-2018-p1-q1', num:1, marks:4, topic:'Algebra', text:'Q1 — Algebraic expressions and proof (4 marks).' },
+      { id:'pp-2018-p1-q2', num:2, marks:5, topic:'Quadratics', text:'Q2 — Quadratic equations and discriminant (5 marks).' },
+      { id:'pp-2018-p1-q3', num:3, marks:6, topic:'Trigonometry', text:'Q3 — Trigonometric equations (6 marks).' },
+      { id:'pp-2018-p1-q4', num:4, marks:7, topic:'Differentiation', text:'Q4 — Differentiation and optimisation (7 marks).' },
+      { id:'pp-2018-p1-q5', num:5, marks:8, topic:'Integration', text:'Q5 — Integration and area (8 marks).' },
+      { id:'pp-2018-p1-q6', num:6, marks:6, topic:'Binomial Expansion', text:'Q6 — Binomial expansion (6 marks).' },
+      { id:'pp-2018-p1-q7', num:7, marks:7, topic:'Vectors', text:'Q7 — 3D vectors (7 marks).' },
+      { id:'pp-2018-p1-q8', num:8, marks:6, topic:'Logarithms', text:'Q8 — Logarithms and exponential equations (6 marks).' },
+    ]
+  },
+  {
+    id:'pp-2018-p2', year:2018, paper:'Paper 2 (Pure)', title:'Edexcel 2018 Paper 2',
+    link:'https://www.physicsandmathstutor.com/maths-revision/a-level-edexcel/',
+    questions:[
+      { id:'pp-2018-p2-q1', num:1, marks:3, topic:'Proof', text:'Q1 — Proof by contradiction (3 marks).' },
+      { id:'pp-2018-p2-q2', num:2, marks:5, topic:'Functions', text:'Q2 — Composite and inverse functions (5 marks).' },
+      { id:'pp-2018-p2-q3', num:3, marks:6, topic:'Radians', text:'Q3 — Solving trig equations in radians (6 marks).' },
+      { id:'pp-2018-p2-q4', num:4, marks:7, topic:'Sequences', text:'Q4 — Recurrence relations and series (7 marks).' },
+      { id:'pp-2018-p2-q5', num:5, marks:8, topic:'Differentiation', text:'Q5 — Parametric and implicit differentiation (8 marks).' },
+      { id:'pp-2018-p2-q6', num:6, marks:9, topic:'Integration', text:'Q6 — Integration by parts and differential equations (9 marks).' },
+      { id:'pp-2018-p2-q7', num:7, marks:6, topic:'Numerical Methods', text:'Q7 — Newton-Raphson method (6 marks).' },
+      { id:'pp-2018-p2-q8', num:8, marks:5, topic:'Trigonometry', text:'Q8 — R sin(x+α) form (5 marks).' },
+    ]
+  },
+  {
+    id:'pp-2018-p3', year:2018, paper:'Paper 3 (Stats & Mechanics)', title:'Edexcel 2018 Paper 3',
+    link:'https://www.physicsandmathstutor.com/maths-revision/a-level-edexcel/',
+    questions:[
+      { id:'pp-2018-p3-q1', num:1, marks:4, topic:'Data Collection', text:'Q1 — Sampling methods (4 marks).' },
+      { id:'pp-2018-p3-q2', num:2, marks:5, topic:'Probability', text:'Q2 — Binomial distribution (5 marks).' },
+      { id:'pp-2018-p3-q3', num:3, marks:6, topic:'Hypothesis Testing', text:'Q3 — Binomial hypothesis test (6 marks).' },
+      { id:'pp-2018-p3-q4', num:4, marks:7, topic:'Normal Distribution', text:'Q4 — Normal distribution (7 marks).' },
+      { id:'pp-2018-p3-q5', num:5, marks:5, topic:'Kinematics', text:'Q5 — SUVAT equations (5 marks).' },
+      { id:'pp-2018-p3-q6', num:6, marks:8, topic:'Forces', text:'Q6 — Connected particles and Newton\'s laws (8 marks).' },
+      { id:'pp-2018-p3-q7', num:7, marks:7, topic:'Projectiles', text:'Q7 — Projectile motion (7 marks).' },
+      { id:'pp-2018-p3-q8', num:8, marks:6, topic:'Moments', text:'Q8 — Equilibrium and moments (6 marks).' },
+    ]
+  },
+  {
+    id:'pp-2017-p1', year:2017, paper:'Paper 1 (Pure)', title:'Edexcel 2017 Sample Paper 1',
+    link:'https://www.physicsandmathstutor.com/maths-revision/a-level-edexcel/',
+    questions:[
+      { id:'pp-2017-p1-q1', num:1, marks:3, topic:'Algebra', text:'Q1 — Algebraic fractions (3 marks).' },
+      { id:'pp-2017-p1-q2', num:2, marks:5, topic:'Logarithms', text:'Q2 — Exponentials and logarithms (5 marks).' },
+      { id:'pp-2017-p1-q3', num:3, marks:6, topic:'Differentiation', text:'Q3 — Chain and product rule (6 marks).' },
+      { id:'pp-2017-p1-q4', num:4, marks:7, topic:'Integration', text:'Q4 — Integration by substitution (7 marks).' },
+      { id:'pp-2017-p1-q5', num:5, marks:8, topic:'Trigonometry', text:'Q5 — R sin(x+α) and equations (8 marks).' },
+      { id:'pp-2017-p1-q6', num:6, marks:6, topic:'Sequences', text:'Q6 — Geometric sequence and series (6 marks).' },
+      { id:'pp-2017-p1-q7', num:7, marks:7, topic:'Vectors', text:'Q7 — 3D vectors and geometric problem (7 marks).' },
+      { id:'pp-2017-p1-q8', num:8, marks:7, topic:'Binomial Expansion', text:'Q8 — Binomial expansion and estimation (7 marks).' },
+    ]
+  },
+  {
+    id:'pp-2017-p2', year:2017, paper:'Paper 2 (Pure)', title:'Edexcel 2017 Sample Paper 2',
+    link:'https://www.physicsandmathstutor.com/maths-revision/a-level-edexcel/',
+    questions:[
+      { id:'pp-2017-p2-q1', num:1, marks:4, topic:'Proof', text:'Q1 — Proof by contradiction (4 marks).' },
+      { id:'pp-2017-p2-q2', num:2, marks:5, topic:'Radians', text:'Q2 — Radian measure and small angle approximations (5 marks).' },
+      { id:'pp-2017-p2-q3', num:3, marks:6, topic:'Functions', text:'Q3 — Modulus function and solving equations (6 marks).' },
+      { id:'pp-2017-p2-q4', num:4, marks:7, topic:'Trigonometry', text:'Q4 — Addition formulae and identities (7 marks).' },
+      { id:'pp-2017-p2-q5', num:5, marks:8, topic:'Differentiation', text:'Q5 — Implicit differentiation and rates of change (8 marks).' },
+      { id:'pp-2017-p2-q6', num:6, marks:8, topic:'Integration', text:'Q6 — Integration by parts / differential equations (8 marks).' },
+      { id:'pp-2017-p2-q7', num:7, marks:6, topic:'Numerical Methods', text:'Q7 — Trapezium rule and iteration (6 marks).' },
+      { id:'pp-2017-p2-q8', num:8, marks:5, topic:'Parametric Equations', text:'Q8 — Parametric equations (5 marks).' },
+    ]
+  },
+  {
+    id:'pp-2017-p3', year:2017, paper:'Paper 3 (Stats & Mechanics)', title:'Edexcel 2017 Sample Paper 3',
+    link:'https://www.physicsandmathstutor.com/maths-revision/a-level-edexcel/',
+    questions:[
+      { id:'pp-2017-p3-q1', num:1, marks:4, topic:'Data Collection', text:'Q1 — Populations, sampling and the large data set (4 marks).' },
+      { id:'pp-2017-p3-q2', num:2, marks:5, topic:'Data Representation', text:'Q2 — Histograms and measures of spread (5 marks).' },
+      { id:'pp-2017-p3-q3', num:3, marks:6, topic:'Probability', text:'Q3 — Probability and Venn diagrams (6 marks).' },
+      { id:'pp-2017-p3-q4', num:4, marks:6, topic:'Statistical Distributions', text:'Q4 — Binomial distribution (6 marks).' },
+      { id:'pp-2017-p3-q5', num:5, marks:6, topic:'Hypothesis Testing', text:'Q5 — One-tailed binomial hypothesis test (6 marks).' },
+      { id:'pp-2017-p3-q6', num:6, marks:5, topic:'Kinematics', text:'Q6 — Velocity-time graphs and SUVAT (5 marks).' },
+      { id:'pp-2017-p3-q7', num:7, marks:7, topic:'Forces', text:'Q7 — Forces, friction and Newton\'s laws (7 marks).' },
+      { id:'pp-2017-p3-q8', num:8, marks:6, topic:'Variable Acceleration', text:'Q8 — Variable acceleration using calculus (6 marks).' },
+    ]
+  },
+];
+
+// ============================================================
+// MADASMATHS — DIRECT PDF LINKS BY TOPIC
+// ============================================================
+
+const BASE_MB = 'https://www.madasmaths.com/archive/maths_booklets/';
+const BASE_PP = 'https://www.madasmaths.com/archive/iygb_practice_papers/';
+const MM_PAGE = 'https://www.madasmaths.com/';
+
+const MADASMATHS_TOPICS = [
+  {
+    id:'mm-algebra', title:'Algebra & Polynomials', category:'Pure',
+    pageUrl: MM_PAGE+'archive_maths_booklets_basic_topics_various.html',
+    pdfs:[
+      { label:'Polynomials', url:BASE_MB+'standard_topics/various/polynomials.pdf' },
+      { label:'Inequalities', url:BASE_MB+'standard_topics/various/inequalities.pdf' },
+      { label:'Equations (Advanced)', url:BASE_MB+'standard_topics/various/equations_advanced_skills.pdf' },
+    ],
+    papers:[{ label:'MP1 Papers', url:MM_PAGE+'archive_iygb_practice_papers_mp1_practice_papers.html' }]
+  },
+  {
+    id:'mm-functions', title:'Functions & Modulus', category:'Pure',
+    pageUrl: MM_PAGE+'archive_maths_booklets_standard_topics_various.html',
+    pdfs:[
+      { label:'Functions — Exam Questions', url:BASE_MB+'standard_topics/various/function_exam_questions.pdf' },
+      { label:'Functions — Practice', url:BASE_MB+'standard_topics/various/function_practice.pdf' },
+      { label:'Modulus Function — Exam Qs', url:BASE_MB+'standard_topics/various/modulus_function_exam_questions.pdf' },
+      { label:'Modulus Function — Practice', url:BASE_MB+'standard_topics/various/modulus_function_practice.pdf' },
+    ],
+    papers:[{ label:'MP2 Papers', url:MM_PAGE+'archive_iygb_practice_papers_mp2_practice_papers.html' }]
+  },
+  {
+    id:'mm-graphs', title:'Graphs & Transformations', category:'Pure',
+    pageUrl: MM_PAGE+'archive_maths_booklets_standard_topics_various.html',
+    pdfs:[
+      { label:'Transformations — Exam Qs', url:BASE_MB+'standard_topics/various/transformations_of_graphs_exam_questions.pdf' },
+      { label:'Transformations — Practice', url:BASE_MB+'standard_topics/various/transformations_of_graphs_practice.pdf' },
+      { label:'Curve Sketching — Exam Qs', url:BASE_MB+'standard_topics/various/curve_sketching_exam_questions.pdf' },
+    ],
+    papers:[{ label:'MP1 Papers', url:MM_PAGE+'archive_iygb_practice_papers_mp1_practice_papers.html' }]
+  },
+  {
+    id:'mm-sequences', title:'Sequences & Binomial', category:'Pure',
+    pageUrl: MM_PAGE+'archive_maths_booklets_standard_topics_various.html',
+    pdfs:[
+      { label:'Binomial Expansions — Exam Qs', url:BASE_MB+'standard_topics/various/binomial_series_expansions_exam_questions.pdf' },
+      { label:'Binomial Expansions — Practice', url:BASE_MB+'standard_topics/various/binomial_series_expansions_practice.pdf' },
+    ],
+    papers:[
+      { label:'MP1 Papers', url:MM_PAGE+'archive_iygb_practice_papers_mp1_practice_papers.html' },
+      { label:'MP2 Papers', url:MM_PAGE+'archive_iygb_practice_papers_mp2_practice_papers.html' },
+    ]
+  },
+  {
+    id:'mm-diff1', title:'Differentiation (Year 1 — Basic)', category:'Pure',
+    pageUrl: MM_PAGE+'archive_maths_booklets_basic_topics_calculus.html',
+    pdfs:[
+      { label:'Calculus Intro — Exam Qs', url:BASE_MB+'basic_topics/calculus/calculus_introduction_exam_questions.pdf' },
+      { label:'Differentiation — Practice I', url:BASE_MB+'basic_topics/calculus/differentiation_practice_i.pdf' },
+      { label:'Optimisation Problems', url:BASE_MB+'basic_topics/calculus/differentiation_optimization_problems.pdf' },
+    ],
+    papers:[{ label:'MP1 Papers', url:MM_PAGE+'archive_iygb_practice_papers_mp1_practice_papers.html' }]
+  },
+  {
+    id:'mm-int1', title:'Integration (Year 1 — Basic)', category:'Pure',
+    pageUrl: MM_PAGE+'archive_maths_booklets_basic_topics_calculus.html',
+    pdfs:[
+      { label:'Integration Intro', url:BASE_MB+'basic_topics/calculus/integration_intro.pdf' },
+      { label:'Integration — Areas Intro', url:BASE_MB+'basic_topics/calculus/integration_areas_intro.pdf' },
+    ],
+    papers:[{ label:'MP1 Papers', url:MM_PAGE+'archive_iygb_practice_papers_mp1_practice_papers.html' }]
+  },
+  {
+    id:'mm-diff2', title:'Differentiation (Year 2 — Standard)', category:'Pure',
+    pageUrl: MM_PAGE+'archive_maths_booklets_standard_topics_various.html',
+    pdfs:[
+      { label:'Differentiation II — Exam Qs', url:BASE_MB+'standard_topics/various/differentiation_ii_exam_questions.pdf' },
+      { label:'Differentiation II — Practice', url:BASE_MB+'standard_topics/various/differentiation_practice_ii.pdf' },
+      { label:'Implicit Differentiation', url:BASE_MB+'standard_topics/various/implicit_differentiation.pdf' },
+      { label:'Implicit Equations — Exam Qs', url:BASE_MB+'standard_topics/various/implicit_equations_exam_questions.pdf' },
+      { label:'Related Rates of Change', url:BASE_MB+'standard_topics/various/related_rates_of_change.pdf' },
+    ],
+    papers:[
+      { label:'MP2 Papers', url:MM_PAGE+'archive_iygb_practice_papers_mp2_practice_papers.html' },
+      { label:'SYN Papers', url:MM_PAGE+'archive_iygb_practice_papers_syn_practice_papers.html' },
+    ]
+  },
+  {
+    id:'mm-int2', title:'Integration (Year 2 — Standard)', category:'Pure',
+    pageUrl: MM_PAGE+'archive_maths_booklets_standard_topics_integration.html',
+    pdfs:[
+      { label:'Standard Integration page ↗', url:MM_PAGE+'archive_maths_booklets_standard_topics_integration.html' },
+      { label:'Further Integration page ↗', url:MM_PAGE+'archive_maths_booklets_further_topics_integration.html' },
+    ],
+    papers:[
+      { label:'MP2 Papers', url:MM_PAGE+'archive_iygb_practice_papers_mp2_practice_papers.html' },
+      { label:'SYN Papers', url:MM_PAGE+'archive_iygb_practice_papers_syn_practice_papers.html' },
+    ]
+  },
+  {
+    id:'mm-trig', title:'Trigonometry', category:'Pure',
+    pageUrl: MM_PAGE+'archive_maths_booklets_standard_topics_trigonometry.html',
+    pdfs:[{ label:'Standard Trigonometry page ↗', url:MM_PAGE+'archive_maths_booklets_standard_topics_trigonometry.html' }],
+    papers:[
+      { label:'MP1 Papers', url:MM_PAGE+'archive_iygb_practice_papers_mp1_practice_papers.html' },
+      { label:'MP2 Papers', url:MM_PAGE+'archive_iygb_practice_papers_mp2_practice_papers.html' },
+    ]
+  },
+  {
+    id:'mm-exp-log', title:'Exponentials & Logarithms', category:'Pure',
+    pageUrl: MM_PAGE+'archive_maths_booklets_standard_topics_various.html',
+    pdfs:[
+      { label:'Exponentials & Logs — Exam Qs', url:BASE_MB+'standard_topics/various/exponentials_logarithms_exam_questions.pdf' },
+      { label:'Exponentials & Logs — Practice', url:BASE_MB+'standard_topics/various/exponentials_logarithms_practice.pdf' },
+    ],
+    papers:[{ label:'MP1 Papers', url:MM_PAGE+'archive_iygb_practice_papers_mp1_practice_papers.html' }]
+  },
+  {
+    id:'mm-parametric', title:'Parametric Equations', category:'Pure',
+    pageUrl: MM_PAGE+'archive_maths_booklets_standard_topics_various.html',
+    pdfs:[
+      { label:'Parametric Equations', url:BASE_MB+'standard_topics/various/parametric_equations.pdf' },
+      { label:'Parametric Equations — Exam Qs', url:BASE_MB+'standard_topics/various/parametric_equations_exam_questions.pdf' },
+    ],
+    papers:[{ label:'MP2 Papers', url:MM_PAGE+'archive_iygb_practice_papers_mp2_practice_papers.html' }]
+  },
+  {
+    id:'mm-numerical', title:'Numerical Methods', category:'Pure',
+    pageUrl: MM_PAGE+'archive_maths_booklets_standard_topics_various.html',
+    pdfs:[{ label:'Numerical Solutions of Equations', url:BASE_MB+'standard_topics/various/numerical_solutions_of_equations.pdf' }],
+    papers:[{ label:'MP2 Papers', url:MM_PAGE+'archive_iygb_practice_papers_mp2_practice_papers.html' }]
+  },
+  {
+    id:'mm-further', title:'Further & Advanced Topics', category:'Pure',
+    pageUrl: MM_PAGE+'archive_maths_booklets_further_topics_various.html',
+    pdfs:[
+      { label:'Further Topics — Various ↗', url:MM_PAGE+'archive_maths_booklets_further_topics_various.html' },
+      { label:'Linear Algebra ↗', url:MM_PAGE+'archive_maths_booklets_further_topics_linear_algebra.html' },
+      { label:'Advanced Topics ↗', url:MM_PAGE+'archive_maths_booklets_advanced_topics.html' },
+    ],
+    papers:[{ label:'SYN Papers', url:MM_PAGE+'archive_iygb_practice_papers_syn_practice_papers.html' }]
+  },
+  {
+    id:'mm-stats', title:'Statistics', category:'Statistics',
+    pageUrl: MM_PAGE+'archive_maths_booklets_statistics.html',
+    pdfs:[{ label:'Statistics booklets page ↗', url:MM_PAGE+'archive_maths_booklets_statistics.html' }],
+    papers:[{ label:'MMS Papers (Stats & Mechanics)', url:MM_PAGE+'archive_iygb_practice_papers_mms_practice_papers.html' }]
+  },
+  {
+    id:'mm-mechanics', title:'Mechanics', category:'Mechanics',
+    pageUrl: MM_PAGE+'archive_maths_booklets_mechanics.html',
+    pdfs:[{ label:'Mechanics booklets page ↗', url:MM_PAGE+'archive_maths_booklets_mechanics.html' }],
+    papers:[{ label:'MMS Papers (Stats & Mechanics)', url:MM_PAGE+'archive_iygb_practice_papers_mms_practice_papers.html' }]
+  },
+  {
+    id:'mm-mp1', title:'MP1 — Pure Paper 1 (A–Z)', category:'Practice Papers',
+    pageUrl: MM_PAGE+'archive_iygb_practice_papers_mp1_practice_papers.html',
+    pdfs:'abcdefghijklmnopqrstuvwxyz'.split('').map(l=>({
+      label:`MP1 Paper ${l.toUpperCase()}`, url:BASE_PP+`mp1_practice_papers/mp1_${l}.pdf`,
+      sol:BASE_PP+`mp1_practice_papers/mp1_${l}_solutions.pdf`
+    })), papers:[]
+  },
+  {
+    id:'mm-mp2', title:'MP2 — Pure Paper 2 (A–Z)', category:'Practice Papers',
+    pageUrl: MM_PAGE+'archive_iygb_practice_papers_mp2_practice_papers.html',
+    pdfs:'abcdefghijklmnopqrstuvwxyz'.split('').map(l=>({
+      label:`MP2 Paper ${l.toUpperCase()}`, url:BASE_PP+`mp2_practice_papers/mp2_${l}.pdf`,
+      sol:BASE_PP+`mp2_practice_papers/mp2_${l}_solutions.pdf`
+    })), papers:[]
+  },
+  {
+    id:'mm-syn', title:'SYN — Synoptic Pure (A–U)', category:'Practice Papers',
+    pageUrl: MM_PAGE+'archive_iygb_practice_papers_syn_practice_papers.html',
+    pdfs:'abcdefghijklmnopqrstu'.split('').map(l=>({
+      label:`SYN Paper ${l.toUpperCase()}`, url:BASE_PP+`syn_practice_papers/syn_${l}.pdf`,
+      sol:BASE_PP+`syn_practice_papers/syn_${l}_solutions.pdf`
+    })), papers:[]
+  },
+  {
+    id:'mm-mms', title:'MMS — Stats & Mechanics (A–U)', category:'Practice Papers',
+    pageUrl: MM_PAGE+'archive_iygb_practice_papers_mms_practice_papers.html',
+    pdfs:'abcdefghijklmnopqrstu'.split('').map(l=>({
+      label:`MMS Paper ${l.toUpperCase()}`, url:BASE_PP+`mms_practice_papers/mms_${l}.pdf`,
+      sol:BASE_PP+`mms_practice_papers/mms_${l}_solutions.pdf`
+    })), papers:[]
+  },
+];

@@ -1,0 +1,866 @@
+// ============================================================
+// A-LEVEL MATHS REVISION APP
+// ============================================================
+
+// ── STORAGE HELPERS ──────────────────────────────────────────
+const store = {
+  get: (k) => { try { return JSON.parse(localStorage.getItem(k)); } catch { return null; } },
+  set: (k, v) => localStorage.setItem(k, JSON.stringify(v)),
+};
+
+function getHistory(qId) { return store.get('hist:' + qId) || []; }
+function saveHistory(qId, entry) {
+  const h = getHistory(qId);
+  h.unshift(entry);
+  store.set('hist:' + qId, h.slice(0, 20));
+}
+function getNotes(qId) { return store.get('notes:' + qId) || ''; }
+function saveNotes(qId, text) { store.set('notes:' + qId, text); }
+function getMMQuestions() { return store.get('mm:questions') || []; }
+function saveMMQuestions(qs) { store.set('mm:questions', qs); }
+function getAllHistory() {
+  const all = [];
+  for (let i = 0; i < localStorage.length; i++) {
+    const k = localStorage.key(i);
+    if (k.startsWith('hist:')) {
+      const h = store.get(k);
+      if (h && h.length) {
+        h.forEach(e => all.push({ qId: k.slice(5), ...e }));
+      }
+    }
+  }
+  return all.sort((a, b) => b.ts - a.ts);
+}
+
+function getFlag(qId)      { return store.get('flag:' + qId) || false; }
+function setFlag(qId, val) { store.set('flag:' + qId, val); }
+function getAllFlags() {
+  const flags = [];
+  for (let i = 0; i < localStorage.length; i++) {
+    const k = localStorage.key(i);
+    if (k.startsWith('flag:') && store.get(k)) flags.push(k.slice(5));
+  }
+  return flags;
+}
+
+// ── VIEW ROUTING ─────────────────────────────────────────────
+const views = {};
+document.querySelectorAll('.view').forEach(v => { views[v.id.replace('view-', '')] = v; });
+const navLinks = document.querySelectorAll('.nav-link');
+
+function switchView(name) {
+  Object.values(views).forEach(v => v.classList.remove('active-view'));
+  navLinks.forEach(l => l.classList.remove('active'));
+  if (views[name]) views[name].classList.add('active-view');
+  const link = document.querySelector(`[data-view="${name}"]`);
+  if (link) link.classList.add('active');
+  if (name === 'home') updateDashboard();
+  if (name === 'practice') renderTopicsGrid();
+  if (name === 'pastpapers') renderPastPapers();
+  if (name === 'madasmaths') renderMadAsMaths();
+  if (name === 'stats') renderProgress();
+  if (name === 'flagged') renderFlaggedView();
+}
+
+navLinks.forEach(l => l.addEventListener('click', e => { e.preventDefault(); switchView(l.dataset.view); }));
+
+// ── DATE ─────────────────────────────────────────────────────
+document.getElementById('today-date').textContent = new Date().toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+
+// ── TIMER FACTORY (stopwatch + countdown) ─────────────────────
+function makeTimer(displayEl) {
+  let secs = 0, interval = null, running = false;
+  let mode = 'up';   // 'up' = stopwatch, 'down' = countdown
+  let limitSecs = 0; // only used in countdown mode
+  let onExpire = null;
+
+  function fmt(s) {
+    const abs = Math.abs(s);
+    return `${String(Math.floor(abs / 60)).padStart(2,'0')}:${String(abs % 60).padStart(2,'0')}`;
+  }
+
+  function updateDisplay() {
+    const val = mode === 'up' ? secs : limitSecs - secs;
+    displayEl.textContent = fmt(val);
+    // colour feedback in countdown mode
+    if (mode === 'down') {
+      const rem = limitSecs - secs;
+      displayEl.classList.toggle('timer-warning', rem <= limitSecs * 0.25 && rem > 60);
+      displayEl.classList.toggle('timer-danger',  rem <= 60);
+    } else {
+      displayEl.classList.remove('timer-warning','timer-danger');
+    }
+  }
+
+  function tick() {
+    secs++;
+    updateDisplay();
+    if (mode === 'down' && secs >= limitSecs) {
+      clearInterval(interval); running = false;
+      displayEl.textContent = '00:00';
+      displayEl.classList.add('timer-danger');
+      if (onExpire) onExpire();
+    }
+  }
+
+  return {
+    setMode(m, mins, expireFn) {
+      mode = m; limitSecs = (mins || 8) * 60; onExpire = expireFn || null;
+      this.reset();
+    },
+    start() { if (!running) { running = true; interval = setInterval(tick, 1000); } },
+    pause() { running = false; clearInterval(interval); },
+    reset() { this.pause(); secs = 0; updateDisplay(); },
+    value() { return secs; },
+    isRunning() { return running; },
+    getMode() { return mode; },
+  };
+}
+
+// ── SCORE RING ─────────────────────────────────────────────────
+function scoreRingSVG(pct, color) {
+  const r = 14, circ = 2 * Math.PI * r;
+  const offset = circ - (pct / 100) * circ;
+  return `<svg viewBox="0 0 34 34" xmlns="http://www.w3.org/2000/svg">
+    <circle class="score-ring-bg" cx="17" cy="17" r="${r}"/>
+    <circle class="score-ring-fg" cx="17" cy="17" r="${r}" stroke="${color}"
+      stroke-dasharray="${circ}" stroke-dashoffset="${offset}"/>
+    <text x="17" y="21" text-anchor="middle" class="score-ring-text">${pct}%</text>
+  </svg>`;
+}
+
+function avgScore(qId) {
+  const h = getHistory(qId);
+  if (!h.length) return null;
+  const scores = h.filter(e => e.pct !== undefined);
+  if (!scores.length) return null;
+  return Math.round(scores.reduce((s, e) => s + e.pct, 0) / scores.length);
+}
+
+function bookColor(book) {
+  return { y1p: 'var(--y1p)', y1s: 'var(--y1s)', y2p: 'var(--y2p)', y2s: 'var(--y2s)' }[book] || 'var(--accent)';
+}
+
+// ── DASHBOARD ─────────────────────────────────────────────────
+function updateDashboard() {
+  const allH = getAllHistory();
+  document.getElementById('stat-done').textContent = allH.length;
+
+  const scored = allH.filter(e => e.pct !== undefined);
+  document.getElementById('stat-avg').textContent = scored.length
+    ? Math.round(scored.reduce((s, e) => s + e.pct, 0) / scored.length) + '%' : '—';
+
+  const totalSecs = allH.reduce((s, e) => s + (e.secs || 0), 0);
+  document.getElementById('stat-time').textContent = totalSecs < 3600
+    ? Math.floor(totalSecs / 60) + 'm'
+    : (totalSecs / 3600).toFixed(1) + 'h';
+
+  // streak
+  const days = new Set(allH.map(e => new Date(e.ts).toDateString()));
+  let streak = 0, d = new Date();
+  while (days.has(d.toDateString())) { streak++; d.setDate(d.getDate() - 1); }
+  document.getElementById('stat-streak').textContent = streak;
+
+  // recent activity
+  const ra = document.getElementById('recent-activity');
+  if (!allH.length) {
+    ra.innerHTML = '<div class="empty-state">No activity yet — start practising!</div>';
+  } else {
+    ra.innerHTML = allH.slice(0, 6).map(e => {
+      const dt = new Date(e.ts);
+      // find human-readable question label
+      let qLabel = e.qId;
+      for (const t of TOPICS) {
+        const q = t.questions?.find(q => q.id === e.qId);
+        if (q) { qLabel = `${t.title} Q${t.questions.indexOf(q)+1}`; break; }
+      }
+      const pctStr = e.pct !== undefined
+        ? `<span class="history-score ${e.pct >= 70 ? 'good' : e.pct >= 40 ? 'mid' : 'bad'}">${e.pct}%</span>` : '';
+      return `<div class="history-entry">
+        <span class="history-date">${dt.toLocaleDateString('en-GB',{day:'numeric',month:'short'})}</span>
+        <span style="font-size:0.82rem;color:var(--text-dim);flex:1">${qLabel}</span>
+        ${pctStr}
+      </div>`;
+    }).join('');
+  }
+
+  // weak topics — clickable, navigate to topic
+  const wt = document.getElementById('weak-topics');
+  const topicAvgs = {};
+  TOPICS.forEach(t => {
+    const sc = t.questions.map(q => avgScore(q.id)).filter(s => s !== null);
+    if (sc.length) topicAvgs[t.id] = { title: t.title, avg: Math.round(sc.reduce((a,b)=>a+b,0)/sc.length) };
+  });
+  const weak = Object.entries(topicAvgs).sort((a,b) => a[1].avg - b[1].avg).slice(0, 6);
+  if (!weak.length) {
+    wt.innerHTML = '<div class="empty-state">Complete questions to see weak areas</div>';
+  } else {
+    wt.innerHTML = weak.map(([id, {title, avg}]) =>
+      `<div class="progress-bar-row dash-topic-link" data-topicid="${id}" style="cursor:pointer" title="Open ${title}">
+        <span class="pbr-label">${title}</span>
+        <div class="pbr-bar"><div class="pbr-fill" style="width:${avg}%;background:${avg<40?'var(--accent3)':avg<70?'var(--accent)':'var(--accent4)'}"></div></div>
+        <span class="pbr-val">${avg}%</span>
+      </div>`
+    ).join('');
+    wt.querySelectorAll('.dash-topic-link').forEach(el => {
+      el.addEventListener('click', () => {
+        switchView('practice');
+        setTimeout(() => openTopicPanel(el.dataset.topicid), 50);
+      });
+    });
+  }
+
+  // flagged questions panel
+  const flags = getAllFlags();
+  const fp = document.getElementById('flagged-panel');
+  if (!fp) return;
+  if (!flags.length) {
+    fp.innerHTML = '<div class="empty-state">No flagged questions</div>';
+  } else {
+    fp.innerHTML = flags.slice(0, 8).map(qId => {
+      let qLabel = qId, topicId = null, qIdx = 0;
+      for (const t of TOPICS) {
+        const qi = t.questions?.findIndex(q => q.id === qId);
+        if (qi >= 0) { qLabel = `${t.title} Q${qi+1}`; topicId = t.id; qIdx = qi; break; }
+      }
+      return `<div class="history-entry dash-flag-link" data-topicid="${topicId}" data-qidx="${qIdx}" style="cursor:pointer">
+        <span style="color:var(--accent);margin-right:4px">⚑</span>
+        <span style="font-size:0.82rem;color:var(--text-dim);flex:1">${qLabel}</span>
+      </div>`;
+    }).join('');
+    fp.querySelectorAll('.dash-flag-link').forEach(el => {
+      el.addEventListener('click', () => {
+        if (!el.dataset.topicid || el.dataset.topicid === 'null') return;
+        switchView('practice');
+        setTimeout(() => {
+          openTopicPanel(el.dataset.topicid);
+          currentQIdx = parseInt(el.dataset.qidx) || 0;
+          renderCurrentQuestion();
+        }, 80);
+      });
+    });
+  }
+}
+
+// ── TOPICS GRID ───────────────────────────────────────────────
+let activeBooks = new Set(['y1p', 'y1s', 'y2p', 'y2s']);
+
+document.querySelectorAll('.chip').forEach(c => {
+  c.addEventListener('click', () => {
+    const f = c.dataset.filter;
+    if (activeBooks.has(f)) { activeBooks.delete(f); c.classList.remove('active-chip'); }
+    else { activeBooks.add(f); c.classList.add('active-chip'); }
+    renderTopicsGrid();
+  });
+});
+
+function renderTopicsGrid() {
+  const search = (document.getElementById('topic-search')?.value || '').toLowerCase();
+  const grid = document.getElementById('topics-grid');
+  const filtered = TOPICS.filter(t => activeBooks.has(t.book) && (!search || t.title.toLowerCase().includes(search)));
+
+  const groups = {};
+  filtered.forEach(t => {
+    const g = t.book;
+    if (!groups[g]) groups[g] = [];
+    groups[g].push(t);
+  });
+
+  const bookLabels = { y1p: 'Year 1 — Pure', y1s: 'Year 1 — Statistics & Mechanics', y2p: 'Year 2 — Pure', y2s: 'Year 2 — Statistics & Mechanics' };
+  const order = ['y1p', 'y1s', 'y2p', 'y2s'];
+
+  let html = '';
+  order.forEach(b => {
+    if (!groups[b]) return;
+    html += `<div class="topic-group-title">${bookLabels[b]}</div>`;
+    groups[b].forEach(t => {
+      const avg = (() => {
+        const sc = t.questions.map(q => avgScore(q.id)).filter(s => s !== null);
+        return sc.length ? Math.round(sc.reduce((a, b) => a + b, 0) / sc.length) : null;
+      })();
+      const done = t.questions.filter(q => getHistory(q.id).length > 0).length;
+      const flagCount = t.questions.filter(q => getFlag(q.id)).length;
+      // last attempted across all questions in this topic
+      const lastTs = t.questions.flatMap(q => getHistory(q.id).map(h => h.ts)).sort((a,b)=>b-a)[0];
+      const lastStr = lastTs ? new Date(lastTs).toLocaleDateString('en-GB',{day:'numeric',month:'short'}) : null;
+      const col = bookColor(b);
+      html += `<div class="topic-card" data-id="${t.id}" style="--book-color:${col}">
+        ${avg !== null ? `<div class="topic-score">${scoreRingSVG(avg, col)}</div>` : ''}
+        <div class="topic-name">${t.title}</div>
+        <div class="topic-meta">
+          <span>${t.questions.length} questions</span>
+          <span>${done}/${t.questions.length} done</span>
+          ${flagCount ? `<span class="flag-badge">⚑ ${flagCount}</span>` : ''}
+        </div>
+        ${lastStr ? `<div class="last-attempted">Last: ${lastStr}</div>` : ''}
+      </div>`;
+    });
+  });
+
+  if (!html) html = '<div class="empty-state" style="grid-column:1/-1">No topics match your filter.</div>';
+  grid.innerHTML = html;
+
+  grid.querySelectorAll('.topic-card').forEach(card => {
+    card.addEventListener('click', () => openTopicPanel(card.dataset.id));
+  });
+}
+
+document.getElementById('topic-search')?.addEventListener('input', renderTopicsGrid);
+
+// ── TOPIC QUESTION PANEL ──────────────────────────────────────
+let currentTopic = null, currentQIdx = 0;
+const qTimer = makeTimer(document.getElementById('q-timer'));
+let qTimerMode = 'up';
+
+// Timer mode toggle
+document.getElementById('q-mode-up')?.addEventListener('click', () => {
+  qTimerMode = 'up';
+  qTimer.setMode('up');
+  document.getElementById('q-mode-up').classList.add('tmode-active');
+  document.getElementById('q-mode-down').classList.remove('tmode-active');
+  document.getElementById('q-countdown-mins').style.opacity = '0.3';
+});
+document.getElementById('q-mode-down')?.addEventListener('click', () => {
+  qTimerMode = 'down';
+  const mins = parseInt(document.getElementById('q-countdown-mins').value) || 8;
+  qTimer.setMode('down', mins, () => {
+    document.getElementById('q-timer').textContent = 'TIME!';
+  });
+  document.getElementById('q-mode-down').classList.add('tmode-active');
+  document.getElementById('q-mode-up').classList.remove('tmode-active');
+  document.getElementById('q-countdown-mins').style.opacity = '1';
+});
+
+function openTopicPanel(topicId) {
+  currentTopic = TOPICS.find(t => t.id === topicId);
+  if (!currentTopic) return;
+  currentQIdx = 0;
+  qTimer.reset();
+  document.getElementById('qpanel-topic-name').textContent = currentTopic.title;
+  document.getElementById('question-panel').classList.remove('hidden');
+  renderCurrentQuestion();
+}
+
+function renderCurrentQuestion() {
+  if (!currentTopic) return;
+  const q = currentTopic.questions[currentQIdx];
+  document.getElementById('q-position').textContent = `Q${currentQIdx + 1} of ${currentTopic.questions.length}`;
+  document.getElementById('q-notes').value = getNotes(q.id);
+  document.getElementById('score-form').classList.add('hidden');
+  document.getElementById('score-got').value = '';
+  document.getElementById('score-max').value = '';
+  document.getElementById('q-hint-area').classList.add('hidden');
+
+  // Flag button state
+  const flagBtn = document.getElementById('btn-flag-q');
+  flagBtn.classList.toggle('flagged', getFlag(q.id));
+
+  document.getElementById('question-display').innerHTML = `
+    <h3>Question ${currentQIdx + 1}</h3>
+    <p>${q.text}</p>
+    <span class="marks">[${q.marks} marks]</span>
+    ${q.source ? `<p style="margin-top:10px;font-size:0.75rem;color:var(--text-muted)">Source: ${q.source}</p>` : ''}
+  `;
+
+  // Show/hide hint button
+  const hintBtn = document.getElementById('btn-show-hint');
+  if (q.hint) {
+    hintBtn.style.display = '';
+    document.getElementById('q-hint-text').textContent = q.hint;
+  } else {
+    hintBtn.style.display = 'none';
+  }
+
+  renderQHistory(q.id, 'q-history');
+  if (window.MathJax) MathJax.typesetPromise([document.getElementById('question-display')]).catch(() => {});
+}
+
+function renderQHistory(qId, containerId) {
+  const h = getHistory(qId);
+  const el = document.getElementById(containerId);
+  if (!h.length) { el.innerHTML = ''; return; }
+  el.innerHTML = '<div style="font-size:0.75rem;color:var(--text-muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.08em">Attempt History</div>' +
+    h.map(e => {
+      const d = new Date(e.ts);
+      const pctStr = e.pct !== undefined
+        ? `<span class="history-score ${e.pct >= 70 ? 'good' : e.pct >= 40 ? 'mid' : 'bad'}">${e.pct}%</span>`
+        : '<span class="history-score" style="color:var(--text-muted)">Unscored</span>';
+      const timeStr = e.secs ? `<span class="history-time">${Math.floor(e.secs / 60)}m ${e.secs % 60}s</span>` : '';
+      return `<div class="history-entry">
+        <span class="history-date">${d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: '2-digit' })}</span>
+        <span style="font-size:0.78rem;color:var(--text-dim)">${d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}</span>
+        ${timeStr}
+        ${pctStr}
+        ${e.notes ? `<span style="font-size:0.75rem;color:var(--text-muted);max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${e.notes}">📝 ${e.notes.slice(0, 40)}</span>` : ''}
+      </div>`;
+    }).join('');
+}
+
+document.getElementById('back-to-topics').addEventListener('click', () => {
+  qTimer.reset();
+  document.getElementById('question-panel').classList.add('hidden');
+  renderTopicsGrid();
+});
+
+document.getElementById('btn-start-timer').addEventListener('click', () => {
+  if (qTimerMode === 'down') {
+    const mins = parseInt(document.getElementById('q-countdown-mins').value) || 8;
+    qTimer.setMode('down', mins, () => { document.getElementById('q-timer').textContent = 'TIME!'; });
+  }
+  qTimer.start();
+});
+document.getElementById('btn-pause-timer').addEventListener('click', () => qTimer.pause());
+document.getElementById('btn-reset-timer').addEventListener('click', () => {
+  if (qTimerMode === 'down') {
+    const mins = parseInt(document.getElementById('q-countdown-mins').value) || 8;
+    qTimer.setMode('down', mins);
+  }
+  qTimer.reset();
+});
+
+document.getElementById('btn-flag-q').addEventListener('click', () => {
+  if (!currentTopic) return;
+  const q = currentTopic.questions[currentQIdx];
+  const newVal = !getFlag(q.id);
+  setFlag(q.id, newVal);
+  document.getElementById('btn-flag-q').classList.toggle('flagged', newVal);
+  renderTopicsGrid();
+});
+
+document.getElementById('btn-show-hint').addEventListener('click', () => {
+  document.getElementById('q-hint-area').classList.toggle('hidden');
+});
+
+document.getElementById('btn-prev-q').addEventListener('click', () => {
+  if (currentQIdx > 0) { currentQIdx--; qTimer.reset(); renderCurrentQuestion(); }
+});
+document.getElementById('btn-next-q').addEventListener('click', () => {
+  if (currentTopic && currentQIdx < currentTopic.questions.length - 1) { currentQIdx++; qTimer.reset(); renderCurrentQuestion(); }
+});
+
+document.getElementById('btn-mark-done').addEventListener('click', () => {
+  const q = currentTopic.questions[currentQIdx];
+  saveNotes(q.id, document.getElementById('q-notes').value);
+  document.getElementById('score-form').classList.remove('hidden');
+});
+
+document.getElementById('btn-save-score').addEventListener('click', () => {
+  const q = currentTopic.questions[currentQIdx];
+  const got = parseInt(document.getElementById('score-got').value);
+  const max = parseInt(document.getElementById('score-max').value) || q.marks;
+  const pct = max > 0 ? Math.round((got / max) * 100) : undefined;
+  const notes = document.getElementById('q-notes').value;
+  saveNotes(q.id, notes);
+  saveHistory(q.id, { ts: Date.now(), secs: qTimer.value(), pct, got, max, notes });
+  qTimer.reset();
+  document.getElementById('score-form').classList.add('hidden');
+  renderCurrentQuestion();
+  renderTopicsGrid();
+});
+
+// auto-save notes on blur
+document.getElementById('q-notes').addEventListener('blur', () => {
+  if (currentTopic) saveNotes(currentTopic.questions[currentQIdx].id, document.getElementById('q-notes').value);
+});
+
+// ── PAST PAPERS ───────────────────────────────────────────────
+let currentPaper = null, currentPPIdx = 0;
+
+function renderPastPapers() {
+  const yearF = document.getElementById('pp-year').value;
+  const paperF = document.getElementById('pp-paper').value;
+  const filtered = PAST_PAPERS.filter(p =>
+    (!yearF || p.year == yearF) &&
+    (!paperF || p.paper === paperF)
+  );
+
+  const grid = document.getElementById('papers-grid');
+  if (!filtered.length) { grid.innerHTML = '<div class="empty-state">No papers match your filter.</div>'; return; }
+
+  grid.innerHTML = filtered.map(p => {
+    const done = p.questions.filter(q => getHistory(q.id).length > 0).length;
+    const pct = Math.round((done / p.questions.length) * 100);
+    return `<div class="paper-card" data-id="${p.id}">
+      <div class="paper-card-title">${p.title}</div>
+      <div class="paper-card-meta">
+        <span>📅 ${p.year}</span>
+        <span>📝 ${p.questions.length} questions</span>
+        <span>${done}/${p.questions.length} done</span>
+      </div>
+      ${p.link ? `<a href="${p.link}" target="_blank" style="font-size:0.75rem;color:var(--accent2);text-decoration:none" onclick="event.stopPropagation()">↗ Download paper</a>` : ''}
+      <div class="paper-card-progress"><div class="paper-card-progress-bar" style="width:${pct}%"></div></div>
+    </div>`;
+  }).join('');
+
+  grid.querySelectorAll('.paper-card').forEach(c => {
+    c.addEventListener('click', () => openPPPanel(c.dataset.id));
+  });
+}
+
+['pp-year', 'pp-paper'].forEach(id => document.getElementById(id).addEventListener('change', renderPastPapers));
+
+function openPPPanel(paperId) {
+  currentPaper = PAST_PAPERS.find(p => p.id === paperId);
+  if (!currentPaper) return;
+  currentPPIdx = 0;
+  ppTimer.reset();
+  document.getElementById('pp-qpanel-name').textContent = currentPaper.title;
+  document.getElementById('pp-question-panel').classList.remove('hidden');
+  renderCurrentPPQuestion();
+}
+
+function renderCurrentPPQuestion() {
+  if (!currentPaper) return;
+  const q = currentPaper.questions[currentPPIdx];
+  document.getElementById('pp-q-position').textContent = `Q${currentPPIdx + 1} of ${currentPaper.questions.length}`;
+  document.getElementById('pp-notes').value = getNotes(q.id);
+  document.getElementById('pp-score-form').classList.add('hidden');
+
+  document.getElementById('pp-question-display').innerHTML = `
+    <h3>Question ${q.num}</h3>
+    <p style="color:var(--text-dim);font-size:0.85rem;margin-bottom:10px">Topic: ${q.topic}</p>
+    <p>${q.text}</p>
+    <span class="marks">[${q.marks} marks]</span>
+    <p style="margin-top:14px;font-size:0.8rem;color:var(--text-muted)">
+      ℹ️ For the actual question, download the paper using the link on the paper card, or visit 
+      <a href="https://www.physicsandmathstutor.com/maths-revision/a-level-edexcel/" target="_blank" style="color:var(--accent2)">PhysicsAndMathsTutor</a> / 
+      <a href="https://qualifications.pearson.com/en/qualifications/edexcel-a-levels/mathematics-2017.html" target="_blank" style="color:var(--accent2)">Edexcel</a>.
+    </p>
+  `;
+  renderQHistory(q.id, 'pp-q-history');
+}
+
+const ppTimer = makeTimer(document.getElementById('pp-timer'));
+let ppTimerMode = 'up';
+
+document.getElementById('pp-mode-up')?.addEventListener('click', () => {
+  ppTimerMode = 'up'; ppTimer.setMode('up');
+  document.getElementById('pp-mode-up').classList.add('tmode-active');
+  document.getElementById('pp-mode-down').classList.remove('tmode-active');
+});
+document.getElementById('pp-mode-down')?.addEventListener('click', () => {
+  ppTimerMode = 'down';
+  const mins = parseInt(document.getElementById('pp-countdown-mins').value) || 8;
+  ppTimer.setMode('down', mins);
+  document.getElementById('pp-mode-down').classList.add('tmode-active');
+  document.getElementById('pp-mode-up').classList.remove('tmode-active');
+});
+
+document.getElementById('back-to-papers').addEventListener('click', () => {
+  ppTimer.reset();
+  document.getElementById('pp-question-panel').classList.add('hidden');
+  renderPastPapers();
+});
+
+document.getElementById('pp-btn-start').addEventListener('click', () => {
+  if (ppTimerMode === 'down') {
+    const mins = parseInt(document.getElementById('pp-countdown-mins').value) || 8;
+    ppTimer.setMode('down', mins);
+  }
+  ppTimer.start();
+});
+document.getElementById('pp-btn-pause').addEventListener('click', () => ppTimer.pause());
+document.getElementById('pp-btn-reset').addEventListener('click', () => ppTimer.reset());
+
+document.getElementById('pp-btn-flag')?.addEventListener('click', () => {
+  if (!currentPaper) return;
+  const q = currentPaper.questions[currentPPIdx];
+  const newVal = !getFlag(q.id);
+  setFlag(q.id, newVal);
+  document.getElementById('pp-btn-flag').classList.toggle('flagged', newVal);
+});
+
+document.getElementById('pp-btn-prev').addEventListener('click', () => {
+  if (currentPPIdx > 0) { currentPPIdx--; ppTimer.reset(); renderCurrentPPQuestion(); }
+});
+document.getElementById('pp-btn-next').addEventListener('click', () => {
+  if (currentPaper && currentPPIdx < currentPaper.questions.length - 1) { currentPPIdx++; ppTimer.reset(); renderCurrentPPQuestion(); }
+});
+
+document.getElementById('pp-btn-mark').addEventListener('click', () => {
+  const q = currentPaper.questions[currentPPIdx];
+  saveNotes(q.id, document.getElementById('pp-notes').value);
+  document.getElementById('pp-score-form').classList.remove('hidden');
+});
+
+document.getElementById('pp-btn-save').addEventListener('click', () => {
+  const q = currentPaper.questions[currentPPIdx];
+  const got = parseInt(document.getElementById('pp-score-got').value);
+  const max = parseInt(document.getElementById('pp-score-max').value) || q.marks;
+  const pct = max > 0 ? Math.round((got / max) * 100) : undefined;
+  const notes = document.getElementById('pp-notes').value;
+  saveNotes(q.id, notes);
+  saveHistory(q.id, { ts: Date.now(), secs: ppTimer.value(), pct, got, max, notes });
+  ppTimer.reset();
+  document.getElementById('pp-score-form').classList.add('hidden');
+  renderCurrentPPQuestion();
+  renderPastPapers();
+});
+
+document.getElementById('pp-notes').addEventListener('blur', () => {
+  if (currentPaper) saveNotes(currentPaper.questions[currentPPIdx].id, document.getElementById('pp-notes').value);
+});
+
+// ── MADASMATHS — TOPIC BROWSER ────────────────────────────────
+// Renders topic cards with expandable direct PDF links.
+// No tracking needed — just one-click to open papers.
+
+const MM_CAT_COLOR = {
+  'Pure': 'var(--y1p)',
+  'Statistics': 'var(--y1s)',
+  'Mechanics': 'var(--accent2)',
+  'Practice Papers': 'var(--y2p)',
+};
+
+function renderMadAsMaths() {
+  const catF    = document.getElementById('mm-cat-filter')?.value || '';
+  const searchF = (document.getElementById('mm-search')?.value || '').toLowerCase();
+
+  const filtered = MADASMATHS_TOPICS.filter(t =>
+    (!catF    || t.category === catF) &&
+    (!searchF || t.title.toLowerCase().includes(searchF) || t.category.toLowerCase().includes(searchF))
+  );
+
+  const grid = document.getElementById('mm-topic-grid');
+  if (!filtered.length) { grid.innerHTML = '<div class="empty-state">No topics match.</div>'; return; }
+
+  // Group by category
+  const order = ['Pure', 'Statistics', 'Mechanics', 'Practice Papers'];
+  const groups = {};
+  filtered.forEach(t => (groups[t.category] = groups[t.category] || []).push(t));
+
+  let html = '';
+  order.forEach(cat => {
+    if (!groups[cat]) return;
+    const col = MM_CAT_COLOR[cat] || 'var(--accent)';
+    html += `<div class="topic-group-title" style="color:${col}">${cat}</div>`;
+    groups[cat].forEach(t => {
+      const isPaperSeries = t.pdfs.length > 4; // paper series have 21-26 entries
+      html += `<div class="mm-topic-card" data-id="${t.id}" style="--bc:${col}">
+        <div class="mm-card-header">
+          <span class="mm-card-title">${t.title}</span>
+          <span class="mm-card-count">${t.pdfs.length} PDF${t.pdfs.length !== 1 ? 's' : ''}</span>
+          <span class="mm-card-chevron">▸</span>
+        </div>
+        <div class="mm-card-body hidden">
+          ${t.pageUrl ? `<a href="${t.pageUrl}" target="_blank" class="mm-page-link">🌐 Browse on MadAsMaths ↗</a>` : ''}
+          ${isPaperSeries
+            ? `<div class="mm-paper-grid">${t.pdfs.map(p => `
+                <span class="mm-paper-pair">
+                  <a href="${p.url}" target="_blank" class="mm-pdf-btn">📄 ${p.label}</a>
+                  ${p.sol ? `<a href="${p.sol}" target="_blank" class="mm-pdf-btn mm-sol-btn">✓ Solutions</a>` : ''}
+                </span>`).join('')}</div>`
+            : `<div class="mm-pdf-list">${t.pdfs.map(p => `
+                <a href="${p.url}" target="_blank" class="mm-pdf-row">
+                  <span class="mm-pdf-icon">📄</span>
+                  <span class="mm-pdf-name">${p.label}</span>
+                  <span class="mm-pdf-arrow">↗</span>
+                </a>`).join('')}
+              ${t.papers.map(p => `
+                <a href="${p.url}" target="_blank" class="mm-pdf-row mm-paper-row">
+                  <span class="mm-pdf-icon">📝</span>
+                  <span class="mm-pdf-name">${p.label}</span>
+                  <span class="mm-pdf-arrow">↗</span>
+                </a>`).join('')}</div>`
+          }
+        </div>
+      </div>`;
+    });
+  });
+
+  grid.innerHTML = html;
+
+  // Expand/collapse on click
+  grid.querySelectorAll('.mm-topic-card').forEach(card => {
+    card.querySelector('.mm-card-header').addEventListener('click', () => {
+      const body = card.querySelector('.mm-card-body');
+      const chevron = card.querySelector('.mm-card-chevron');
+      const open = !body.classList.contains('hidden');
+      body.classList.toggle('hidden', open);
+      chevron.textContent = open ? '▸' : '▾';
+      card.classList.toggle('mm-card-open', !open);
+    });
+  });
+}
+
+document.getElementById('mm-cat-filter')?.addEventListener('change', renderMadAsMaths);
+document.getElementById('mm-search')?.addEventListener('input', renderMadAsMaths);
+
+// ── PROGRESS VIEW ─────────────────────────────────────────────
+function renderProgress() {
+  const content = document.getElementById('progress-content');
+  const books = [
+    { key: 'y1p', label: 'Year 1 Pure', color: 'var(--y1p)' },
+    { key: 'y1s', label: 'Year 1 Statistics & Mechanics', color: 'var(--y1s)' },
+    { key: 'y2p', label: 'Year 2 Pure', color: 'var(--y2p)' },
+    { key: 'y2s', label: 'Year 2 Statistics & Mechanics', color: 'var(--y2s)' },
+  ];
+
+  let html = '';
+  books.forEach(b => {
+    const topics = TOPICS.filter(t => t.book === b.key);
+    html += `<div class="progress-section">
+      <div class="progress-section-title" style="color:${b.color}">${b.label}</div>`;
+    topics.forEach(t => {
+      const sc = t.questions.map(q => avgScore(q.id)).filter(s => s !== null);
+      const avg = sc.length ? Math.round(sc.reduce((a, x) => a + x, 0) / sc.length) : null;
+      const done = t.questions.filter(q => getHistory(q.id).length > 0).length;
+      const fillColor = avg === null ? 'var(--border)' : avg >= 70 ? 'var(--accent4)' : avg >= 40 ? b.color : 'var(--accent3)';
+      html += `<div class="progress-bar-row">
+        <span class="pbr-label" title="${t.title}">${t.title}</span>
+        <div class="pbr-bar"><div class="pbr-fill" style="width:${avg || 0}%;background:${fillColor}"></div></div>
+        <span class="pbr-val">${avg !== null ? avg + '%' : done + '/' + t.questions.length}</span>
+      </div>`;
+    });
+    html += '</div>';
+  });
+
+  // Past paper progress
+  html += `<div class="progress-section">
+    <div class="progress-section-title" style="color:var(--accent2)">Past Papers</div>`;
+  PAST_PAPERS.forEach(p => {
+    const done = p.questions.filter(q => getHistory(q.id).length > 0).length;
+    const pct = Math.round((done / p.questions.length) * 100);
+    html += `<div class="progress-bar-row">
+      <span class="pbr-label" title="${p.title}">${p.title}</span>
+      <div class="pbr-bar"><div class="pbr-fill" style="width:${pct}%;background:var(--accent2)"></div></div>
+      <span class="pbr-val">${done}/${p.questions.length}</span>
+    </div>`;
+  });
+  html += '</div>';
+
+  content.innerHTML = html;
+}
+
+// ── EXPORT ────────────────────────────────────────────────────
+document.getElementById('btn-export').addEventListener('click', () => {
+  const allH = getAllHistory();
+  const csv = ['Question ID,Date,Score %,Time (s),Notes']
+    .concat(allH.map(e => `"${e.qId}","${new Date(e.ts).toISOString()}","${e.pct ?? ''}","${e.secs ?? ''}","${(e.notes || '').replace(/"/g, '""')}"` ))
+    .join('\n');
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'maths-progress.csv'; a.click();
+  URL.revokeObjectURL(url);
+});
+
+// ── FLAGGED VIEW ───────────────────────────────────────────────
+function renderFlaggedView() {
+  const flags = getAllFlags();
+  const list = document.getElementById('flagged-list');
+  if (!list) return;
+
+  if (!flags.length) {
+    list.innerHTML = '<div class="empty-state" style="margin-top:40px">No flagged questions — use the ⚑ button while practising to flag questions for review.</div>';
+    return;
+  }
+
+  // Group flagged questions by topic/paper
+  const groups = { topic: [], paper: [] };
+  flags.forEach(qId => {
+    for (const t of TOPICS) {
+      const qi = t.questions?.findIndex(q => q.id === qId);
+      if (qi >= 0) { groups.topic.push({ qId, topic: t, qIdx: qi, q: t.questions[qi] }); return; }
+    }
+    for (const p of PAST_PAPERS) {
+      const qi = p.questions?.findIndex(q => q.id === qId);
+      if (qi >= 0) { groups.paper.push({ qId, paper: p, qIdx: qi, q: p.questions[qi] }); return; }
+    }
+  });
+
+  let html = '';
+
+  if (groups.topic.length) {
+    html += '<div class="progress-section-title" style="color:var(--accent);margin-bottom:12px">Topic Practice</div>';
+    html += '<div class="flagged-grid">';
+    groups.topic.forEach(({ qId, topic, qIdx, q }) => {
+      const avg = avgScore(qId);
+      const h = getHistory(qId);
+      const lastTs = h[0]?.ts;
+      const lastStr = lastTs ? new Date(lastTs).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'2-digit'}) : 'Never';
+      html += `<div class="flagged-card" data-topicid="${topic.id}" data-qidx="${qIdx}">
+        <div class="flagged-card-top">
+          <span class="flagged-card-title">${topic.title}</span>
+          <button class="flag-remove-btn" data-qid="${qId}" title="Remove flag">✕</button>
+        </div>
+        <div class="flagged-card-q">Q${qIdx+1}: ${q.text.replace(/<[^>]+>/g,'').substring(0,100)}…</div>
+        <div class="flagged-card-meta">
+          <span>[${q.marks} marks]</span>
+          <span>Last: ${lastStr}</span>
+          ${avg !== null ? `<span class="${avg>=70?'good':avg>=40?'mid':'bad'}">${avg}% avg</span>` : '<span style="color:var(--text-muted)">Unscored</span>'}
+        </div>
+      </div>`;
+    });
+    html += '</div>';
+  }
+
+  if (groups.paper.length) {
+    html += '<div class="progress-section-title" style="color:var(--accent2);margin:24px 0 12px">Past Papers</div>';
+    html += '<div class="flagged-grid">';
+    groups.paper.forEach(({ qId, paper, qIdx, q }) => {
+      const avg = avgScore(qId);
+      const h = getHistory(qId);
+      const lastStr = h[0]?.ts ? new Date(h[0].ts).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'2-digit'}) : 'Never';
+      html += `<div class="flagged-card flagged-card-pp" data-paperid="${paper.id}" data-qidx="${qIdx}">
+        <div class="flagged-card-top">
+          <span class="flagged-card-title">${paper.title} — Q${q.num}</span>
+          <button class="flag-remove-btn" data-qid="${qId}" title="Remove flag">✕</button>
+        </div>
+        <div class="flagged-card-q">${q.topic} [${q.marks} marks]</div>
+        <div class="flagged-card-meta">
+          <span>Last: ${lastStr}</span>
+          ${avg !== null ? `<span class="${avg>=70?'good':avg>=40?'mid':'bad'}">${avg}% avg</span>` : '<span style="color:var(--text-muted)">Unscored</span>'}
+        </div>
+      </div>`;
+    });
+    html += '</div>';
+  }
+
+  list.innerHTML = html;
+
+  // Click card → jump to question
+  list.querySelectorAll('.flagged-card[data-topicid]').forEach(card => {
+    card.addEventListener('click', e => {
+      if (e.target.classList.contains('flag-remove-btn')) return;
+      switchView('practice');
+      setTimeout(() => {
+        openTopicPanel(card.dataset.topicid);
+        currentQIdx = parseInt(card.dataset.qidx) || 0;
+        renderCurrentQuestion();
+      }, 60);
+    });
+  });
+
+  list.querySelectorAll('.flagged-card[data-paperid]').forEach(card => {
+    card.addEventListener('click', e => {
+      if (e.target.classList.contains('flag-remove-btn')) return;
+      switchView('pastpapers');
+      setTimeout(() => {
+        openPPPanel(card.dataset.paperid);
+        currentPPIdx = parseInt(card.dataset.qidx) || 0;
+        renderCurrentPPQuestion();
+      }, 60);
+    });
+  });
+
+  // Remove flag buttons
+  list.querySelectorAll('.flag-remove-btn').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      setFlag(btn.dataset.qid, false);
+      renderFlaggedView();
+      renderTopicsGrid();
+    });
+  });
+}
+
+document.getElementById('btn-clear-flags')?.addEventListener('click', () => {
+  if (!confirm('Clear all flagged questions?')) return;
+  getAllFlags().forEach(qId => setFlag(qId, false));
+  renderFlaggedView();
+  renderTopicsGrid();
+});
+
+// ── INIT ──────────────────────────────────────────────────────
+switchView('home');
