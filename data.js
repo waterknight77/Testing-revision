@@ -1286,7 +1286,7 @@ const TOPICS = [
 
 const PAST_PAPERS = [
   {
-    id:'pp-2024-p1', pdfUrl:'https://pmt.physicsandmathstutor.com/download/Maths/A-level/PDF-Questions/Edexcel/9MA0-01-2024.pdf', solUrl:'https://pmt.physicsandmathstutor.com/download/Maths/A-level/PDF-Mark-Schemes/Edexcel/9MA0-01-2024-MS.pdf', year:2024, paper:'Paper 1 (Pure)', title:'Edexcel 2024 Paper 1',
+    id:'pp-2024-p1', pdfUrl:'https://pmt.physicsandmathstutor.com/download/Maths/A-level/Papers/Edexcel/Paper-1/MA/June%202024%20MA.pdf', solUrl:'https://pmt.physicsandmathstutor.com/download/Maths/A-level/Papers/Edexcel/Paper-1/MS/June%202024%20MS.pdf', year:2024, paper:'Paper 1 (Pure)', title:'Edexcel 2024 Paper 1',
     link:'https://www.physicsandmathstutor.com/maths-revision/a-level-edexcel/',
     questions:[
       { id:'pp-2024-p1-q1', num:1, page:3, marks:4, topic:'Proof', text:'Q1 — Proof / algebraic manipulation (4 marks). Download paper from link above.' },
@@ -1301,7 +1301,7 @@ const PAST_PAPERS = [
     ]
   },
   {
-    id:'pp-2024-p2', pdfUrl:'https://pmt.physicsandmathstutor.com/download/Maths/A-level/PDF-Questions/Edexcel/9MA0-02-2024.pdf', solUrl:'https://pmt.physicsandmathstutor.com/download/Maths/A-level/PDF-Mark-Schemes/Edexcel/9MA0-02-2024-MS.pdf', year:2024, paper:'Paper 2 (Pure)', title:'Edexcel 2024 Paper 2',
+    id:'pp-2024-p2', pdfUrl:'https://pmt.physicsandmathstutor.com/download/Maths/A-level/Papers/Edexcel/Paper-2/MA/June%202024%20MA.pdf', solUrl:'https://pmt.physicsandmathstutor.com/download/Maths/A-level/Papers/Edexcel/Paper-2/MS/June%202024%20MS.pdf', year:2024, paper:'Paper 2 (Pure)', title:'Edexcel 2024 Paper 2',
     link:'https://www.physicsandmathstutor.com/maths-revision/a-level-edexcel/',
     questions:[
       { id:'pp-2024-p2-q1', num:1, page:3, marks:5, topic:'Functions', text:'Q1 — Functions and mappings (5 marks).' },
@@ -1314,7 +1314,7 @@ const PAST_PAPERS = [
     ]
   },
   {
-    id:'pp-2024-p3', pdfUrl:'https://pmt.physicsandmathstutor.com/download/Maths/A-level/PDF-Questions/Edexcel/9MA0-03-2024.pdf', solUrl:'https://pmt.physicsandmathstutor.com/download/Maths/A-level/PDF-Mark-Schemes/Edexcel/9MA0-03-2024-MS.pdf', year:2024, paper:'Paper 3 (Stats & Mechanics)', title:'Edexcel 2024 Paper 3',
+    id:'pp-2024-p3', pdfUrl:'https://pmt.physicsandmathstutor.com/download/Maths/A-level/Papers/Edexcel/Paper-3/MA/June%202024%20MA.pdf', solUrl:'https://pmt.physicsandmathstutor.com/download/Maths/A-level/Papers/Edexcel/Paper-3/MS/June%202024%20MS.pdf', year:2024, paper:'Paper 3 (Stats & Mechanics)', title:'Edexcel 2024 Paper 3',
     link:'https://www.physicsandmathstutor.com/maths-revision/a-level-edexcel/',
     questions:[
       { id:'pp-2024-p3-q1', num:1, page:3, marks:5, topic:'Regression & Correlation', text:'Q1 — Regression and correlation (5 marks).' },
@@ -1327,7 +1327,7 @@ const PAST_PAPERS = [
     ]
   },
   {
-    id:'pp-2023-p1', pdfUrl:'https://pmt.physicsandmathstutor.com/download/Maths/A-level/PDF-Questions/Edexcel/9MA0-01-2023.pdf', solUrl:'https://pmt.physicsandmathstutor.com/download/Maths/A-level/PDF-Mark-Schemes/Edexcel/9MA0-01-2023-MS.pdf', year:2023, paper:'Paper 1 (Pure)', title:'Edexcel 2023 Paper 1',
+    id:'pp-2023-p1', pdfUrl:'https://pmt.physicsandmathstutor.com/download/Maths/A-level/Papers/Edexcel/Paper-1/MA/June%202023%20MA.pdf', solUrl:'https://pmt.physicsandmathstutor.com/download/Maths/A-level/Papers/Edexcel/Paper-1/MS/June%202023%20MS.pdf', year:2023, paper:'Paper 1 (Pure)', title:'Edexcel 2023 Paper 1',
     link:'https://www.physicsandmathstutor.com/maths-revision/a-level-edexcel/',
     questions:[
       { id:'pp-2023-p1-q1', num:1, page:3, marks:4, topic:'Indices & Surds', text:'Q1 — Surds and rationalising (4 marks).' },
@@ -1341,7 +1341,7 @@ const PAST_PAPERS = [
     ]
   },
   {
-    id:'pp-2023-p2', pdfUrl:'https://pmt.physicsandmathstutor.com/download/Maths/A-level/PDF-Questions/Edexcel/9MA0-02-2023.pdf', solUrl:'https://pmt.physicsandmathstutor.com/download/Maths/A-level/PDF-Mark-Schemes/Edexcel/9MA0-02-2023-MS.pdf', year:2023, paper:'Paper 2 (Pure)', title:'Edexcel 2023 Paper 2',
+    id:'pp-2023-p2', pdfUrl:'https://pmt.physicsandmathstutor.com/download/Maths/A-level/Papers/Edexcel/Paper-2/MA/June%202023%20MA.pdf', solUrl:'https://pmt.physicsandmathstutor.com/download/Maths/A-level/Papers/Edexcel/Paper-2/MS/June%202023%20MS.pdf', year:2023, paper:'Paper 2 (Pure)', title:'Edexcel 2023 Paper 2',
     link:'https://www.physicsandmathstutor.com/maths-revision/a-level-edexcel/',
     questions:[
       { id:'pp-2023-p2-q1', num:1, page:3, marks:4, topic:'Binomial Expansion', text:'Q1 — Binomial series (4 marks).' },
@@ -1354,7 +1354,7 @@ const PAST_PAPERS = [
     ]
   },
   {
-    id:'pp-2023-p3', pdfUrl:'https://pmt.physicsandmathstutor.com/download/Maths/A-level/PDF-Questions/Edexcel/9MA0-03-2023.pdf', solUrl:'https://pmt.physicsandmathstutor.com/download/Maths/A-level/PDF-Mark-Schemes/Edexcel/9MA0-03-2023-MS.pdf', year:2023, paper:'Paper 3 (Stats & Mechanics)', title:'Edexcel 2023 Paper 3',
+    id:'pp-2023-p3', pdfUrl:'https://pmt.physicsandmathstutor.com/download/Maths/A-level/Papers/Edexcel/Paper-3/MA/June%202023%20MA.pdf', solUrl:'https://pmt.physicsandmathstutor.com/download/Maths/A-level/Papers/Edexcel/Paper-3/MS/June%202023%20MS.pdf', year:2023, paper:'Paper 3 (Stats & Mechanics)', title:'Edexcel 2023 Paper 3',
     link:'https://www.physicsandmathstutor.com/maths-revision/a-level-edexcel/',
     questions:[
       { id:'pp-2023-p3-q1', num:1, page:3, marks:5, topic:'Statistics', text:'Q1 — Statistical diagrams / large data set (5 marks).' },
@@ -1366,7 +1366,7 @@ const PAST_PAPERS = [
     ]
   },
   {
-    id:'pp-2022-p1', pdfUrl:'https://pmt.physicsandmathstutor.com/download/Maths/A-level/PDF-Questions/Edexcel/9MA0-01-2022.pdf', solUrl:'https://pmt.physicsandmathstutor.com/download/Maths/A-level/PDF-Mark-Schemes/Edexcel/9MA0-01-2022-MS.pdf', year:2022, paper:'Paper 1 (Pure)', title:'Edexcel 2022 Paper 1',
+    id:'pp-2022-p1', pdfUrl:'https://pmt.physicsandmathstutor.com/download/Maths/A-level/Papers/Edexcel/Paper-1/MA/June%202022%20MA.pdf', solUrl:'https://pmt.physicsandmathstutor.com/download/Maths/A-level/Papers/Edexcel/Paper-1/MS/June%202022%20MS.pdf', year:2022, paper:'Paper 1 (Pure)', title:'Edexcel 2022 Paper 1',
     link:'https://www.physicsandmathstutor.com/maths-revision/a-level-edexcel/',
     questions:[
       { id:'pp-2022-p1-q1', num:1, page:3, marks:3, topic:'Logarithms', text:'Q1 — Laws of logarithms (3 marks).' },
@@ -1380,7 +1380,7 @@ const PAST_PAPERS = [
     ]
   },
   {
-    id:'pp-2022-p2', pdfUrl:'https://pmt.physicsandmathstutor.com/download/Maths/A-level/PDF-Questions/Edexcel/9MA0-02-2022.pdf', solUrl:'https://pmt.physicsandmathstutor.com/download/Maths/A-level/PDF-Mark-Schemes/Edexcel/9MA0-02-2022-MS.pdf', year:2022, paper:'Paper 2 (Pure)', title:'Edexcel 2022 Paper 2',
+    id:'pp-2022-p2', pdfUrl:'https://pmt.physicsandmathstutor.com/download/Maths/A-level/Papers/Edexcel/Paper-2/MA/June%202022%20MA.pdf', solUrl:'https://pmt.physicsandmathstutor.com/download/Maths/A-level/Papers/Edexcel/Paper-2/MS/June%202022%20MS.pdf', year:2022, paper:'Paper 2 (Pure)', title:'Edexcel 2022 Paper 2',
     link:'https://www.physicsandmathstutor.com/maths-revision/a-level-edexcel/',
     questions:[
       { id:'pp-2022-p2-q1', num:1, page:3, marks:4, topic:'Functions', text:'Q1 — Functions, domain and range (4 marks).' },
@@ -1394,7 +1394,7 @@ const PAST_PAPERS = [
     ]
   },
   {
-    id:'pp-2022-p3', pdfUrl:'https://pmt.physicsandmathstutor.com/download/Maths/A-level/PDF-Questions/Edexcel/9MA0-03-2022.pdf', solUrl:'https://pmt.physicsandmathstutor.com/download/Maths/A-level/PDF-Mark-Schemes/Edexcel/9MA0-03-2022-MS.pdf', year:2022, paper:'Paper 3 (Stats & Mechanics)', title:'Edexcel 2022 Paper 3',
+    id:'pp-2022-p3', pdfUrl:'https://pmt.physicsandmathstutor.com/download/Maths/A-level/Papers/Edexcel/Paper-3/MA/June%202022%20MA.pdf', solUrl:'https://pmt.physicsandmathstutor.com/download/Maths/A-level/Papers/Edexcel/Paper-3/MS/June%202022%20MS.pdf', year:2022, paper:'Paper 3 (Stats & Mechanics)', title:'Edexcel 2022 Paper 3',
     link:'https://www.physicsandmathstutor.com/maths-revision/a-level-edexcel/',
     questions:[
       { id:'pp-2022-p3-q1', num:1, page:3, marks:4, topic:'Regression & Correlation', text:'Q1 — Regression line and interpretation (4 marks).' },
@@ -1408,7 +1408,7 @@ const PAST_PAPERS = [
     ]
   },
   {
-    id:'pp-2019-p1', pdfUrl:'https://pmt.physicsandmathstutor.com/download/Maths/A-level/PDF-Questions/Edexcel/9MA0-01-2019.pdf', solUrl:'https://pmt.physicsandmathstutor.com/download/Maths/A-level/PDF-Mark-Schemes/Edexcel/9MA0-01-2019-MS.pdf', year:2019, paper:'Paper 1 (Pure)', title:'Edexcel 2019 Paper 1',
+    id:'pp-2019-p1', pdfUrl:'https://pmt.physicsandmathstutor.com/download/Maths/A-level/Papers/Edexcel/Paper-1/MA/June%202019%20MA.pdf', solUrl:'https://pmt.physicsandmathstutor.com/download/Maths/A-level/Papers/Edexcel/Paper-1/MS/June%202019%20MS.pdf', year:2019, paper:'Paper 1 (Pure)', title:'Edexcel 2019 Paper 1',
     link:'https://www.physicsandmathstutor.com/maths-revision/a-level-edexcel/',
     questions:[
       { id:'pp-2019-p1-q1', num:1, page:3, marks:3, topic:'Algebra', text:'Q1 — Binomial expansion and approximation (3 marks).' },
@@ -1422,7 +1422,7 @@ const PAST_PAPERS = [
     ]
   },
   {
-    id:'pp-2019-p2', pdfUrl:'https://pmt.physicsandmathstutor.com/download/Maths/A-level/PDF-Questions/Edexcel/9MA0-02-2019.pdf', solUrl:'https://pmt.physicsandmathstutor.com/download/Maths/A-level/PDF-Mark-Schemes/Edexcel/9MA0-02-2019-MS.pdf', year:2019, paper:'Paper 2 (Pure)', title:'Edexcel 2019 Paper 2',
+    id:'pp-2019-p2', pdfUrl:'https://pmt.physicsandmathstutor.com/download/Maths/A-level/Papers/Edexcel/Paper-2/MA/June%202019%20MA.pdf', solUrl:'https://pmt.physicsandmathstutor.com/download/Maths/A-level/Papers/Edexcel/Paper-2/MS/June%202019%20MS.pdf', year:2019, paper:'Paper 2 (Pure)', title:'Edexcel 2019 Paper 2',
     link:'https://www.physicsandmathstutor.com/maths-revision/a-level-edexcel/',
     questions:[
       { id:'pp-2019-p2-q1', num:1, page:3, marks:4, topic:'Radians', text:'Q1 — Radian measure: arc, sector, segment (4 marks).' },
@@ -1436,7 +1436,7 @@ const PAST_PAPERS = [
     ]
   },
   {
-    id:'pp-2019-p3', pdfUrl:'https://pmt.physicsandmathstutor.com/download/Maths/A-level/PDF-Questions/Edexcel/9MA0-03-2019.pdf', solUrl:'https://pmt.physicsandmathstutor.com/download/Maths/A-level/PDF-Mark-Schemes/Edexcel/9MA0-03-2019-MS.pdf', year:2019, paper:'Paper 3 (Stats & Mechanics)', title:'Edexcel 2019 Paper 3',
+    id:'pp-2019-p3', pdfUrl:'https://pmt.physicsandmathstutor.com/download/Maths/A-level/Papers/Edexcel/Paper-3/MA/June%202019%20MA.pdf', solUrl:'https://pmt.physicsandmathstutor.com/download/Maths/A-level/Papers/Edexcel/Paper-3/MS/June%202019%20MS.pdf', year:2019, paper:'Paper 3 (Stats & Mechanics)', title:'Edexcel 2019 Paper 3',
     link:'https://www.physicsandmathstutor.com/maths-revision/a-level-edexcel/',
     questions:[
       { id:'pp-2019-p3-q1', num:1, page:3, marks:4, topic:'Statistics', text:'Q1 — Interpreting statistical diagrams (4 marks).' },
@@ -1449,7 +1449,7 @@ const PAST_PAPERS = [
     ]
   },
   {
-    id:'pp-2018-p1', pdfUrl:'https://pmt.physicsandmathstutor.com/download/Maths/A-level/PDF-Questions/Edexcel/9MA0-01-2018.pdf', solUrl:'https://pmt.physicsandmathstutor.com/download/Maths/A-level/PDF-Mark-Schemes/Edexcel/9MA0-01-2018-MS.pdf', year:2018, paper:'Paper 1 (Pure)', title:'Edexcel 2018 Paper 1',
+    id:'pp-2018-p1', pdfUrl:'https://pmt.physicsandmathstutor.com/download/Maths/A-level/Papers/Edexcel/Paper-1/MA/June%202018%20MA.pdf', solUrl:'https://pmt.physicsandmathstutor.com/download/Maths/A-level/Papers/Edexcel/Paper-1/MS/June%202018%20MS.pdf', year:2018, paper:'Paper 1 (Pure)', title:'Edexcel 2018 Paper 1',
     link:'https://www.physicsandmathstutor.com/maths-revision/a-level-edexcel/',
     questions:[
       { id:'pp-2018-p1-q1', num:1, page:3, marks:4, topic:'Algebra', text:'Q1 — Algebraic expressions and proof (4 marks).' },
@@ -1463,7 +1463,7 @@ const PAST_PAPERS = [
     ]
   },
   {
-    id:'pp-2018-p2', pdfUrl:'https://pmt.physicsandmathstutor.com/download/Maths/A-level/PDF-Questions/Edexcel/9MA0-02-2018.pdf', solUrl:'https://pmt.physicsandmathstutor.com/download/Maths/A-level/PDF-Mark-Schemes/Edexcel/9MA0-02-2018-MS.pdf', year:2018, paper:'Paper 2 (Pure)', title:'Edexcel 2018 Paper 2',
+    id:'pp-2018-p2', pdfUrl:'https://pmt.physicsandmathstutor.com/download/Maths/A-level/Papers/Edexcel/Paper-2/MA/June%202018%20MA.pdf', solUrl:'https://pmt.physicsandmathstutor.com/download/Maths/A-level/Papers/Edexcel/Paper-2/MS/June%202018%20MS.pdf', year:2018, paper:'Paper 2 (Pure)', title:'Edexcel 2018 Paper 2',
     link:'https://www.physicsandmathstutor.com/maths-revision/a-level-edexcel/',
     questions:[
       { id:'pp-2018-p2-q1', num:1, page:3, marks:3, topic:'Proof', text:'Q1 — Proof by contradiction (3 marks).' },
@@ -1477,7 +1477,7 @@ const PAST_PAPERS = [
     ]
   },
   {
-    id:'pp-2018-p3', pdfUrl:'https://pmt.physicsandmathstutor.com/download/Maths/A-level/PDF-Questions/Edexcel/9MA0-03-2018.pdf', solUrl:'https://pmt.physicsandmathstutor.com/download/Maths/A-level/PDF-Mark-Schemes/Edexcel/9MA0-03-2018-MS.pdf', year:2018, paper:'Paper 3 (Stats & Mechanics)', title:'Edexcel 2018 Paper 3',
+    id:'pp-2018-p3', pdfUrl:'https://pmt.physicsandmathstutor.com/download/Maths/A-level/Papers/Edexcel/Paper-3/MA/June%202018%20MA.pdf', solUrl:'https://pmt.physicsandmathstutor.com/download/Maths/A-level/Papers/Edexcel/Paper-3/MS/June%202018%20MS.pdf', year:2018, paper:'Paper 3 (Stats & Mechanics)', title:'Edexcel 2018 Paper 3',
     link:'https://www.physicsandmathstutor.com/maths-revision/a-level-edexcel/',
     questions:[
       { id:'pp-2018-p3-q1', num:1, page:3, marks:4, topic:'Data Collection', text:'Q1 — Sampling methods (4 marks).' },
@@ -1491,7 +1491,7 @@ const PAST_PAPERS = [
     ]
   },
   {
-    id:'pp-2017-p1', pdfUrl:'https://pmt.physicsandmathstutor.com/download/Maths/A-level/PDF-Questions/Edexcel/9MA0-01-2017-SAM.pdf', solUrl:'https://pmt.physicsandmathstutor.com/download/Maths/A-level/PDF-Mark-Schemes/Edexcel/9MA0-01-2017-SAM-MS.pdf', year:2017, paper:'Paper 1 (Pure)', title:'Edexcel 2017 Sample Paper 1',
+    id:'pp-2017-p1', pdfUrl:'https://pmt.physicsandmathstutor.com/download/Maths/A-level/Papers/Edexcel/Paper-1/MA/Sample%20MA.pdf', solUrl:'https://pmt.physicsandmathstutor.com/download/Maths/A-level/Papers/Edexcel/Paper-1/MS/Specimen%20MS.pdf', year:2017, paper:'Paper 1 (Pure)', title:'Edexcel 2017 Sample Paper 1',
     link:'https://www.physicsandmathstutor.com/maths-revision/a-level-edexcel/',
     questions:[
       { id:'pp-2017-p1-q1', num:1, page:3, marks:3, topic:'Algebra', text:'Q1 — Algebraic fractions (3 marks).' },
@@ -1505,7 +1505,7 @@ const PAST_PAPERS = [
     ]
   },
   {
-    id:'pp-2017-p2', pdfUrl:'https://pmt.physicsandmathstutor.com/download/Maths/A-level/PDF-Questions/Edexcel/9MA0-02-2017-SAM.pdf', solUrl:'https://pmt.physicsandmathstutor.com/download/Maths/A-level/PDF-Mark-Schemes/Edexcel/9MA0-02-2017-SAM-MS.pdf', year:2017, paper:'Paper 2 (Pure)', title:'Edexcel 2017 Sample Paper 2',
+    id:'pp-2017-p2', pdfUrl:'https://pmt.physicsandmathstutor.com/download/Maths/A-level/Papers/Edexcel/Paper-2/MA/Sample%20MA.pdf', solUrl:'https://pmt.physicsandmathstutor.com/download/Maths/A-level/Papers/Edexcel/Paper-2/MS/Specimen%20MS.pdf', year:2017, paper:'Paper 2 (Pure)', title:'Edexcel 2017 Sample Paper 2',
     link:'https://www.physicsandmathstutor.com/maths-revision/a-level-edexcel/',
     questions:[
       { id:'pp-2017-p2-q1', num:1, page:3, marks:4, topic:'Proof', text:'Q1 — Proof by contradiction (4 marks).' },
@@ -1519,7 +1519,7 @@ const PAST_PAPERS = [
     ]
   },
   {
-    id:'pp-2017-p3', pdfUrl:'https://pmt.physicsandmathstutor.com/download/Maths/A-level/PDF-Questions/Edexcel/9MA0-03-2017-SAM.pdf', solUrl:'https://pmt.physicsandmathstutor.com/download/Maths/A-level/PDF-Mark-Schemes/Edexcel/9MA0-03-2017-SAM-MS.pdf', year:2017, paper:'Paper 3 (Stats & Mechanics)', title:'Edexcel 2017 Sample Paper 3',
+    id:'pp-2017-p3', pdfUrl:'https://pmt.physicsandmathstutor.com/download/Maths/A-level/Papers/Edexcel/Paper-3/MA/Sample%20MA.pdf', solUrl:'https://pmt.physicsandmathstutor.com/download/Maths/A-level/Papers/Edexcel/Paper-3/MS/Specimen%20MS.pdf', year:2017, paper:'Paper 3 (Stats & Mechanics)', title:'Edexcel 2017 Sample Paper 3',
     link:'https://www.physicsandmathstutor.com/maths-revision/a-level-edexcel/',
     questions:[
       { id:'pp-2017-p3-q1', num:1, page:3, marks:4, topic:'Data Collection', text:'Q1 — Populations, sampling and the large data set (4 marks).' },

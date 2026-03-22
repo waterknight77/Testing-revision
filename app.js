@@ -502,6 +502,10 @@ document.getElementById('btn-mark-done').addEventListener('click', () => {
   maxEl.value = q.marks;
   maxEl.readOnly = true;
   maxEl.style.opacity = '0.6';
+  document.getElementById('q-marks-display').textContent = q.marks;
+  // Reset math input
+  document.getElementById('q-math-input').value = '';
+  document.getElementById('q-math-preview').classList.add('hidden');
   document.getElementById('score-got').focus();
   // Show answer
   const answerBox = document.getElementById('q-answer-box');
@@ -510,10 +514,9 @@ document.getElementById('btn-mark-done').addEventListener('click', () => {
       const answerText = document.getElementById('q-answer-text');
       answerText.innerHTML = q.answer;
       answerBox.classList.remove('hidden');
-      // Clear MathJax's cache for this element then re-render
       if (window.MathJax) {
         MathJax.typesetClear([answerText]);
-        MathJax.typesetPromise([answerText]).catch(() => {});
+        setTimeout(() => MathJax.typesetPromise([answerText]).catch(() => {}), 50);
       }
     } else answerBox.classList.add('hidden');
   }
@@ -548,6 +551,34 @@ document.getElementById('btn-save-score').addEventListener('click', () => {
 document.getElementById('q-notes').addEventListener('blur', () => {
   if (currentTopic) saveNotes(currentTopic.questions[currentQIdx].id, document.getElementById('q-notes').value);
 });
+
+// ── MATHS INPUT RENDER ────────────────────────────────────────
+function wireMathInput(inputId, btnId, previewId) {
+  const input   = document.getElementById(inputId);
+  const btn     = document.getElementById(btnId);
+  const preview = document.getElementById(previewId);
+  if (!input || !btn || !preview) return;
+
+  function renderMath() {
+    const raw = input.value.trim();
+    if (!raw) { preview.classList.add('hidden'); return; }
+    // Wrap in \( \) if not already wrapped
+    const latex = raw.startsWith('\\(') || raw.startsWith('$$') ? raw : `\\(${raw}\\)`;
+    preview.innerHTML = latex;
+    preview.classList.remove('hidden');
+    if (window.MathJax) {
+      MathJax.typesetClear([preview]);
+      setTimeout(() => MathJax.typesetPromise([preview]).catch(() => {}), 30);
+    }
+  }
+
+  btn.addEventListener('click', renderMath);
+  // Also render on Enter key
+  input.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); renderMath(); } });
+}
+
+wireMathInput('q-math-input',  'q-math-render',  'q-math-preview');
+wireMathInput('pp-math-input', 'pp-math-render', 'pp-math-preview');
 
 // ── PAST PAPERS ───────────────────────────────────────────────
 let currentPaper = null, currentPPIdx = 0;
@@ -704,6 +735,9 @@ document.getElementById('pp-btn-mark').addEventListener('click', () => {
   maxEl.value = q.marks;
   maxEl.readOnly = true;
   maxEl.style.opacity = '0.6';
+  document.getElementById('pp-marks-display').textContent = q.marks;
+  document.getElementById('pp-math-input').value = '';
+  document.getElementById('pp-math-preview').classList.add('hidden');
   document.getElementById('pp-score-got').focus();
 });
 
@@ -1113,25 +1147,35 @@ function buildDrawingPanel(containerId) {
   // ── Resize handle (drag to change height) ──
   const handle = container.querySelector(`#draw-resize-${containerId}`);
   let resizing = false, startY = 0, startH = 0, currentH = 420;
+
   handle.addEventListener('pointerdown', e => {
     resizing = true;
     startY = e.clientY;
     startH = currentH;
-    handle.setPointerCapture(e.pointerId);
     e.preventDefault();
+    e.stopPropagation();
+    document.body.style.userSelect = 'none';
+    document.body.style.cursor = 'ns-resize';
   });
-  handle.addEventListener('pointermove', e => {
+
+  document.addEventListener('pointermove', e => {
     if (!resizing) return;
-    const newH = Math.max(200, startH + (e.clientY - startY));
+    const newH = Math.max(150, Math.min(1200, startH + (e.clientY - startY)));
     currentH = newH;
     canvas.style.height = newH + 'px';
-    // Resize canvas internal resolution preserving content
+    // Preserve drawing content while resizing
     const saved = drawCtx ? drawCtx.getImageData(0, 0, canvas.width, canvas.height) : null;
     canvas.width  = canvas.offsetWidth || 800;
     canvas.height = newH;
     if (saved && drawCtx) drawCtx.putImageData(saved, 0, 0);
   });
-  handle.addEventListener('pointerup', () => { resizing = false; });
+
+  document.addEventListener('pointerup', e => {
+    if (!resizing) return;
+    resizing = false;
+    document.body.style.userSelect = '';
+    document.body.style.cursor = '';
+  });
 
   // ── Tool buttons ──
   const penBtn    = container.querySelector(`#draw-pen-${containerId}`);

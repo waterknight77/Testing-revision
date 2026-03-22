@@ -146,11 +146,17 @@
             <div id="q-answer-text" class="answer-text"></div>
           </div>
           <div id="score-form" class="score-form hidden">
-            <label class="notes-label">Score (out of max marks):</label>
+            <label class="notes-label">Your answer (optional — renders as maths)</label>
+            <div class="math-input-row">
+              <input type="text" id="q-math-input" placeholder="e.g. x^2 + 3x - 4 or just notes…" />
+              <button class="btn btn-secondary" id="q-math-render" style="flex-shrink:0">Render</button>
+            </div>
+            <div id="q-math-preview" class="math-preview hidden"></div>
+            <label class="notes-label" style="margin-top:10px">Score (out of <span id="q-marks-display"></span> marks):</label>
             <div class="score-inputs">
               <input type="number" id="score-got" min="0" placeholder="Got" />
               <span>/ </span>
-              <input type="number" id="score-max" min="1" placeholder="Max" />
+              <input type="number" id="score-max" min="1" placeholder="Max" readonly style="opacity:0.6" />
               <button class="btn btn-primary" id="btn-save-score">Save</button>
             </div>
           </div>
@@ -218,11 +224,17 @@
             <textarea id="pp-notes" placeholder="Write working, hints, observations…"></textarea>
           </div>
           <div id="pp-score-form" class="score-form hidden">
-            <label class="notes-label">Score:</label>
+            <label class="notes-label">Your answer (optional — renders as maths)</label>
+            <div class="math-input-row">
+              <input type="text" id="pp-math-input" placeholder="e.g. x^2 + 3x - 4…" />
+              <button class="btn btn-secondary" id="pp-math-render" style="flex-shrink:0">Render</button>
+            </div>
+            <div id="pp-math-preview" class="math-preview hidden"></div>
+            <label class="notes-label" style="margin-top:10px">Score (out of <span id="pp-marks-display"></span> marks):</label>
             <div class="score-inputs">
               <input type="number" id="pp-score-got" min="0" placeholder="Got" />
               <span>/ </span>
-              <input type="number" id="pp-score-max" min="1" placeholder="Max" />
+              <input type="number" id="pp-score-max" min="1" placeholder="Max" readonly style="opacity:0.6" />
               <button class="btn btn-primary" id="pp-btn-save">Save</button>
             </div>
           </div>
