@@ -562,18 +562,20 @@ function wireMathInput(inputId, btnId, previewId) {
   function renderMath() {
     const raw = input.value.trim();
     if (!raw) { preview.classList.add('hidden'); return; }
-    // Wrap in \( \) if not already wrapped
-    const latex = raw.startsWith('\\(') || raw.startsWith('$$') ? raw : `\\(${raw}\\)`;
+    // Always wrap in display math delimiters
+    const latex = `\\[${raw}\\]`;
     preview.innerHTML = latex;
     preview.classList.remove('hidden');
     if (window.MathJax) {
       MathJax.typesetClear([preview]);
-      setTimeout(() => MathJax.typesetPromise([preview]).catch(() => {}), 30);
+      MathJax.typesetPromise([preview]).catch(e => {
+        // If typesetting fails show raw
+        preview.innerHTML = `<code>${raw}</code>`;
+      });
     }
   }
 
   btn.addEventListener('click', renderMath);
-  // Also render on Enter key
   input.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); renderMath(); } });
 }
 
@@ -1044,10 +1046,8 @@ function doUndo() {
   }
 }
 
-// Global Ctrl+Z handler
 document.addEventListener('keydown', e => {
   if ((e.ctrlKey || e.metaKey) && e.key === 'z' && drawCanvas) {
-    // Only undo canvas if focus is NOT in a text input/textarea
     if (document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
       e.preventDefault();
       doUndo();
@@ -1056,50 +1056,57 @@ document.addEventListener('keydown', e => {
 });
 
 function initCanvas(canvasEl) {
+  // Each call sets the active canvas - whichever was opened last is active
   drawCanvas = canvasEl;
   drawCtx = canvasEl.getContext('2d');
-  resizeCanvas();
+
+  // Set internal resolution to match display size
+  canvasEl.width  = canvasEl.offsetWidth  || 800;
+  canvasEl.height = canvasEl.offsetHeight || 420;
 
   canvasEl.addEventListener('pointerdown', e => {
+    // Make THIS canvas active
+    drawCanvas = canvasEl;
+    drawCtx = canvasEl.getContext('2d');
     isDrawing = true;
-    const {x, y} = canvasPos(e);
-    lastX = x; lastY = y;
+    const pos = canvasPos(e, canvasEl);
+    lastX = pos.x; lastY = pos.y;
     drawHistory.push(drawCtx.getImageData(0, 0, drawCanvas.width, drawCanvas.height));
     if (drawHistory.length > MAX_UNDO) drawHistory.shift();
     drawCtx.beginPath();
-    drawCtx.arc(x, y, (drawTool === 'eraser' ? drawSize * 4 : drawSize) / 2, 0, Math.PI * 2);
+    drawCtx.arc(pos.x, pos.y, (drawTool === 'eraser' ? drawSize * 4 : drawSize) / 2, 0, Math.PI * 2);
     drawCtx.fillStyle = drawTool === 'eraser' ? '#0f0f13' : drawColor;
     drawCtx.fill();
     e.preventDefault();
   });
 
   canvasEl.addEventListener('pointermove', e => {
-    if (!isDrawing) return;
-    const {x, y} = canvasPos(e);
+    if (!isDrawing || drawCanvas !== canvasEl) return;
+    const pos = canvasPos(e, canvasEl);
     const pressure = e.pressure > 0 ? e.pressure : 1;
     const size = drawTool === 'eraser' ? drawSize * 4 : drawSize * pressure;
     drawCtx.beginPath();
     drawCtx.moveTo(lastX, lastY);
-    drawCtx.lineTo(x, y);
+    drawCtx.lineTo(pos.x, pos.y);
     drawCtx.strokeStyle = drawTool === 'eraser' ? '#0f0f13' : drawColor;
     drawCtx.lineWidth = size;
     drawCtx.lineCap = 'round';
     drawCtx.lineJoin = 'round';
     drawCtx.stroke();
-    lastX = x; lastY = y;
+    lastX = pos.x; lastY = pos.y;
     e.preventDefault();
   });
 
   canvasEl.addEventListener('pointerup',    () => { isDrawing = false; });
   canvasEl.addEventListener('pointerleave', () => { isDrawing = false; });
-  canvasEl.addEventListener('pointerdown',  e => { try { canvasEl.setPointerCapture(e.pointerId); } catch {} });
 }
 
-function canvasPos(e) {
-  const rect = drawCanvas.getBoundingClientRect();
+function canvasPos(e, canvas) {
+  const c = canvas || drawCanvas;
+  const rect = c.getBoundingClientRect();
   return {
-    x: (e.clientX - rect.left) * (drawCanvas.width  / rect.width),
-    y: (e.clientY - rect.top)  * (drawCanvas.height / rect.height),
+    x: (e.clientX - rect.left) * (c.width  / rect.width),
+    y: (e.clientY - rect.top)  * (c.height / rect.height),
   };
 }
 
@@ -1107,7 +1114,7 @@ function resizeCanvas() {
   if (!drawCanvas) return;
   const saved = drawCtx.getImageData(0, 0, drawCanvas.width, drawCanvas.height);
   drawCanvas.width  = drawCanvas.offsetWidth  || 800;
-  drawCanvas.height = drawCanvas.offsetHeight || 400;
+  drawCanvas.height = drawCanvas.offsetHeight || 420;
   drawCtx.putImageData(saved, 0, 0);
 }
 
@@ -1163,11 +1170,12 @@ function buildDrawingPanel(containerId) {
     const newH = Math.max(150, Math.min(1200, startH + (e.clientY - startY)));
     currentH = newH;
     canvas.style.height = newH + 'px';
-    // Preserve drawing content while resizing
-    const saved = drawCtx ? drawCtx.getImageData(0, 0, canvas.width, canvas.height) : null;
+    const ctx = canvas.getContext('2d');
+    const saved = ctx.getImageData(0, 0, canvas.width, canvas.height);
     canvas.width  = canvas.offsetWidth || 800;
     canvas.height = newH;
-    if (saved && drawCtx) drawCtx.putImageData(saved, 0, 0);
+    ctx.putImageData(saved, 0, 0);
+    if (drawCanvas === canvas) drawCtx = ctx;
   });
 
   document.addEventListener('pointerup', e => {
