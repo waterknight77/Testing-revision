@@ -132,11 +132,9 @@
             <button class="btn btn-secondary" id="btn-reset-timer">↺ Reset</button>
             <button class="btn btn-secondary btn-hint" id="btn-show-hint">💡 Hint</button>
             <button class="btn btn-flag" id="btn-flag-q" title="Flag for review">⚑ Flag</button>
-            <button class="btn btn-draw" id="btn-draw-q" title="Open drawing canvas">🖊 Draw</button>
             <button class="btn btn-primary" id="btn-mark-done">Mark &amp; Score</button>
           </div>
           <div id="q-timer-warning" class="timer-warning hidden"></div>
-          <div id="draw-panel-q" class="draw-panel hidden"></div>
           <div class="notes-area">
             <label class="notes-label">📝 Notes</label>
             <textarea id="q-notes" placeholder="Write working, observations, methods…"></textarea>
@@ -214,11 +212,9 @@
             <button class="btn btn-secondary" id="pp-btn-pause">⏸ Pause</button>
             <button class="btn btn-secondary" id="pp-btn-reset">↺ Reset</button>
             <button class="btn btn-flag" id="pp-btn-flag">⚑ Flag</button>
-            <button class="btn btn-draw" id="btn-draw-pp" title="Open drawing canvas">🖊 Draw</button>
             <button class="btn btn-primary" id="pp-btn-mark">Mark &amp; Score</button>
           </div>
           <div id="pp-timer-warning" class="timer-warning hidden"></div>
-          <div id="draw-panel-pp" class="draw-panel hidden"></div>
           <div class="notes-area">
             <label class="notes-label">📝 Notes</label>
             <textarea id="pp-notes" placeholder="Write working, hints, observations…"></textarea>
@@ -303,6 +299,24 @@
 </div>
 
 <!-- MATHJAX for rendering maths -->
+<!-- MathJax config - must come BEFORE the MathJax script -->
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [['\\(', '\\)']],
+    displayMath: [['\\[', '\\]']],
+    processEscapes: true,
+    processEnvironments: true,
+  },
+  options: {
+    skipHtmlTags: ['script','noscript','style','textarea','pre'],
+    processHtmlClass: 'math-render',
+  },
+  startup: {
+    typeset: false  // don't auto-typeset on load, we do it manually
+  }
+};
+</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js"></script>
 <script src="data.js"></script>
 <script src="app.js"></script>
