@@ -559,18 +559,53 @@ function wireMathInput(inputId, btnId, previewId) {
   const preview = document.getElementById(previewId);
   if (!input || !btn || !preview) return;
 
+  // Insert a shortcut at cursor position
+  function insertAt(text) {
+    const start = input.selectionStart;
+    const end   = input.selectionEnd;
+    const val   = input.value;
+    input.value = val.slice(0, start) + text + val.slice(end);
+    input.selectionStart = input.selectionEnd = start + text.length;
+    input.focus();
+  }
+
+  // Add shortcut toolbar above the input
+  const toolbar = document.createElement('div');
+  toolbar.className = 'math-shortcut-bar';
+  const shortcuts = [
+    { label: 'a/b',         ins: '\\frac{}{}',     title: 'Fraction' },
+    { label: '√',           ins: '\\sqrt{}',        title: 'Square root' },
+    { label: 'xⁿ',          ins: '^{}',             title: 'Power' },
+    { label: 'xₙ',          ins: '_{} ',            title: 'Subscript' },
+    { label: '∫',           ins: '\\int_{}^{} ',    title: 'Integral' },
+    { label: 'π',           ins: '\\pi',            title: 'Pi' },
+    { label: '∞',           ins: '\\infty',         title: 'Infinity' },
+    { label: '≤',           ins: '\\leq',           title: 'Less or equal' },
+    { label: '≥',           ins: '\\geq',           title: 'Greater or equal' },
+    { label: '±',           ins: '\\pm',            title: 'Plus minus' },
+    { label: 'θ',           ins: '\\theta',         title: 'Theta' },
+    { label: 'α',           ins: '\\alpha',         title: 'Alpha' },
+    { label: 'dy/dx',       ins: '\\frac{dy}{dx}',  title: 'Derivative' },
+    { label: 'd²y/dx²',     ins: '\\frac{d^2y}{dx^2}', title: 'Second derivative' },
+  ];
+  toolbar.innerHTML = shortcuts.map(s =>
+    `<button class="math-shortcut-btn" title="${s.title}" data-ins="${s.ins}">${s.label}</button>`
+  ).join('');
+  // Insert toolbar before the input's parent
+  input.parentElement.insertBefore(toolbar, input.parentElement.firstChild);
+  toolbar.querySelectorAll('.math-shortcut-btn').forEach(b => {
+    b.addEventListener('click', e => { e.preventDefault(); insertAt(b.dataset.ins); });
+  });
+
   function renderMath() {
     const raw = input.value.trim();
     if (!raw) { preview.classList.add('hidden'); return; }
-    // Always wrap in display math delimiters
-    const latex = `\\[${raw}\\]`;
-    preview.innerHTML = latex;
+    preview.innerHTML = `\\[${raw}\\]`;
     preview.classList.remove('hidden');
     if (window.MathJax) {
       MathJax.typesetClear([preview]);
-      MathJax.typesetPromise([preview]).catch(e => {
-        // If typesetting fails show raw
-        preview.innerHTML = `<code>${raw}</code>`;
+      MathJax.typesetPromise([preview]).catch(() => {
+        preview.innerHTML = `<code style="color:var(--accent3)">${raw}</code><span style="font-size:0.75rem;color:var(--text-muted);margin-left:8px">— check your LaTeX syntax</span>`;
       });
     }
   }
@@ -634,13 +669,20 @@ function renderCurrentPPQuestion() {
   document.getElementById('pp-q-position').textContent = `Q${currentPPIdx + 1} of ${currentPaper.questions.length}`;
   document.getElementById('pp-notes').value = getNotes(q.id);
   document.getElementById('pp-score-form').classList.add('hidden');
+  document.getElementById('pp-math-input').value = '';
+  document.getElementById('pp-math-preview').classList.add('hidden');
 
   const flagBtn = document.getElementById('pp-btn-flag');
   if (flagBtn) flagBtn.classList.toggle('flagged', getFlag(q.id));
 
-  const pdfUrl  = currentPaper.pdfUrl || null;
-  const solUrl  = currentPaper.solUrl || null;
+  const pdfUrl = currentPaper.pdfUrl || null;
+  const solUrl = currentPaper.solUrl || null;
   const pageUrl = pdfUrl && q.page ? `${pdfUrl}#page=${q.page}` : pdfUrl;
+
+  // PMT listing page for this paper type
+  const paperNum = currentPaper.paper.includes('1') ? '1' :
+                   currentPaper.paper.includes('2') ? '2' : '3';
+  const pmtPage = `https://www.physicsandmathstutor.com/maths-revision/a-level-edexcel/papers/`;
 
   document.getElementById('pp-question-display').innerHTML = `
     <div class="pp-q-header">
@@ -652,23 +694,18 @@ function renderCurrentPPQuestion() {
         ${q.page ? `<span style="font-size:0.7rem;color:var(--text-muted);margin-left:8px;font-family:'Space Mono',monospace">≈ p.${q.page}</span>` : ''}
       </div>
       <div class="pp-paper-links">
-        ${pageUrl  ? `<a href="${pageUrl}"  target="_blank" class="btn btn-secondary" style="font-size:0.8rem;text-decoration:none;padding:6px 12px">📄 Open Paper</a>` : ''}
-        ${solUrl   ? `<a href="${solUrl}"   target="_blank" class="btn btn-secondary" style="font-size:0.8rem;text-decoration:none;padding:6px 12px">✓ Mark Scheme</a>` : ''}
-        ${!pageUrl ? `<a href="${currentPaper.link}" target="_blank" class="btn btn-secondary" style="font-size:0.8rem;text-decoration:none;padding:6px 12px">↗ Get Paper</a>` : ''}
+        ${pageUrl ? `<a href="${pageUrl}" target="_blank" rel="noopener" class="btn btn-secondary" style="font-size:0.8rem;text-decoration:none;padding:6px 12px">📄 Open Paper</a>` : ''}
+        ${solUrl  ? `<a href="${solUrl}"  target="_blank" rel="noopener" class="btn btn-secondary" style="font-size:0.8rem;text-decoration:none;padding:6px 12px">✓ Mark Scheme</a>` : ''}
+        <a href="${pmtPage}" target="_blank" rel="noopener" class="btn btn-secondary" style="font-size:0.8rem;text-decoration:none;padding:6px 12px">↗ PMT Papers</a>
       </div>
     </div>
     <div class="pp-q-body">
       <p class="pp-q-desc">${q.text}</p>
       <div class="pp-q-howto">
-        Work through <strong>Question ${q.num}</strong> on your tablet or paper, then log your time and score below.
-        ${q.page ? `The question starts on approximately <strong>page ${q.page}</strong> of the paper.` : ''}
+        Click <strong>Open Paper</strong> above to view the PDF in a new tab — it will open at approximately page ${q.page || 1}.
+        Work through <strong>Question ${q.num}</strong> on your tablet, then come back to log your time and score.
       </div>
     </div>
-    ${pageUrl ? `
-    <details class="pp-pdf-embed-toggle" id="pp-pdf-details">
-      <summary>📄 View paper inline (page ${q.page || 1})</summary>
-      <iframe src="${pageUrl}" class="pp-pdf-iframe" title="${currentPaper.title}"></iframe>
-    </details>` : ''}
   `;
 
   renderQHistory(q.id, 'pp-q-history');
@@ -1056,25 +1093,30 @@ document.addEventListener('keydown', e => {
 });
 
 function initCanvas(canvasEl) {
-  // Each call sets the active canvas - whichever was opened last is active
   drawCanvas = canvasEl;
   drawCtx = canvasEl.getContext('2d');
 
-  // Set internal resolution to match display size
-  canvasEl.width  = canvasEl.offsetWidth  || 800;
-  canvasEl.height = canvasEl.offsetHeight || 420;
+  // Defer setting dimensions until after the element is in the DOM and has layout
+  requestAnimationFrame(() => {
+    canvasEl.width  = canvasEl.offsetWidth  || 800;
+    canvasEl.height = canvasEl.offsetHeight || 420;
+  });
 
   canvasEl.addEventListener('pointerdown', e => {
-    // Make THIS canvas active
     drawCanvas = canvasEl;
     drawCtx = canvasEl.getContext('2d');
+    // Ensure canvas has correct internal dimensions
+    if (canvasEl.width < 10) {
+      canvasEl.width  = canvasEl.offsetWidth  || 800;
+      canvasEl.height = canvasEl.offsetHeight || 420;
+    }
     isDrawing = true;
     const pos = canvasPos(e, canvasEl);
     lastX = pos.x; lastY = pos.y;
     drawHistory.push(drawCtx.getImageData(0, 0, drawCanvas.width, drawCanvas.height));
     if (drawHistory.length > MAX_UNDO) drawHistory.shift();
     drawCtx.beginPath();
-    drawCtx.arc(pos.x, pos.y, (drawTool === 'eraser' ? drawSize * 4 : drawSize) / 2, 0, Math.PI * 2);
+    drawCtx.arc(pos.x, pos.y, Math.max(1, (drawTool === 'eraser' ? drawSize * 4 : drawSize) / 2), 0, Math.PI * 2);
     drawCtx.fillStyle = drawTool === 'eraser' ? '#0f0f13' : drawColor;
     drawCtx.fill();
     e.preventDefault();
@@ -1084,7 +1126,7 @@ function initCanvas(canvasEl) {
     if (!isDrawing || drawCanvas !== canvasEl) return;
     const pos = canvasPos(e, canvasEl);
     const pressure = e.pressure > 0 ? e.pressure : 1;
-    const size = drawTool === 'eraser' ? drawSize * 4 : drawSize * pressure;
+    const size = Math.max(1, drawTool === 'eraser' ? drawSize * 4 : drawSize * pressure);
     drawCtx.beginPath();
     drawCtx.moveTo(lastX, lastY);
     drawCtx.lineTo(pos.x, pos.y);
